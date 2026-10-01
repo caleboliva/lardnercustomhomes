@@ -1,0 +1,113 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  image: ImageMetadata | null;
+  alt: string;
+  /** A CSS aspect ratio such as "4/3"; "natural" for the photo's own shape; "fill" to fill the parent. */
+  ratio?: string;
+  sizes?: string;
+  /** Load immediately. Use for photos visible when the page opens. */
+  eager?: boolean;
+  placeholderLabel?: string;
+}
+
+const {
+  image,
+  alt,
+  ratio = '3/2',
+  sizes = '100vw',
+  eager = false,
+  placeholderLabel = 'Project photo',
+} = Astro.props;
+
+const fill = ratio === 'fill';
+const cssRatio = ratio === 'natural' ? (image ? `${image.width}/${image.height}` : '3/2') : ratio;
+const maxWidth = image ? Math.min(image.width, 2000) : 0;
+const widths = image ? [...[480, 800, 1200, 1600].filter((w) => w < maxWidth), maxWidth] : [];
+---
+
+<span class:list={['photo', { 'photo--fill': fill }]} style={fill ? undefined : `--ratio: ${cssRatio}`}>
+  {
+    image ? (
+      <Image
+        src={image}
+        alt={alt}
+        width={maxWidth}
+        widths={widths}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchpriority={eager ? 'high' : 'auto'}
+      />
+    ) : (
+      <span class="photo__placeholder" role="img" aria-label={`Placeholder: ${alt}`}>
+        <span class="photo__tag">Placeholder</span>
+        <span class="photo__label">{placeholderLabel}</span>
+      </span>
+    )
+  }
+</span>
+
+<style>
+  .photo {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: var(--color-champagne);
+    aspect-ratio: var(--ratio);
+  }
+
+  .photo--fill {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-slow) var(--ease);
+  }
+
+  :global(a:hover) .photo :global(img),
+  :global(button:hover) .photo :global(img) {
+    transform: scale(1.03);
+  }
+
+  .photo__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    color: var(--color-midnight);
+    text-align: center;
+    transition: background-color var(--dur) var(--ease);
+  }
+
+  :global(a:hover) .photo__placeholder,
+  :global(button:hover) .photo__placeholder {
+    background: color-mix(in srgb, var(--color-powder) 45%, var(--color-champagne));
+  }
+
+  .photo__tag {
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  .photo__label {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-style: italic;
+    line-height: 1.2;
+  }
+</style>
