@@ -1,0 +1,36 @@
+---
+import type { GalleryItem } from '../lib/images.ts';
+
+interface Props {
+  item: GalleryItem;
+  class?: string;
+}
+
+const { item, class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={['lb-trigger', className]}
+  data-lightbox
+  data-lb-src={item.full?.src ?? ''}
+  data-lb-width={item.full?.width ?? 0}
+  data-lb-height={item.full?.height ?? 0}
+  data-lb-alt={item.alt}
+  data-lb-caption={item.caption ?? ''}
+  aria-label={`View larger: ${item.alt}`}
+>
+  <slot />
+</button>
+
+<style>
+  .lb-trigger {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    text-align: inherit;
+  }
+</style>

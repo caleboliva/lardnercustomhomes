@@ -4,6 +4,17 @@ import Icon from '../components/Icon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { placeholder } from '../lib/format.ts';
 import { site } from '../data/site.ts';
+import Lightbox from '../components/Lightbox.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import colin from '../assets/people/colin-lardner.jpg';
+import { toGalleryItem } from '../lib/images.ts';
+
+const demoItems = await Promise.all([
+  toGalleryItem(null, 'Sample placeholder one', 'Demo set'),
+  toGalleryItem(colin, 'Colin Lardner seated in a cream armchair', 'Demo set'),
+  toGalleryItem(null, 'Sample placeholder two', 'Demo set'),
+]);
+const singleItem = await toGalleryItem(null, 'A set of one', 'Single photo');
 ---
 
 <BaseLayout title={site.name}>
@@ -30,4 +41,11 @@ import { site } from '../data/site.ts';
   <section class="section" data-theme="dark" style="background:var(--bg);color:var(--text)">
     <div class="container"><h2>Dark theme</h2><p><a class="btn" href="/">Button on dark</a></p></div>
   </section>
+  <section class="section container">
+    <h2>Lightbox demo (three photos)</h2>
+    <PhotoGrid items={demoItems} layout="three" captions eagerCount={3} />
+    <h2 style="margin-top:3rem">Lightbox demo (one photo)</h2>
+    <PhotoGrid items={[singleItem]} />
+  </section>
+  <Lightbox />
 </BaseLayout>

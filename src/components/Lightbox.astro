@@ -1,0 +1,187 @@
+---
+import Icon from './Icon.astro';
+---
+
+<dialog class="lightbox" data-lightbox-dialog aria-label="Photo viewer">
+  <button type="button" class="lightbox__btn lightbox__close" data-lightbox-close data-lightbox-keep>
+    <Icon name="close" />
+    <span class="visually-hidden">Close photo viewer</span>
+  </button>
+  <figure class="lightbox__figure">
+    <img class="lightbox__img" data-lightbox-img data-lightbox-keep alt="" hidden />
+    <span class="lightbox__placeholder" data-lightbox-placeholder data-lightbox-keep hidden>
+      <span class="lightbox__tag">Placeholder</span>
+      <span class="lightbox__label" data-lightbox-placeholder-text></span>
+    </span>
+    <figcaption class="lightbox__caption" data-lightbox-keep>
+      <span data-lightbox-caption></span>
+      <span class="lightbox__counter" data-lightbox-counter aria-live="polite"></span>
+    </figcaption>
+  </figure>
+  <button type="button" class="lightbox__btn lightbox__prev" data-lightbox-prev data-lightbox-keep>
+    <Icon name="arrow-left" />
+    <span class="visually-hidden">Previous photo</span>
+  </button>
+  <button type="button" class="lightbox__btn lightbox__next" data-lightbox-next data-lightbox-keep>
+    <Icon name="arrow-right" />
+    <span class="visually-hidden">Next photo</span>
+  </button>
+</dialog>
+
+<script>
+  import { initLightbox } from '../scripts/lightbox.ts';
+  initLightbox();
+</script>
+
+<style>
+  .lightbox {
+    --focus: var(--color-powder);
+    --frame-h: calc(100dvh - 9.5rem);
+
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-white);
+    overflow: hidden;
+    overscroll-behavior: contain;
+  }
+
+  .lightbox[open] {
+    display: grid;
+    place-items: center;
+    animation: lightbox-in var(--dur) var(--ease);
+  }
+
+  .lightbox::backdrop {
+    background: var(--color-midnight-deep);
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .lightbox__figure {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    max-width: 100%;
+    margin: 0;
+    padding: 4.5rem var(--space-4) var(--space-4);
+  }
+
+  .lightbox__img {
+    width: auto;
+    max-width: min(100%, 92vw);
+    height: auto;
+    max-height: var(--frame-h);
+    object-fit: contain;
+  }
+
+  .lightbox__placeholder {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-2);
+    width: min(92vw, 60rem, calc(var(--frame-h) * 1.5));
+    padding: var(--space-5);
+    background: var(--color-champagne);
+    color: var(--color-midnight);
+    text-align: center;
+    aspect-ratio: 3 / 2;
+  }
+
+  .lightbox__tag {
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  .lightbox__label {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-style: italic;
+    line-height: 1.2;
+  }
+
+  .lightbox__caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-5);
+    font-size: var(--step--1);
+    letter-spacing: 0.06em;
+  }
+
+  .lightbox__counter {
+    color: color-mix(in srgb, var(--color-white) 74%, var(--color-midnight-deep));
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lightbox__btn {
+    position: fixed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--color-white) 55%, transparent);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-midnight-deep) 70%, transparent);
+    color: var(--color-white);
+    transition:
+      background-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+
+  .lightbox__btn:hover {
+    background: var(--color-powder);
+    color: var(--color-midnight);
+  }
+
+  .lightbox__close {
+    top: var(--space-4);
+    right: var(--space-4);
+  }
+
+  .lightbox__prev,
+  .lightbox__next {
+    bottom: var(--space-4);
+  }
+
+  .lightbox__prev {
+    left: var(--space-4);
+  }
+
+  .lightbox__next {
+    right: var(--space-4);
+  }
+
+  @media (min-width: 64rem) {
+    .lightbox__prev,
+    .lightbox__next {
+      top: 50%;
+      bottom: auto;
+      margin-top: -1.5rem;
+    }
+
+    .lightbox__prev {
+      left: var(--space-5);
+    }
+
+    .lightbox__next {
+      right: var(--space-5);
+    }
+  }
+</style>
