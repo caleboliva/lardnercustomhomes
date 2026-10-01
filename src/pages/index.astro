@@ -1,51 +1,225 @@
 ---
-import Copy from '../components/Copy.astro';
-import Icon from '../components/Icon.astro';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { placeholder } from '../lib/format.ts';
+import Photo from '../components/Photo.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { copy } from '../data/copy.ts';
+import { projects } from '../data/projects.ts';
 import { site } from '../data/site.ts';
-import Lightbox from '../components/Lightbox.astro';
-import PhotoGrid from '../components/PhotoGrid.astro';
-import colin from '../assets/people/colin-lardner.jpg';
-import { toGalleryItem } from '../lib/images.ts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { featuredProjects } from '../lib/content.ts';
+import { siteImage } from '../lib/images.ts';
 
-const demoItems = await Promise.all([
-  toGalleryItem(null, 'Sample placeholder one', 'Demo set'),
-  toGalleryItem(colin, 'Colin Lardner seated in a cream armchair', 'Demo set'),
-  toGalleryItem(null, 'Sample placeholder two', 'Demo set'),
-]);
-const singleItem = await toGalleryItem(null, 'A set of one', 'Single photo');
+const { hero, intro, featured, neighborhoods, quote, cta } = copy.home;
+const heroImage = siteImage(hero.image);
+const featuredList = featuredProjects(projects, 3);
 ---
 
 <BaseLayout title={site.name}>
-  <section class="section container">
-    <p class="eyebrow">Eyebrow label</p>
-    <h1>Heading one in Cormorant</h1>
-    <p class="lead">Lead paragraph in Jost, a little larger than body text.</p>
-    <div class="prose">
-      <p>Body text in Jost. The quick brown fox jumps over the lazy dog. <a href="/">An inline link</a>.</p>
-      <p><Copy text={placeholder('a sample of missing copy')} /></p>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <Photo image={heroImage} alt={hero.imageAlt} ratio="fill" sizes="100vw" eager placeholderLabel="Hero photo" />
     </div>
-    <p style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem">
-      <a class="btn" href="/">Primary button</a>
-      <a class="btn btn--ghost" href="/">Ghost button</a>
-      <a class="link-arrow" href="/">Arrow link</a>
-    </p>
-    <p style="display:flex;gap:1rem;margin-top:2rem">
-      <Icon name="menu" /><Icon name="close" /><Icon name="chevron-down" /><Icon name="arrow-left" />
-      <Icon name="arrow-right" /><Icon name="check" /><Icon name="alert" /><Icon name="facebook" /><Icon name="instagram" />
-    </p>
+    <div class="hero__panel">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1 id="hero-title">{hero.title}</h1>
+      <p class="hero__actions">
+        <a class="btn" href="/homes/">{hero.primaryCta}</a>
+        <a class="btn btn--ghost" href="/gallery/">{hero.secondaryCta}</a>
+      </p>
+    </div>
   </section>
-  <section class="section section--surface"><div class="container"><h2>Champagne band</h2></div></section>
-  <section class="section section--accent"><div class="container"><h2 data-reveal>Powder Blue band, revealed on scroll</h2></div></section>
-  <section class="section" data-theme="dark" style="background:var(--bg);color:var(--text)">
-    <div class="container"><h2>Dark theme</h2><p><a class="btn" href="/">Button on dark</a></p></div>
+
+  <section class="intro section container" aria-labelledby="intro-title">
+    <div class="intro__heading" data-reveal>
+      <p class="eyebrow">{intro.eyebrow}</p>
+      <h2 id="intro-title">{intro.heading}</h2>
+    </div>
+    <div class="intro__body prose" data-reveal style="--reveal-i: 1">
+      {intro.body.map((paragraph) => <p>{paragraph}</p>)}
+      <p><a class="link-arrow" href="/about/">{intro.link}</a></p>
+    </div>
   </section>
-  <section class="section container">
-    <h2>Lightbox demo (three photos)</h2>
-    <PhotoGrid items={demoItems} layout="three" captions eagerCount={3} />
-    <h2 style="margin-top:3rem">Lightbox demo (one photo)</h2>
-    <PhotoGrid items={[singleItem]} />
+
+  {
+    featuredList.length > 0 && (
+      <section class="featured section section--tight container" aria-labelledby="featured-title">
+        <div class="featured__header" data-reveal>
+          <div>
+            <p class="eyebrow">{featured.eyebrow}</p>
+            <h2 id="featured-title">{featured.heading}</h2>
+          </div>
+          <a class="link-arrow" href="/gallery/">{featured.link}</a>
+        </div>
+        <ul class="grid grid--3" role="list">
+          {featuredList.map((project, i) => (
+            <li data-reveal style={`--reveal-i: ${i}`}>
+              <ProjectCard
+                project={project}
+                headingLevel={3}
+                sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 46vw, 92vw"
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="section section--surface" aria-labelledby="neighborhoods-title">
+    <div class="neighborhoods container" data-reveal>
+      <h2 class="eyebrow" id="neighborhoods-title">{neighborhoods.eyebrow}</h2>
+      <ul class="neighborhoods__list" role="list">
+        {neighborhoods.names.map((name) => <li>{name}</li>)}
+      </ul>
+      <p class="neighborhoods__note">{neighborhoods.note}</p>
+    </div>
   </section>
-  <Lightbox />
+
+  <section class="section container" aria-label="A word from Colin Lardner">
+    <figure class="quote" data-reveal>
+      <blockquote><p>&ldquo;{quote.text}&rdquo;</p></blockquote>
+      <figcaption class="eyebrow">{quote.attribution}</figcaption>
+    </figure>
+  </section>
+
+  <section class="section section--accent" aria-labelledby="cta-title">
+    <div class="cta container" data-reveal>
+      <h2 id="cta-title">{cta.heading}</h2>
+      <p class="lead">{cta.body}</p>
+      <a class="btn" href="/inventory/">{cta.button}</a>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-rows: minmax(52svh, 1fr) auto;
+    min-height: calc(100svh - var(--header-h));
+  }
+
+  .hero__media {
+    grid-row: 1;
+  }
+
+  .hero__panel {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    grid-row: 2;
+    padding: var(--space-6) var(--gutter) var(--space-7);
+    background: var(--bg);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .intro {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .intro__heading {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .featured {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .featured__header {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .featured__header > div {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .neighborhoods {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .neighborhoods__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-7);
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.25;
+  }
+
+  .neighborhoods__note {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .quote {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-5);
+    max-width: 56rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .quote blockquote {
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-style: italic;
+    line-height: var(--leading-tight);
+    text-wrap: balance;
+  }
+
+  .cta {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+  }
+
+  .cta .btn {
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 64rem) {
+    .hero {
+      grid-template-rows: minmax(0, 1fr);
+    }
+
+    .hero__media,
+    .hero__panel {
+      grid-area: 1 / 1;
+    }
+
+    .hero__panel {
+      z-index: 1;
+      align-self: end;
+      justify-self: start;
+      max-width: 46rem;
+      padding: var(--space-7) var(--space-8) var(--space-7) var(--gutter);
+    }
+
+    /* Keep the placeholder label clear of the title panel until a hero photo is supplied. */
+    .hero__media :global(.photo__placeholder) {
+      justify-content: flex-start;
+      padding-top: var(--space-9);
+    }
+
+    .intro {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      column-gap: var(--space-9);
+    }
+  }
+</style>
