@@ -1,0 +1,157 @@
+---
+import type { NavItem } from '../data/navigation.ts';
+import { isCurrentPage, isCurrentSection } from '../lib/nav-utils.ts';
+import Icon from './Icon.astro';
+
+interface Props {
+  items: NavItem[];
+  pathname: string;
+  align: 'start' | 'end';
+}
+
+const { items, pathname, align } = Astro.props;
+const submenuId = (label: string) => `submenu-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const current = (href: string) =>
+  isCurrentPage(pathname, href) ? 'page' : isCurrentSection(pathname, href) ? 'true' : undefined;
+---
+
+<ul class="nav-list" data-align={align} role="list">
+  {
+    items.map((item) => (
+      <li class="nav-list__item" data-submenu={item.children ? '' : undefined}>
+        <a class="nav-list__link" href={item.href} aria-current={current(item.href)}>{item.label}</a>
+        {item.children && (
+          <Fragment>
+            <button
+              type="button"
+              class="nav-list__toggle"
+              data-submenu-toggle
+              aria-expanded="false"
+              aria-controls={submenuId(item.label)}
+            >
+              <Icon name="chevron-down" size={16} />
+              <span class="visually-hidden">{`${item.label} submenu`}</span>
+            </button>
+            <ul class="nav-list__submenu" id={submenuId(item.label)} role="list">
+              {item.children.map((child) => (
+                <li>
+                  <a
+                    class="nav-list__sublink"
+                    href={child.href}
+                    aria-current={isCurrentPage(pathname, child.href) ? 'page' : undefined}
+                  >{child.label}</a>
+                </li>
+              ))}
+            </ul>
+          </Fragment>
+        )}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* `display` is set by Header.astro so the list can be hidden on small screens. */
+  .nav-list {
+    align-items: center;
+    gap: var(--space-7);
+    margin: 0;
+  }
+
+  .nav-list[data-align='end'] {
+    justify-content: flex-end;
+  }
+
+  .nav-list[data-align='start'] {
+    justify-content: flex-start;
+  }
+
+  .nav-list__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-list__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    background: linear-gradient(currentColor, currentColor) no-repeat left calc(50% + 0.95em) / 0 1px;
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-size var(--dur) var(--ease);
+  }
+
+  .nav-list__link:hover,
+  .nav-list__link[aria-current] {
+    background-size: 100% 1px;
+  }
+
+  .nav-list__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: var(--tap);
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .nav-list__toggle :global(svg) {
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .nav-list__toggle[aria-expanded='true'] :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .nav-list__submenu {
+    position: absolute;
+    top: 100%;
+    left: calc(var(--space-5) * -1);
+    min-width: 14rem;
+    margin: 0;
+    padding: var(--space-2) 0;
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    visibility: hidden;
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease),
+      visibility 0s linear var(--dur-fast);
+  }
+
+  .nav-list__item:hover > .nav-list__submenu,
+  .nav-list__toggle[aria-expanded='true'] + .nav-list__submenu {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .nav-list__sublink {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: var(--space-2) var(--space-5);
+    font-size: var(--step--1);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+
+  .nav-list__sublink:hover {
+    background: var(--accent);
+  }
+
+  .nav-list__sublink[aria-current='page'] {
+    text-decoration: underline;
+  }
+</style>

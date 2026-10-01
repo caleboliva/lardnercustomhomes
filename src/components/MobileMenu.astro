@@ -1,0 +1,154 @@
+---
+import { primaryNav } from '../data/navigation.ts';
+import { site } from '../data/site.ts';
+import { isCurrentPage } from '../lib/nav-utils.ts';
+import Icon from './Icon.astro';
+
+interface Props {
+  pathname: string;
+}
+
+const { pathname } = Astro.props;
+const items = [...primaryNav.left, ...primaryNav.right];
+const current = (href: string) => (isCurrentPage(pathname, href) ? 'page' : undefined);
+---
+
+<dialog class="menu" id="mobile-menu" data-menu aria-label="Site menu">
+  <div class="menu__bar container">
+    <button type="button" class="menu__close" data-menu-close>
+      <Icon name="close" />
+      <span class="visually-hidden">Close menu</span>
+    </button>
+  </div>
+  <nav class="menu__nav container" aria-label="Site menu">
+    <ul class="menu__list" role="list">
+      <li><a class="menu__link" href="/" aria-current={current('/')}>Home</a></li>
+      {
+        items.map((item) => (
+          <li>
+            <a class="menu__link" href={item.href} aria-current={current(item.href)}>{item.label}</a>
+            {item.children && (
+              <ul class="menu__sublist" role="list">
+                {item.children.map((child) => (
+                  <li>
+                    <a class="menu__sublink" href={child.href} aria-current={current(child.href)}>{child.label}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+    <ul class="menu__contact" role="list">
+      <li><a href={site.phone.href}>{site.phone.display}</a></li>
+      <li><a href={site.email.href}>{site.email.display}</a></li>
+    </ul>
+  </nav>
+</dialog>
+
+<style>
+  .menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--bg);
+    color: var(--text);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .menu[open] {
+    animation: menu-in var(--dur) var(--ease);
+  }
+
+  .menu::backdrop {
+    background: var(--bg);
+  }
+
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+  }
+
+  .menu__bar {
+    display: flex;
+    align-items: center;
+    height: var(--header-h);
+  }
+
+  .menu__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap);
+    height: var(--tap);
+    margin-left: calc(var(--space-2) * -1);
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .menu__nav {
+    padding-block: var(--space-5) var(--space-8);
+  }
+
+  .menu__list {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .menu__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 3.25rem;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: var(--leading-tight);
+    text-decoration: none;
+  }
+
+  .menu__link[aria-current='page'],
+  .menu__sublink[aria-current='page'] {
+    text-decoration: underline;
+  }
+
+  .menu__sublist {
+    display: grid;
+    margin: 0 0 var(--space-3);
+    padding-left: var(--space-4);
+    border-left: 1px solid var(--rule);
+  }
+
+  .menu__sublink {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-caps);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .menu__contact {
+    display: grid;
+    margin: var(--space-7) 0 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule);
+  }
+
+  .menu__contact a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+</style>

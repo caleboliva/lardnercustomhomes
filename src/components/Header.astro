@@ -1,0 +1,144 @@
+---
+import { Image } from 'astro:assets';
+import logoFull from '../assets/brand/lardner-custom-homes-logo.webp';
+import logoMark from '../assets/brand/lardner-custom-homes-mark.png';
+import { primaryNav } from '../data/navigation.ts';
+import Icon from './Icon.astro';
+import MobileMenu from './MobileMenu.astro';
+import NavList from './NavList.astro';
+
+const { pathname } = Astro.url;
+---
+
+<header class="header" data-header>
+  <div class="header__inner container">
+    <button
+      type="button"
+      class="header__menu-btn"
+      data-menu-open
+      aria-haspopup="dialog"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+    >
+      <Icon name="menu" />
+      <span class="visually-hidden">Open menu</span>
+    </button>
+    <nav class="header__nav" aria-label="Primary">
+      <NavList items={primaryNav.left} pathname={pathname} align="end" />
+      <a class="header__logo" href="/" aria-label="Lardner Custom Homes, home page">
+        <Image class="header__logo-full" src={logoFull} alt="" width={260} loading="eager" />
+        <Image class="header__logo-mark" src={logoMark} alt="" width={96} loading="eager" />
+      </a>
+      <NavList items={primaryNav.right} pathname={pathname} align="start" />
+    </nav>
+  </div>
+</header>
+<MobileMenu pathname={pathname} />
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    border-bottom: 1px solid transparent;
+    background: var(--bg);
+    transition:
+      transform var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+
+  .header[data-compact] {
+    border-bottom-color: var(--rule);
+  }
+
+  .header[data-hidden] {
+    transform: translateY(-100%);
+  }
+
+  .header__inner {
+    display: grid;
+    align-items: center;
+    grid-template-columns: var(--tap) minmax(0, 1fr) var(--tap);
+    height: var(--header-h);
+    transition: height var(--dur) var(--ease);
+  }
+
+  .header[data-compact] .header__inner {
+    height: var(--header-h-compact);
+  }
+
+  .header__menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap);
+    height: var(--tap);
+    margin-left: calc(var(--space-2) * -1);
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .header__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header__nav :global(.nav-list) {
+    display: none;
+  }
+
+  .header__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--tap);
+    min-height: var(--tap);
+  }
+
+  .header__logo :global(img) {
+    width: auto;
+  }
+
+  .header__logo :global(.header__logo-full) {
+    display: none;
+    height: calc(var(--header-h) - 2rem);
+  }
+
+  .header__logo :global(.header__logo-mark) {
+    height: 2.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .header__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .header__menu-btn {
+      display: none;
+    }
+
+    .header__nav {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      column-gap: var(--space-8);
+    }
+
+    .header__nav :global(.nav-list) {
+      display: flex;
+    }
+
+    .header:not([data-compact]) .header__logo :global(.header__logo-full) {
+      display: block;
+    }
+
+    .header:not([data-compact]) .header__logo :global(.header__logo-mark) {
+      display: none;
+    }
+
+    .header[data-compact] .header__logo :global(.header__logo-mark) {
+      height: 2.75rem;
+    }
+  }
+</style>

@@ -1,0 +1,44 @@
+---
+import { site } from '../data/site.ts';
+import Icon from './Icon.astro';
+---
+
+<ul class="social" role="list">
+  {
+    site.social.map((profile) => (
+      <li>
+        <a class="social__link" href={profile.href} target="_blank" rel="noopener noreferrer">
+          <Icon name={profile.icon} size={22} />
+          <span class="visually-hidden">{`${profile.name} (opens in a new tab)`}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .social {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .social__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--text);
+    border-radius: 50%;
+    transition:
+      background-color var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease);
+  }
+
+  .social__link:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+  }
+</style>
