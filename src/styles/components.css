@@ -210,3 +210,138 @@
   font-size: var(--step--1);
   letter-spacing: 0.04em;
 }
+
+/* Forms */
+.field {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field__label {
+  padding: 0;
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field__input {
+  width: 100%;
+  min-height: 3rem;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--field-border);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--color-white) 65%, var(--bg));
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+textarea.field__input {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.field__input:hover,
+.field__input:focus {
+  border-color: var(--text);
+}
+
+.field[data-invalid] .field__input {
+  border-color: var(--text);
+  border-width: 2px;
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.field__error svg {
+  flex: none;
+  margin-top: 0.1em;
+}
+
+.select {
+  position: relative;
+}
+
+.select select {
+  padding-right: 3rem;
+  appearance: none;
+}
+
+.select svg {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  margin-top: -0.5625rem;
+  pointer-events: none;
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.choice {
+  position: relative;
+  display: inline-flex;
+}
+
+.choice__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.choice__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--field-border);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+/* A ring that fills when chosen, so the choice never depends on colour alone. */
+.choice__label::before {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  content: '';
+}
+
+.choice__input:hover + .choice__label {
+  background: var(--accent);
+}
+
+.choice__input:checked + .choice__label {
+  border-color: var(--color-midnight);
+  background: var(--color-midnight);
+  color: var(--color-honeydew);
+}
+
+.choice__input:checked + .choice__label::before {
+  background: currentColor;
+}
+
+.choice__input:focus-visible + .choice__label {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}

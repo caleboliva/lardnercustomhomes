@@ -1,0 +1,11 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<p class="field__error" id={id} hidden><Icon name="alert" size={18} /><span data-error-text></span></p>

@@ -1,0 +1,163 @@
+---
+import { site } from '../data/site.ts';
+import { LIMITS, PRICE_POINTS, REALTOR_OPTIONS, REFERRAL_OPTIONS } from '../lib/validation.ts';
+import ChoiceField from './ChoiceField.astro';
+import Field from './Field.astro';
+import FieldError from './FieldError.astro';
+import Icon from './Icon.astro';
+
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
+const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
+---
+
+<div class="inquiry" data-inquiry>
+  <form
+    class="inquiry__form"
+    data-inquiry-form
+    method="post"
+    action={endpoint || undefined}
+    data-endpoint={endpoint}
+    data-access-key={accessKey}
+    data-demo={import.meta.env.DEV ? '' : undefined}
+  >
+    <p class="inquiry__note"><span aria-hidden="true">*</span> marks a required field.</p>
+
+    <div class="inquiry__row">
+      <Field name="firstName" label="First name" autocomplete="given-name" maxlength={LIMITS.name} required />
+      <Field name="lastName" label="Last name" autocomplete="family-name" maxlength={LIMITS.name} required />
+    </div>
+    <div class="inquiry__row">
+      <Field name="email" label="Email" type="email" autocomplete="email" maxlength={LIMITS.email} required />
+      <Field name="phone" label="Phone" type="tel" autocomplete="tel" maxlength={24} required />
+    </div>
+    <Field name="message" label="Tell us what you're looking for" maxlength={LIMITS.message} multiline />
+    <ChoiceField name="pricePoint" legend="Price point" options={PRICE_POINTS} required />
+    <ChoiceField name="realtor" legend="Are you working with a realtor?" options={REALTOR_OPTIONS} required />
+
+    <div class="field" data-field="referral">
+      <label class="field__label" for="inq-referral">How did you hear about us?</label>
+      <div class="select">
+        <select class="field__input" id="inq-referral" name="referral">
+          <option value="">Select one</option>
+          {REFERRAL_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+        </select>
+        <Icon name="chevron-down" size={18} />
+      </div>
+      <FieldError id="inq-referral-error" />
+    </div>
+    <div data-referral-other>
+      <Field name="referralOther" label="Other (please tell us)" maxlength={LIMITS.referralOther} />
+    </div>
+
+    <!-- Spam trap. People never see or reach this field; simple bots fill it in. -->
+    <div class="visually-hidden" aria-hidden="true">
+      <label for="inq-company">Company</label>
+      <input id="inq-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="inquiry__alert" data-inquiry-alert role="alert" tabindex="-1" hidden>
+      <Icon name="alert" />
+      <div>
+        <p class="inquiry__alert-title" data-inquiry-alert-title></p>
+        <p>You can also reach Colin at <a href={site.email.href}>{site.email.display}</a> or <a href={site.phone.href}>{site.phone.display}</a>.</p>
+      </div>
+    </div>
+
+    <button class="btn inquiry__submit" type="submit" data-inquiry-submit>
+      <span data-inquiry-submit-label>Send</span>
+    </button>
+
+    <noscript>
+      <p class="inquiry__note">This form needs JavaScript. You can also reach Colin at {site.email.display} or {site.phone.display}.</p>
+    </noscript>
+  </form>
+
+  <div class="inquiry__success" data-inquiry-success role="status" tabindex="-1" hidden>
+    <Icon name="check" size={32} />
+    <h2>Thank you.</h2>
+    <p class="lead" data-inquiry-success-text>Your message is on its way to Colin. We'll be in touch soon.</p>
+  </div>
+</div>
+
+<script>
+  import { initInquiryForm } from '../scripts/inquiry-form.ts';
+  initInquiryForm();
+</script>
+
+<style>
+  .inquiry__form {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .inquiry__note {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .inquiry__row {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .inquiry__alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 2px solid var(--text);
+    background: var(--surface);
+  }
+
+  .inquiry__alert :global(svg) {
+    flex: none;
+    margin-top: 0.15em;
+  }
+
+  .inquiry__alert-title {
+    font-weight: 500;
+  }
+
+  .inquiry__submit {
+    justify-self: start;
+    min-width: 10rem;
+  }
+
+  .inquiry__submit[data-loading]::after {
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: inquiry-spin 0.8s linear infinite;
+    content: '';
+  }
+
+  .inquiry__submit[aria-disabled='true'] {
+    cursor: progress;
+  }
+
+  @keyframes inquiry-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .inquiry__success {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding: var(--space-7) var(--space-6);
+    background: var(--surface);
+  }
+
+  .inquiry__success:focus {
+    outline: none;
+  }
+
+  @media (min-width: 40rem) {
+    .inquiry__row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

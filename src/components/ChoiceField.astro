@@ -1,0 +1,28 @@
+---
+import FieldError from './FieldError.astro';
+
+interface Props {
+  name: string;
+  legend: string;
+  options: readonly string[];
+  required?: boolean;
+}
+
+const { name, legend, options, required = false } = Astro.props;
+const id = `inq-${name}`;
+---
+
+<fieldset class="field" data-field={name} role="radiogroup" aria-required={required ? 'true' : undefined}>
+  <legend class="field__label">{legend}{required && <Fragment>{' '}<span aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></Fragment>}</legend>
+  <div class="choices">
+    {
+      options.map((option, i) => (
+        <span class="choice">
+          <input class="choice__input" type="radio" id={`${id}-${i}`} name={name} value={option} required={required} />
+          <label class="choice__label" for={`${id}-${i}`}>{option}</label>
+        </span>
+      ))
+    }
+  </div>
+  <FieldError id={`${id}-error`} />
+</fieldset>

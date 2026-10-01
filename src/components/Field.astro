@@ -1,0 +1,28 @@
+---
+import FieldError from './FieldError.astro';
+
+interface Props {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel';
+  autocomplete?: string;
+  required?: boolean;
+  maxlength?: number;
+  multiline?: boolean;
+}
+
+const { name, label, type = 'text', autocomplete, required = false, maxlength, multiline = false } = Astro.props;
+const id = `inq-${name}`;
+---
+
+<div class="field" data-field={name}>
+  <label class="field__label" for={id}>{label}{required && <Fragment>{' '}<span aria-hidden="true">*</span><span class="visually-hidden"> (required)</span></Fragment>}</label>
+  {
+    multiline ? (
+      <textarea class="field__input" id={id} name={name} rows="5" maxlength={maxlength} required={required}></textarea>
+    ) : (
+      <input class="field__input" id={id} name={name} type={type} autocomplete={autocomplete} maxlength={maxlength} required={required} />
+    )
+  }
+  <FieldError id={`${id}-error`} />
+</div>
