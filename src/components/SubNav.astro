@@ -1,0 +1,56 @@
+---
+import { isCurrentPage } from '../lib/nav-utils.ts';
+
+interface Props {
+  /** Names the group for screen readers, for example "Homes sections". */
+  label: string;
+  items: { label: string; href: string }[];
+}
+
+const { label, items } = Astro.props;
+const { pathname } = Astro.url;
+---
+
+<nav class="subnav container" aria-label={label}>
+  <ul class="subnav__list" role="list">
+    {
+      items.map((item) => (
+        <li>
+          <a class="subnav__link" href={item.href} aria-current={isCurrentPage(pathname, item.href) ? 'page' : undefined}>{item.label}</a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .subnav__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-6);
+    margin: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .subnav__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .subnav__link:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  .subnav__link[aria-current='page'] {
+    border-bottom-color: var(--text);
+  }
+</style>

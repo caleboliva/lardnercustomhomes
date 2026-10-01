@@ -1,0 +1,27 @@
+---
+import Copy from '../../components/Copy.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SubNav from '../../components/SubNav.astro';
+import { copy } from '../../data/copy.ts';
+import { homesSubNav } from '../../data/navigation.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const page = copy.homes.buildOnYourLot;
+---
+
+<BaseLayout title={page.title} description="Build a custom home on your own lot with Lardner Custom Homes in Dallas.">
+  <PageHeader title={page.title} eyebrow="Homes" intro={page.intro} />
+  <SubNav label="Homes sections" items={homesSubNav} />
+  <section class="section section--tight container">
+    <div class="prose">
+      {page.body.map((paragraph) => <p><Copy text={paragraph} /></p>)}
+    </div>
+    <p class="cta"><a class="btn" href="/inventory/">{page.button}</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .cta {
+    margin-top: var(--space-6);
+  }
+</style>

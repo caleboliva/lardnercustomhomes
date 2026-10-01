@@ -1,0 +1,43 @@
+---
+import { copy } from '../data/copy.ts';
+import { listings } from '../data/homes.ts';
+import { homesSubNav } from '../data/navigation.ts';
+import type { ListingCategory } from '../data/types.ts';
+import { filterListings } from '../lib/content.ts';
+import ListingCard from './ListingCard.astro';
+import PageHeader from './PageHeader.astro';
+import SubNav from './SubNav.astro';
+
+interface Props {
+  title: string;
+  intro: string;
+  eyebrow?: string;
+  /** Leave out to show every listing. */
+  category?: ListingCategory;
+}
+
+const { title, intro, eyebrow, category } = Astro.props;
+const items = filterListings(listings, category);
+---
+
+<PageHeader title={title} eyebrow={eyebrow} intro={intro} />
+<SubNav label="Homes sections" items={homesSubNav} />
+<section class="section section--tight container" aria-label={title}>
+  {
+    items.length > 0 ? (
+      <ul class="grid grid--3" role="list">
+        {items.map((listing, i) => (
+          <li data-reveal style={`--reveal-i: ${i % 3}`}>
+            <ListingCard listing={listing} eager={i < 3} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="empty">
+        <p class="lead">{copy.homes.empty.heading}</p>
+        <p>{copy.homes.empty.body}</p>
+        <a class="btn" href="/inventory/">{copy.homes.empty.button}</a>
+      </div>
+    )
+  }
+</section>

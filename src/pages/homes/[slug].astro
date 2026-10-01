@@ -1,0 +1,164 @@
+---
+import Copy from '../../components/Copy.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import Photo from '../../components/Photo.astro';
+import PhotoGrid from '../../components/PhotoGrid.astro';
+import { copy } from '../../data/copy.ts';
+import { listings } from '../../data/homes.ts';
+import type { Listing } from '../../data/types.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatNumber, placeholder } from '../../lib/format.ts';
+import { homeImage, toGalleryItem } from '../../lib/images.ts';
+
+export function getStaticPaths() {
+  return listings.map((listing) => ({ params: { slug: listing.slug }, props: { listing } }));
+}
+
+interface Props {
+  listing: Listing;
+}
+
+const { listing } = Astro.props;
+const isLot = listing.category === 'lot';
+const cover = homeImage(listing.slug, listing.cover);
+const coverAlt = listing.photos.find((photo) => photo.file === listing.cover)?.alt ?? listing.title;
+const items = await Promise.all(
+  listing.photos.map((photo) => toGalleryItem(homeImage(listing.slug, photo.file), photo.alt, listing.title)),
+);
+
+const facts: { label: string; value: string }[] = [];
+if (listing.neighborhood) facts.push({ label: 'Neighborhood', value: listing.neighborhood });
+if (listing.address) facts.push({ label: 'Address', value: listing.address });
+if (listing.price) facts.push({ label: 'Price', value: listing.price });
+if (listing.beds !== undefined) facts.push({ label: 'Bedrooms', value: String(listing.beds) });
+if (listing.baths !== undefined) facts.push({ label: 'Bathrooms', value: String(listing.baths) });
+if (listing.sqft !== undefined) facts.push({ label: 'Square feet', value: formatNumber(listing.sqft) });
+if (listing.lotSize) facts.push({ label: 'Lot size', value: listing.lotSize });
+if (facts.length === 0 && listing.placeholder) {
+  facts.push({
+    label: 'Details',
+    value: placeholder(isLot ? 'neighborhood, address, price, lot size' : 'neighborhood, address, price, beds, baths, square feet'),
+  });
+}
+
+const description =
+  listing.description ?? (listing.placeholder ? placeholder(`a short description of this ${isLot ? 'lot' : 'home'}`) : '');
+const back = isLot ? { href: '/homes/lots/', label: 'All lots' } : { href: '/homes/available/', label: 'Available homes' };
+const inquiryHref = `/inventory/?home=${encodeURIComponent(listing.title)}`;
+---
+
+<BaseLayout title={listing.title} description={`${listing.title} from Lardner Custom Homes in Dallas.`}>
+  <article class="listing">
+    <header class="listing__header container">
+      <a class="listing__back" href={back.href}><span aria-hidden="true">&larr;</span> {back.label}</a>
+      <p class="eyebrow">{listing.status}</p>
+      <h1>{listing.title}</h1>
+    </header>
+
+    <div class="container">
+      <Photo
+        image={cover}
+        alt={coverAlt}
+        ratio="16/9"
+        sizes="(min-width: 90rem) 82rem, 92vw"
+        eager
+        placeholderLabel={isLot ? 'Lot photo' : 'Home photo'}
+      />
+    </div>
+
+    <section class="listing__summary section section--tight container" aria-label="Details">
+      <dl class="listing__facts">
+        {
+          facts.map((fact) => (
+            <div class="listing__fact">
+              <dt>{fact.label}</dt>
+              <dd><Copy text={fact.value} /></dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="listing__about">
+        {description && <p class="lead"><Copy text={description} /></p>}
+        <a class="btn" href={inquiryHref}>{isLot ? copy.homes.lotDetailCta : copy.homes.detailCta}</a>
+      </div>
+    </section>
+
+    {
+      items.length > 0 && (
+        <section class="listing__photos container" aria-labelledby="photos-heading">
+          <h2 id="photos-heading">Photos</h2>
+          <PhotoGrid items={items} layout="three" ratio="4/3" />
+        </section>
+      )
+    }
+  </article>
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  .listing__header {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    padding-block: var(--space-7) var(--space-6);
+  }
+
+  .listing__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--tap);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  .listing__summary {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .listing__facts {
+    display: grid;
+    align-content: start;
+    margin: 0;
+  }
+
+  .listing__fact {
+    display: grid;
+    gap: var(--space-1) var(--space-5);
+    grid-template-columns: 9rem minmax(0, 1fr);
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--rule);
+  }
+
+  .listing__fact dt {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps);
+    line-height: 2;
+    text-transform: uppercase;
+  }
+
+  .listing__about {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--space-5);
+  }
+
+  .listing__photos {
+    display: grid;
+    gap: var(--space-6);
+    padding-bottom: var(--space-section);
+  }
+
+  @media (min-width: 64rem) {
+    .listing__summary {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      column-gap: var(--space-9);
+    }
+  }
+</style>

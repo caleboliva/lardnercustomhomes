@@ -1,0 +1,11 @@
+---
+import ListingsView from '../../components/ListingsView.astro';
+import { copy } from '../../data/copy.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const { title, intro } = copy.homes.available;
+---
+
+<BaseLayout title={title} description="Homes for sale and coming soon from Lardner Custom Homes in Dallas.">
+  <ListingsView title={title} intro={intro} eyebrow="Homes" category="available" />
+</BaseLayout>

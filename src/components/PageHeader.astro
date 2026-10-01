@@ -1,0 +1,25 @@
+---
+import Copy from './Copy.astro';
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  intro?: string;
+}
+
+const { title, eyebrow, intro } = Astro.props;
+---
+
+<header class="page-header container">
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h1>{title}</h1>
+  {intro && <p class="lead"><Copy text={intro} /></p>}
+</header>
+
+<style>
+  .page-header {
+    display: grid;
+    gap: var(--space-4);
+    padding-block: var(--space-8) var(--space-6);
+  }
+</style>
