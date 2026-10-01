@@ -1,0 +1,11 @@
+---
+import { isPlaceholder } from '../lib/format.ts';
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+{isPlaceholder(text) ? <mark class="placeholder-text">{text}</mark> : text}

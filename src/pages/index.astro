@@ -1,13 +1,33 @@
 ---
+import Copy from '../components/Copy.astro';
+import Icon from '../components/Icon.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { placeholder } from '../lib/format.ts';
+import { site } from '../data/site.ts';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lardner Custom Homes</title>
-  </head>
-  <body>
-    <h1>Lardner Custom Homes</h1>
-  </body>
-</html>
+<BaseLayout title={site.name}>
+  <section class="section container">
+    <p class="eyebrow">Eyebrow label</p>
+    <h1>Heading one in Cormorant</h1>
+    <p class="lead">Lead paragraph in Jost, a little larger than body text.</p>
+    <div class="prose">
+      <p>Body text in Jost. The quick brown fox jumps over the lazy dog. <a href="/">An inline link</a>.</p>
+      <p><Copy text={placeholder('a sample of missing copy')} /></p>
+    </div>
+    <p style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem">
+      <a class="btn" href="/">Primary button</a>
+      <a class="btn btn--ghost" href="/">Ghost button</a>
+      <a class="link-arrow" href="/">Arrow link</a>
+    </p>
+    <p style="display:flex;gap:1rem;margin-top:2rem">
+      <Icon name="menu" /><Icon name="close" /><Icon name="chevron-down" /><Icon name="arrow-left" />
+      <Icon name="arrow-right" /><Icon name="check" /><Icon name="alert" /><Icon name="facebook" /><Icon name="instagram" />
+    </p>
+  </section>
+  <section class="section section--surface"><div class="container"><h2>Champagne band</h2></div></section>
+  <section class="section section--accent"><div class="container"><h2 data-reveal>Powder Blue band, revealed on scroll</h2></div></section>
+  <section class="section" data-theme="dark" style="background:var(--bg);color:var(--text)">
+    <div class="container"><h2>Dark theme</h2><p><a class="btn" href="/">Button on dark</a></p></div>
+  </section>
+</BaseLayout>

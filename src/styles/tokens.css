@@ -1,0 +1,77 @@
+:root {
+  /* Palette. Names from figma.com/colors. Change the site's colours here. */
+  --color-honeydew: #f0fff0;
+  --color-champagne: #f7e6ca;
+  --color-powder: #b8e3e9;
+  --color-midnight: #272757;
+  --color-midnight-deep: #12122b;
+  --color-white: #ffffff;
+
+  /* Roles. Components use these, never the palette directly. */
+  --bg: var(--color-honeydew);
+  --surface: var(--color-champagne);
+  --accent: var(--color-powder);
+  --text: var(--color-midnight);
+  --text-muted: color-mix(in srgb, var(--color-midnight) 72%, var(--color-honeydew));
+  --rule: color-mix(in srgb, var(--color-midnight) 18%, transparent);
+  --field-border: color-mix(in srgb, var(--color-midnight) 60%, transparent);
+  --focus: var(--color-midnight);
+  --btn-bg: var(--color-midnight);
+  --btn-text: var(--color-honeydew);
+
+  /* Type */
+  --font-display: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'Jost Variable', Jost, 'Helvetica Neue', Arial, sans-serif;
+  --step--1: clamp(0.8125rem, 0.79rem + 0.11vw, 0.875rem);
+  --step-0: clamp(1.0625rem, 1.04rem + 0.11vw, 1.125rem);
+  --step-1: clamp(1.25rem, 1.16rem + 0.45vw, 1.5rem);
+  --step-2: clamp(1.625rem, 1.4rem + 1.1vw, 2.25rem);
+  --step-3: clamp(2.125rem, 1.72rem + 2vw, 3.25rem);
+  --step-4: clamp(2.5rem, 1.95rem + 2.7vw, 4rem);
+  --leading-tight: 1.1;
+  --leading-body: 1.65;
+  --tracking-caps: 0.14em;
+  --measure: 65ch;
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-section: clamp(4rem, 2.5rem + 6vw, 8rem);
+  --gutter: clamp(1.25rem, 0.5rem + 3.2vw, 3rem);
+  --content-max: 82.5rem;
+
+  /* Layout */
+  --header-h: 4rem;
+  --header-h-compact: 4rem;
+  --tap: 2.75rem;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 180ms;
+  --dur: 320ms;
+  --dur-slow: 700ms;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --header-h: 8.5rem;
+    --header-h-compact: 4.5rem;
+  }
+}
+
+[data-theme='dark'] {
+  --bg: var(--color-midnight-deep);
+  --text: var(--color-white);
+  --text-muted: color-mix(in srgb, var(--color-white) 74%, var(--color-midnight-deep));
+  --rule: color-mix(in srgb, var(--color-white) 22%, transparent);
+  --focus: var(--color-powder);
+  --btn-bg: var(--color-honeydew);
+  --btn-text: var(--color-midnight);
+}
