@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import colinPhoto from '../assets/people/colin-lardner.jpg';
+import PageHeader from '../components/PageHeader.astro';
+import { copy } from '../data/copy.ts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const { title, colin, company, values } = copy.about;
+---
+
+<BaseLayout title={title} description="Meet Colin Lardner and the team behind Lardner Custom Homes in Dallas.">
+  <PageHeader title={title} />
+
+  <section class="colin container" aria-labelledby="colin-name">
+    <div class="colin__photo" data-reveal>
+      <Image src={colinPhoto} alt={colin.photoAlt} width={447} height={447} loading="eager" />
+    </div>
+    <div class="colin__text" data-reveal style="--reveal-i: 1">
+      <div class="colin__heading">
+        <h2 id="colin-name">{colin.name}</h2>
+        <p class="eyebrow">{colin.role}</p>
+      </div>
+      <div class="prose">
+        {colin.bio.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="company-title">
+    <div class="split container" data-reveal>
+      <h2 id="company-title">{company.heading}</h2>
+      <div class="prose">
+        {company.body.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="values-title">
+    <h2 id="values-title" data-reveal>{values.heading}</h2>
+    <ul class="values" role="list">
+      {
+        values.items.map((value) => (
+          <li class="values__item" data-reveal>
+            <h3>{value.title}</h3>
+            <p>{value.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .colin {
+    display: grid;
+    gap: var(--space-6);
+    padding-bottom: var(--space-section);
+  }
+
+  /* The source photo is 447px square, so it is never shown wider than 400px. */
+  .colin__photo {
+    max-width: 25rem;
+  }
+
+  .colin__photo :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .colin__text {
+    display: grid;
+    align-content: start;
+    gap: var(--space-5);
+  }
+
+  .colin__heading {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .split {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .values {
+    margin: var(--space-6) 0 0;
+  }
+
+  .values__item {
+    display: grid;
+    gap: var(--space-2);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--rule);
+  }
+
+  .values__item p {
+    max-width: var(--measure);
+  }
+
+  @media (min-width: 64rem) {
+    /* All three bands share one left column so their text lines up down the page. */
+    .colin,
+    .split,
+    .values__item {
+      grid-template-columns: 25rem minmax(0, 1fr);
+      column-gap: var(--space-9);
+    }
+
+    .colin {
+      align-items: start;
+    }
+  }
+</style>
