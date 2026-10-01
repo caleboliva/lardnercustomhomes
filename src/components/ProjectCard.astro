@@ -1,0 +1,28 @@
+---
+import type { Project } from '../data/types.ts';
+import { projectImage } from '../lib/images.ts';
+import Photo from './Photo.astro';
+
+interface Props {
+  project: Project;
+  /** 2 on the Gallery page; 3 where the cards sit under another heading. */
+  headingLevel?: 2 | 3;
+  eager?: boolean;
+  sizes?: string;
+}
+
+const { project, headingLevel = 2, eager = false, sizes = '(min-width: 40rem) 46vw, 92vw' } = Astro.props;
+const Heading = `h${headingLevel}` as const;
+const cover = projectImage(project.slug, project.cover);
+const coverAlt = project.photos.find((photo) => photo.file === project.cover)?.alt ?? `${project.name}: front elevation`;
+---
+
+<article class="card">
+  <a class="card__link" href={`/gallery/${project.slug}/`}>
+    <Photo image={cover} alt={coverAlt} ratio="3/2" sizes={sizes} eager={eager} placeholderLabel="Front elevation" />
+    <div class="card__body">
+      <Heading class="card__title">{project.name}</Heading>
+      {project.location && <p class="card__meta">{project.location}</p>}
+    </div>
+  </a>
+</article>

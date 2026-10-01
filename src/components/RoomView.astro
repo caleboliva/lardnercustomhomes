@@ -1,0 +1,36 @@
+---
+import { copy } from '../data/copy.ts';
+import { gallerySubNav } from '../data/navigation.ts';
+import { projects } from '../data/projects.ts';
+import { ROOM_LABELS, type RoomPage } from '../data/types.ts';
+import { photosForRoom } from '../lib/content.ts';
+import { projectImage, toGalleryItem } from '../lib/images.ts';
+import Lightbox from './Lightbox.astro';
+import PageHeader from './PageHeader.astro';
+import PhotoGrid from './PhotoGrid.astro';
+import SubNav from './SubNav.astro';
+
+interface Props {
+  room: RoomPage;
+}
+
+const { room } = Astro.props;
+const items = await Promise.all(
+  photosForRoom(projects, room).map(({ photo, project }) =>
+    toGalleryItem(projectImage(project.slug, photo.file), photo.alt, project.name, `/gallery/${project.slug}/`),
+  ),
+);
+---
+
+<PageHeader title={ROOM_LABELS[room]} eyebrow="Gallery" intro={copy.gallery.rooms[room]} />
+<SubNav label="Gallery sections" items={gallerySubNav} />
+<section class="section section--tight container" aria-label={`${ROOM_LABELS[room]} photos`}>
+  {
+    items.length > 0 ? (
+      <PhotoGrid items={items} layout="two" ratio="3/2" captions eagerCount={2} />
+    ) : (
+      <div class="empty"><p class="lead">{copy.gallery.empty}</p></div>
+    )
+  }
+</section>
+<Lightbox />
