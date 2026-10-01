@@ -1,0 +1,84 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { copy } from '../src/data/copy.ts';
+import { listings } from '../src/data/homes.ts';
+import { gallerySubNav, homesSubNav, primaryNav } from '../src/data/navigation.ts';
+import { projects } from '../src/data/projects.ts';
+import { site } from '../src/data/site.ts';
+import { RESERVED_LISTING_SLUGS, RESERVED_PROJECT_SLUGS, ROOM_PAGES } from '../src/data/types.ts';
+
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const ROOMS: readonly string[] = [...ROOM_PAGES, 'other'];
+
+function assertUnique(values: string[], what: string): void {
+  assert.equal(new Set(values).size, values.length, `${what} must be unique`);
+}
+
+test('listing slugs are unique, URL-safe and do not collide with fixed pages', () => {
+  const slugs = listings.map((l) => l.slug);
+  assertUnique(slugs, 'listing slugs');
+  for (const slug of slugs) {
+    assert.match(slug, SLUG);
+    assert.equal(RESERVED_LISTING_SLUGS.includes(slug), false, `"${slug}" is reserved`);
+  }
+});
+
+test('project slugs are unique, URL-safe and do not collide with room pages', () => {
+  const slugs = projects.map((p) => p.slug);
+  assertUnique(slugs, 'project slugs');
+  for (const slug of slugs) {
+    assert.match(slug, SLUG);
+    assert.equal(RESERVED_PROJECT_SLUGS.includes(slug), false, `"${slug}" is reserved`);
+  }
+});
+
+test('every photo has alt text and a known room', () => {
+  const photos = [...listings.flatMap((l) => l.photos), ...projects.flatMap((p) => p.photos)];
+  assert.ok(photos.length > 0);
+  for (const photo of photos) {
+    assert.ok(photo.alt.trim().length > 0, 'photo alt text must not be empty');
+    assert.ok(ROOMS.includes(photo.room), `unknown room "${photo.room}"`);
+  }
+});
+
+test('sample entries are labelled so they cannot be mistaken for real ones', () => {
+  for (const l of listings.filter((x) => x.placeholder)) assert.match(l.title, /^Sample /);
+  for (const p of projects.filter((x) => x.placeholder)) assert.match(p.name, /^Sample /);
+});
+
+test('sample data exercises every page: both categories and all four rooms', () => {
+  assert.ok(listings.some((l) => l.category === 'available'));
+  assert.ok(listings.some((l) => l.category === 'lot'));
+  for (const room of ROOM_PAGES) {
+    assert.ok(projects.some((p) => p.photos.some((photo) => photo.room === room)), `no ${room} photo`);
+  }
+  assert.ok(projects.some((p) => p.featured));
+});
+
+test('contact constants match the brief', () => {
+  assert.equal(site.phone.href, 'tel:8445273637');
+  assert.equal(site.email.href, 'mailto:colin@lardnergroup.com');
+  assert.equal(site.address, 'Dallas, TX 75220');
+  assert.deepEqual(
+    site.social.map((s) => s.href),
+    ['https://www.facebook.com/dallashomesforsale', 'https://www.instagram.com/lardner_group/'],
+  );
+  assert.equal(site.legal.length, 2);
+});
+
+test('navigation links are site-relative and end with a slash', () => {
+  const top = [...primaryNav.left, ...primaryNav.right];
+  const links = [...top, ...top.flatMap((i) => i.children ?? []), ...homesSubNav, ...gallerySubNav];
+  for (const link of links) assert.match(link.href, /^\/[a-z0-9/-]*\/$/, link.href);
+});
+
+test('copy has no empty strings', () => {
+  const walk = (value: unknown, path: string): void => {
+    if (typeof value === 'string') assert.ok(value.trim().length > 0, `${path} is empty`);
+    else if (Array.isArray(value)) value.forEach((v, i) => walk(v, `${path}[${i}]`));
+    else if (value && typeof value === 'object') {
+      for (const [key, v] of Object.entries(value)) walk(v, `${path}.${key}`);
+    }
+  };
+  walk(copy, 'copy');
+});
