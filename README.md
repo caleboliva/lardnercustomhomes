@@ -20,7 +20,8 @@ Then open http://localhost:4321.
 | Command | What it does |
 |---|---|
 | `npm run dev` | Starts the site locally and reloads as you edit |
-| `npm test` | Runs the unit tests |
+| `npm test` | Runs the unit tests and lists photo names that do not match a file |
+| `npm run launch-check` | Lists sample content, placeholders and missing settings that block launch |
 | `npm run build` | Checks the code and builds the finished site into `dist/` |
 | `npm run preview` | Serves the built site from `dist/` |
 
@@ -72,6 +73,8 @@ Never put a private or secret key in a `PUBLIC_` variable. Anything with that pr
 To preview the form's states without sending anything, run `npm run dev` and open `/inventory/?formDemo=success` or `/inventory/?formDemo=error`. This only works locally.
 
 ## Publish
+
+Run `npm run launch-check` first: it must say "Ready to launch". `HANDOFF.md` walks through the whole launch in order.
 
 `npm run build` writes the finished site to `dist/`. That folder can be uploaded to any static host (Netlify, Cloudflare Pages, Vercel and similar).
 
