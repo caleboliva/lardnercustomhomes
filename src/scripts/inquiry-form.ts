@@ -1,5 +1,5 @@
+import { deliverInquiry, TRAP_FIELD, type DeliveryOutcome } from '../lib/delivery.ts';
 import {
-  buildPayload,
   formatPhone,
   normalizePhone,
   validateField,
@@ -12,15 +12,12 @@ import {
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-const TIMEOUT_MS = 15_000;
 const DEMO_DELAY_MS = 1_200;
 const MESSAGES = {
   notConnected: "This form isn't connected yet, so your message was not sent.",
   failed: 'Sorry, something went wrong and your message was not sent.',
   demoSuccess: 'Demo mode: this is how a successful send looks. Nothing was sent.',
 };
-
-class NotConnectedError extends Error {}
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
@@ -122,32 +119,20 @@ export function initInquiryForm(): void {
     }
   };
 
-  const deliver = async (values: InquiryValues): Promise<void> => {
-    // The spam trap was filled in: drop the message without telling the bot.
-    if (String(new FormData(form).get('company') ?? '') !== '') return;
-
+  const deliver = async (values: InquiryValues): Promise<DeliveryOutcome> => {
+    // Local development only: preview the states without sending anything.
     if (demo === 'success' || demo === 'error') {
       await wait(DEMO_DELAY_MS);
-      if (demo === 'error') throw new Error('Demo error');
-      return;
+      return demo === 'success' ? 'sent' : 'failed';
     }
 
-    const endpoint = form.dataset.endpoint;
-    if (!endpoint) throw new NotConnectedError();
-
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(buildPayload(values, form.dataset.accessKey)),
-        signal: controller.signal,
-      });
-      if (!response.ok) throw new Error(`Form service responded with ${response.status}`);
-    } finally {
-      window.clearTimeout(timer);
-    }
+    return deliverInquiry(values, {
+      endpoint: form.dataset.endpoint ?? '',
+      accessKey: form.dataset.accessKey,
+      trap: String(new FormData(form).get(TRAP_FIELD) ?? ''),
+      // Looked up at call time, not captured, so the page always uses the current window.fetch.
+      fetchFn: (input, init) => window.fetch(input, init),
+    });
   };
 
   form.addEventListener('submit', async (event) => {
@@ -165,12 +150,16 @@ export function initInquiryForm(): void {
     }
 
     setStatus('submitting');
+    let outcome: DeliveryOutcome;
     try {
-      await deliver(values);
-      setStatus('success', demo === 'success' ? MESSAGES.demoSuccess : '');
-    } catch (error) {
-      setStatus('error', error instanceof NotConnectedError ? MESSAGES.notConnected : MESSAGES.failed);
+      outcome = await deliver(values);
+    } catch {
+      outcome = 'failed';
     }
+    // Only a confirmed delivery shows the thank-you. A tripped spam trap gets the same
+    // message as any other failure, so a real person still sees how to reach Colin.
+    if (outcome === 'sent') setStatus('success', demo === 'success' ? MESSAGES.demoSuccess : '');
+    else setStatus('error', outcome === 'not-connected' ? MESSAGES.notConnected : MESSAGES.failed);
   });
 
   // Check a field when the visitor leaves it.

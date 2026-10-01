@@ -5,7 +5,7 @@ Built with [Astro](https://astro.build). The output is plain HTML, CSS and a sma
 
 ## Run it
 
-You need [Node.js](https://nodejs.org) 22.12 or newer.
+You need [Node.js](https://nodejs.org) 22.18 or newer (the current LTS release is fine).
 
 ```bash
 npm install
@@ -41,9 +41,12 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 
 - Project photos go in `src/assets/projects/<project-slug>/`.
 - Home and lot photos go in `src/assets/homes/<listing-slug>/`.
-- The home page hero goes in `src/assets/site/`; set its file name at `copy.home.hero.image`.
+- The home page hero goes in `src/assets/site/`; set its file name at `copy.home.hero.image` and describe it in `copy.home.hero.imageAlt`.
 - Use JPG, PNG, WebP or AVIF. Upload the largest version you have; the site resizes and compresses automatically.
-- If a file name in the data does not match a file on disk, the site shows a "Placeholder" tile instead of a broken image.
+- iPhone photos are often HEIC files, which the site cannot use. Export them as JPG first.
+- The name in the data must match the file name exactly, including capital letters: `IMG_0001.JPG` is not `img_0001.jpg`.
+- If a name does not match a file, the site shows a "Placeholder" tile instead of a broken image. Run `npm test` after adding photos: it lists any name that does not match.
+- Cards and cover images crop photos to a fixed shape from the centre, so landscape photos work best there. The project page and the photo viewer show each photo uncropped.
 - Each photo's `room` decides which Gallery room page it also appears on.
 - Write `alt` text that describes the photo for someone who cannot see it.
 
@@ -60,6 +63,9 @@ The form does not send email until it is connected to a form service. Until then
 3. Set `PUBLIC_FORM_ENDPOINT` to the address the service gives you.
 4. If the service needs a key in the message and that key is designed to be public, set `PUBLIC_FORM_ACCESS_KEY`.
 5. On the hosting provider, set the same variables, then rebuild.
+6. Send one test enquiry from the live site and confirm it arrives in Colin's inbox.
+
+The site treats any "OK" reply from the form service as sent. Choose a service that replies with an error when delivery fails, so visitors are told when a message did not go through.
 
 Never put a private or secret key in a `PUBLIC_` variable. Anything with that prefix is sent to every visitor's browser.
 

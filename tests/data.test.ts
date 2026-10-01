@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { existsSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import test from 'node:test';
 import { copy } from '../src/data/copy.ts';
 import { listings } from '../src/data/homes.ts';
@@ -6,6 +8,7 @@ import { gallerySubNav, homesSubNav, primaryNav } from '../src/data/navigation.t
 import { projects } from '../src/data/projects.ts';
 import { site } from '../src/data/site.ts';
 import { RESERVED_LISTING_SLUGS, RESERVED_PROJECT_SLUGS, ROOM_PAGES } from '../src/data/types.ts';
+import { findMissingPhotos, type PhotoRef } from '../src/lib/photo-files.ts';
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ROOMS: readonly string[] = [...ROOM_PAGES, 'other'];
@@ -46,7 +49,10 @@ test('sample entries are labelled so they cannot be mistaken for real ones', () 
   for (const p of projects.filter((x) => x.placeholder)) assert.match(p.name, /^Sample /);
 });
 
-test('sample data exercises every page: both categories and all four rooms', () => {
+test('while only sample data is in place, it exercises every page', () => {
+  // Real content is free to have no lots, or no bath photos. This only guards the samples.
+  const samplesOnly = listings.every((l) => l.placeholder) && projects.every((p) => p.placeholder);
+  if (!samplesOnly) return;
   assert.ok(listings.some((l) => l.category === 'available'));
   assert.ok(listings.some((l) => l.category === 'lot'));
   for (const room of ROOM_PAGES) {
@@ -55,15 +61,50 @@ test('sample data exercises every page: both categories and all four rooms', () 
   assert.ok(projects.some((p) => p.featured));
 });
 
-test('contact constants match the brief', () => {
-  assert.equal(site.phone.href, 'tel:8445273637');
-  assert.equal(site.email.href, 'mailto:colin@lardnergroup.com');
-  assert.equal(site.address, 'Dallas, TX 75220');
-  assert.deepEqual(
-    site.social.map((s) => s.href),
-    ['https://www.facebook.com/dallashomesforsale', 'https://www.instagram.com/lardner_group/'],
-  );
+test('contact details are well formed, whatever their values', () => {
+  assert.match(site.phone.href, /^tel:\+?\d{10,11}$/);
+  assert.ok(site.phone.display.trim().length > 0);
+  assert.match(site.email.href, /^mailto:[^\s@]+@[^\s@]+\.[^\s@]{2,}$/);
+  assert.equal(site.email.href, `mailto:${site.email.display}`);
+  assert.ok(site.address.trim().length > 0);
+  for (const profile of site.social) assert.match(profile.href, /^https:\/\/\S+$/, profile.name);
+});
+
+test('the two TREC documents the footer links to exist', () => {
   assert.equal(site.legal.length, 2);
+  for (const doc of site.legal) {
+    assert.match(doc.href, /^\/documents\/[a-z0-9-]+\.pdf$/);
+    assert.ok(existsSync(join('public', doc.href)), `${doc.href} is missing from public/`);
+  }
+});
+
+test('every photo named in the data exists on disk with exactly that name', () => {
+  const refs: PhotoRef[] = [];
+  for (const listing of listings) {
+    const dir = `homes/${listing.slug}`;
+    if (listing.cover) refs.push({ dir, file: listing.cover });
+    for (const photo of listing.photos) if (photo.file) refs.push({ dir, file: photo.file });
+  }
+  for (const project of projects) {
+    const dir = `projects/${project.slug}`;
+    if (project.cover) refs.push({ dir, file: project.cover });
+    for (const photo of project.photos) if (photo.file) refs.push({ dir, file: photo.file });
+  }
+  if (copy.home.hero.image) refs.push({ dir: 'site', file: copy.home.hero.image });
+
+  // readdirSync, not existsSync: Windows treats names as case-insensitive, web servers do not.
+  const readDir = (dir: string) => {
+    try {
+      return readdirSync(join('src', 'assets', dir));
+    } catch {
+      return [];
+    }
+  };
+  assert.deepEqual(
+    findMissingPhotos(refs, readDir),
+    [],
+    'These photos are named in src/data but not found in src/assets (check spelling, capital letters and file type)',
+  );
 });
 
 test('navigation links are site-relative and end with a slash', () => {

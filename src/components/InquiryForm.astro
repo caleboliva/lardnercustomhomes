@@ -1,5 +1,6 @@
 ---
 import { site } from '../data/site.ts';
+import { TRAP_FIELD } from '../lib/delivery.ts';
 import { LIMITS, PRICE_POINTS, REALTOR_OPTIONS, REFERRAL_OPTIONS } from '../lib/validation.ts';
 import ChoiceField from './ChoiceField.astro';
 import Field from './Field.astro';
@@ -49,10 +50,10 @@ const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
       <Field name="referralOther" label="Other (please tell us)" maxlength={LIMITS.referralOther} />
     </div>
 
-    <!-- Spam trap. People never see or reach this field; simple bots fill it in. -->
+    <!-- Spam trap. People never see or reach this field; simple bots fill it in. Its name is deliberately meaningless so browsers do not auto-fill it. -->
     <div class="visually-hidden" aria-hidden="true">
-      <label for="inq-company">Company</label>
-      <input id="inq-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+      <label for="inq-check">Leave this field empty</label>
+      <input id="inq-check" name={TRAP_FIELD} type="text" tabindex="-1" autocomplete="off" />
     </div>
 
     <div class="inquiry__alert" data-inquiry-alert role="alert" tabindex="-1" hidden>

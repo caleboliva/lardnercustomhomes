@@ -70,14 +70,18 @@ const items = await Promise.all(
       column-gap: var(--space-9);
     }
 
-    /* Capping the width caps the height, so the whole gallery fits in an 800px-tall window. */
+    /*
+      The gallery is three rows of 3:2 tiles, so its height is its width plus about 7rem.
+      Capping the width by the window height keeps the whole gallery visible under the header
+      on short laptop screens as well as tall ones.
+    */
     .inventory__gallery {
-      max-width: 36rem;
+      max-width: min(36rem, max(18rem, calc(100dvh - 13rem)));
     }
   }
 
-  /* Keep the gallery in view beside the form, but only when the window is tall enough to show all of it. */
-  @media (min-width: 64rem) and (min-height: 50rem) {
+  /* Keep the gallery in view beside the form. Below 32rem tall there is no room for it. */
+  @media (min-width: 64rem) and (min-height: 32rem) {
     .inventory__gallery {
       position: sticky;
       top: calc(var(--header-h-compact) + var(--space-5));
