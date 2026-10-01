@@ -24,6 +24,7 @@ Everything on this list is currently a labelled placeholder or needs Colin's sig
 ## Details to confirm
 
 - [ ] **Phone number**: the site uses (844) 527-3637. The current site shows 214-282-3144.
+- [ ] **Facebook link**: `https://www.facebook.com/dallashomesforsale` shows "This content isn't available right now" to visitors who are not logged in to Facebook. Confirm the page is public, or supply the correct address.
 - [ ] **Job title**: shown as "CEO", as on the current site.
 - [ ] **TREC documents**: the footer links to the IABS form and Consumer Protection Notice CN 1-5. The third supplied file (`trec.pdf`) is an older notice and is not used.
 
