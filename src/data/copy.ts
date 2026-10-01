@@ -21,7 +21,7 @@ export const copy = {
       heading: 'Homes built around the way you live.',
       body: [
         'We design and build homes in Dallas that are creative, efficient and good to look at. Most of all, each one is planned around the way its owners live.',
-        'Our team is made up of accomplished, creative people who care about design, energy efficiency and well-chosen finishes.',
+        'The people who build them are accomplished and creative, and they care as much about energy efficiency as they do about the finishes.',
       ],
       link: 'About us',
     },
@@ -87,7 +87,7 @@ export const copy = {
       // "Husband to Tracy, Dad to Stoneleigh").
       bio: [
         'Colin Lardner is the one looking up at buildings and pointing out what they could become. He pairs a Texas-sized personality with New York City determination and a roll-up-your-sleeves attitude.',
-        'Building runs in the family. Like his father and grandfather before him, Colin has spent his career rebuilding communities, and the Live-Work-Play concept in Dallas is part of that work. He has also spent time in Africa and South America helping people rebuild their lives, and he mentors a number of people closer to home.',
+        'Building runs in the family. Like his father and grandfather before him, Colin has rebuilding communities in his blood, and the Live-Work-Play concept in Dallas is part of his legacy. He has also spent time in Africa and South America helping people rebuild their lives, and he mentors a number of people closer to home.',
         "He holds a master's in real estate from Columbia University and is a licensed general contractor and Texas real estate broker. At home, he is husband to Tracy and dad to Stoneleigh.",
       ],
     },
@@ -98,8 +98,8 @@ export const copy = {
     company: {
       heading: 'The company',
       body: [
-        'Lardner Custom Homes designs and builds homes across Dallas, from Midway Hollow and the M-Streets to Preston Hollow.',
-        'We hire accomplished, creative people and ask them to sweat the details: design that holds your attention, energy efficiency, and finishes chosen with care. The aim is a home that is distinctive, efficient and built for the way you live.',
+        'Lardner Custom Homes designs and builds homes in Dallas neighborhoods including Midway Hollow, the M-Streets and Preston Hollow.',
+        'We hire accomplished, creative people and ask them to sweat the details, right down to the finishes. The aim is a home that runs efficiently and looks like no other on the street.',
       ],
     },
     // Sources: lardnercustomhomes.com home page ("Design Matters.", "Good design is good
@@ -115,7 +115,7 @@ export const copy = {
         },
         {
           title: 'Beauty and efficiency',
-          body: 'We work to get the most out of every home: how it looks, what makes it different and how efficiently it runs.',
+          body: 'We work to get the most out of every home, both in how it looks and in how efficiently it runs.',
         },
         {
           title: 'Trust',
@@ -123,7 +123,7 @@ export const copy = {
         },
         {
           title: 'One home at a time',
-          body: 'Our goal is simple. Make Dallas better, one home at a time.',
+          body: 'We want to make Dallas better, one home at a time.',
         },
       ],
     },

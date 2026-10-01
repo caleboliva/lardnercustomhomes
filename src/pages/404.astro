@@ -1,0 +1,27 @@
+---
+import PageHeader from '../components/PageHeader.astro';
+import { copy } from '../data/copy.ts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const { title, body } = copy.notFound;
+---
+
+<BaseLayout title={title}>
+  <PageHeader title={title} intro={body} />
+  <section class="container">
+    <p class="links">
+      <a class="btn" href="/">Home</a>
+      <a class="btn btn--ghost" href="/homes/">Homes</a>
+      <a class="btn btn--ghost" href="/gallery/">Gallery</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-bottom: var(--space-section);
+  }
+</style>
