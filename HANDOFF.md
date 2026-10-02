@@ -16,7 +16,7 @@ Ask Colin to have these ready. It saves most of the time on the day.
 
 ## 1. Set up on Colin's computer
 
-1. Copy `lardner-custom-homes.zip` to his computer and unzip it somewhere simple, such as `Documents\lardner-custom-homes`. Avoid a folder that syncs to OneDrive or iCloud.
+1. Get the project onto his computer and unzip it somewhere simple, such as `Documents\lardner-custom-homes`. Either sign in to GitHub, open the `caleboliva/lardnercustomhomes` repository and choose Code > Download ZIP (this is always the latest version), or copy `lardner-custom-homes.zip` over. Avoid a folder that syncs to OneDrive or iCloud.
 2. Install Node.js from https://nodejs.org (the LTS version). This is a one-time step.
 3. Open the Claude desktop app, go to the Code tab, and open the unzipped folder.
 
@@ -51,18 +51,19 @@ Details are in the README under "Connect the Inventory form".
 
 ## 5. Check, then publish
 
+The domain already points at GitHub Pages, which publishes from the `caleboliva/lardnercustomhomes` repository on every push to `main`. Until launch it publishes only a holding page (logo and contact details).
+
 1. Run `npm run launch-check`. It must say "Ready to launch". It lists any sample entry, placeholder or missing setting that is left.
-2. Run `npm test` and `npm run build`. The finished site is the `dist` folder.
-3. Publish `dist` to a static host (for example Netlify or Cloudflare Pages). Colin creates the account. Set the form address there too, as described in the README.
-4. Open the host's temporary address and check every page before touching the domain.
-5. Point lardnercustomhomes.com at the new host, following the host's instructions for a custom domain.
+2. Run `npm test` and `npm run build`, and look through the full site in the local preview one last time.
+3. Add the form address on GitHub (Settings > Secrets and variables > Actions > Variables, named `PUBLIC_FORM_ENDPOINT`).
+4. Delete the `SITE_MODE: holding` line from `.github/workflows/deploy.yml`, commit and push. GitHub re-runs the launch check, then publishes the full site. Ask Claude to do this step.
+5. Open lardnercustomhomes.com a few minutes later and check every page.
 
 ### Take care with the domain
 
-- **Squarespace cannot host this site.** The domain has to point at the new host.
-- **Change only the website records** (the ones for the bare domain and `www`). Leave any email records (MX) exactly as they are, or email on that domain will stop.
-- **Do not cancel anything at Squarespace until the new site is live on the domain** and checked. If the domain itself is registered through Squarespace, cancel only the website plan and keep the domain registration.
-- DNS changes can take from a few minutes to a day to reach everyone.
+- **The domain's DNS is managed at Squarespace and already points at GitHub.** It needs no further changes.
+- **Leave any email records (MX) alone.** Changing them stops email on that domain.
+- **The domain registration is still with Squarespace.** If Colin cancels the old Squarespace website plan, he must keep the domain registration itself.
 
 ## 6. After launch
 

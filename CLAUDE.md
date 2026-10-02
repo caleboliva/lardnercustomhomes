@@ -22,6 +22,13 @@ On Windows, if a command fails with "An Application Control policy has blocked t
 
 If the Browser pane's preview will not start on a Mac, change `runtimeExecutable` in `.claude/launch.json` to `npm`.
 
+## Publishing
+
+- The site is published by GitHub Pages from `caleboliva/lardnercustomhomes` (remote `origin`). Every push to `main` deploys to lardnercustomhomes.com through `.github/workflows/deploy.yml`.
+- **The live domain currently shows only a holding page.** The workflow sets `SITE_MODE: holding`, which builds `holding/` instead of `src/`. Do not remove that line unless the user asks to launch.
+- Launching means: `npm run launch-check` says "Ready to launch", then delete the `SITE_MODE: holding` line and push. The workflow re-runs the launch check and refuses to publish the full site while anything is unfinished.
+- A push is a public deployment. Confirm with the user before pushing.
+
 ## Rules
 
 - **Never invent facts** about the company, Colin, homes, prices, specs or projects. Use what Colin provides. Where something is missing, use `placeholder('what is needed')` from `src/lib/format.ts`.

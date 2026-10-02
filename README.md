@@ -74,11 +74,29 @@ To preview the form's states without sending anything, run `npm run dev` and ope
 
 ## Publish
 
-Run `npm run launch-check` first: it must say "Ready to launch". `HANDOFF.md` walks through the whole launch in order.
+The site is published by GitHub Pages from the `caleboliva/lardnercustomhomes` repository. Every push to the `main` branch rebuilds and republishes it at lardnercustomhomes.com; the steps are in `.github/workflows/deploy.yml`.
 
-`npm run build` writes the finished site to `dist/`. That folder can be uploaded to any static host (Netlify, Cloudflare Pages, Vercel and similar).
+**Right now only a holding page is published.** The workflow sets `SITE_MODE: holding`, which builds the single page in `holding/` instead of the full site in `src/`. Visitors see the logo and Colin's contact details; none of the sample content is public.
 
-Squarespace cannot host this site. To go live, publish `dist/` to a static host and point the lardnercustomhomes.com domain at it.
+To launch the full site:
+
+1. Run `npm run launch-check`. It must say "Ready to launch".
+2. If the form is connected, add its address on GitHub under Settings > Secrets and variables > Actions > Variables, as `PUBLIC_FORM_ENDPOINT`.
+3. Delete the `SITE_MODE: holding` line from `.github/workflows/deploy.yml` and push.
+
+GitHub runs the launch check again before publishing the full site and stops if anything is unfinished, so sample content cannot go live by accident.
+
+To see the holding page locally, build it and preview the result:
+
+```bash
+SITE_MODE=holding npm run build
+```
+
+```bash
+npm run preview
+```
+
+`HANDOFF.md` walks through the whole launch in order.
 
 ## Project layout
 

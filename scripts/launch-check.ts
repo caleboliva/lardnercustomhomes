@@ -20,15 +20,22 @@ function formEndpoint(): string {
     .replace(/^["']|["']$/g, '');
 }
 
-const problems = prelaunchProblems({
-  listings,
-  projects,
-  copy,
-  heroImage: copy.home.hero.image,
-  formEndpoint: formEndpoint(),
-});
+// In holding mode only the holding page is published, so unfinished content cannot go public.
+const holding = process.env.SITE_MODE === 'holding';
 
-if (problems.length === 0) {
+const problems = holding
+  ? []
+  : prelaunchProblems({
+      listings,
+      projects,
+      copy,
+      heroImage: copy.home.hero.image,
+      formEndpoint: formEndpoint(),
+    });
+
+if (holding) {
+  console.log('Holding mode: only the holding page will be published, so the launch check is skipped.');
+} else if (problems.length === 0) {
   console.log('Ready to launch: no sample content, placeholders or missing settings found.');
 } else {
   console.log(`Not ready to launch yet. ${problems.length} thing(s) to fix:\n`);

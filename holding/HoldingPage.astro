@@ -1,0 +1,139 @@
+---
+// The temporary page shown on the live domain until the full site launches.
+// It is built instead of ./src when SITE_MODE=holding (see astro.config.mjs).
+import '@fontsource-variable/jost/wght.css';
+import '@fontsource-variable/cormorant-garamond/wght.css';
+import '../src/styles/tokens.css';
+import '../src/styles/base.css';
+import '../src/styles/components.css';
+import { Image } from 'astro:assets';
+import logo from '../src/assets/brand/lardner-custom-homes-logo.webp';
+import SocialLinks from '../src/components/SocialLinks.astro';
+import { site } from '../src/data/site.ts';
+
+const year = new Date().getFullYear();
+const canonical = new URL('/', Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.name}</title>
+    <meta name="description" content={site.description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="theme-color" content="#f0fff0" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={site.name} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <main class="holding">
+      <h1 class="holding__logo">
+        <Image src={logo} alt={site.name} width={440} loading="eager" />
+      </h1>
+      <!-- Source: lardnercustomhomes.com home page ("Making Dallas Better, One Home at a Time."). -->
+      <p class="holding__tagline">Making Dallas better, one home at a time.</p>
+      <p class="holding__message">Our new website is on its way. Until then, we'd be glad to hear from you.</p>
+      <ul class="holding__contact" role="list">
+        <li><a href={site.phone.href}>{site.phone.display}</a></li>
+        <li><a href={site.email.href}>{site.email.display}</a></li>
+        <li><span>{site.address}</span></li>
+      </ul>
+      <SocialLinks />
+    </main>
+    <footer class="holding__footer">
+      <ul role="list">
+        {
+          site.legal.map((doc) => (
+            <li>
+              <a href={doc.href} target="_blank" rel="noopener noreferrer">{doc.label}<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
+            </li>
+          ))
+        }
+      </ul>
+      <p>&copy; {year} {site.name}</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .holding {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: var(--space-5);
+    padding: var(--space-8) var(--gutter);
+    text-align: center;
+  }
+
+  .holding__logo {
+    margin-bottom: var(--space-4);
+    font-size: inherit;
+    line-height: 1;
+  }
+
+  .holding__logo :global(img) {
+    width: auto;
+    height: clamp(9rem, 22vw, 13rem);
+  }
+
+  .holding__tagline {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: var(--leading-tight);
+    text-wrap: balance;
+  }
+
+  .holding__message {
+    max-width: 34ch;
+    color: var(--text-muted);
+  }
+
+  .holding__contact {
+    display: grid;
+    margin: var(--space-3) 0 0;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule);
+    font-size: var(--step-1);
+  }
+
+  .holding__contact a,
+  .holding__contact span {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+
+  .holding__footer {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--gutter);
+    border-top: 1px solid var(--rule);
+    /* 15px. Texas requires the two TREC links to be at least 10 point. */
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .holding__footer ul {
+    display: grid;
+    margin: 0;
+  }
+
+  .holding__footer a {
+    display: inline-block;
+    padding-block: var(--space-3);
+  }
+
+  .holding__footer p {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+  }
+</style>

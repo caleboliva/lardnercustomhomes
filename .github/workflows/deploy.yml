@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+# Builds the site and publishes it to GitHub Pages on every push to main.
+# The custom domain is set in the repository's Settings > Pages, and in public/CNAME.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deployment finish rather than cancelling it halfway.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+      - name: Install, build and upload the site
+        uses: withastro/action@v6
+        with:
+          node-version: 24
+          # Runs the launch check first, so the full site cannot be published
+          # while sample content or placeholders remain.
+          build-cmd: npm run build:deploy
+        env:
+          # TO LAUNCH THE FULL SITE: delete the SITE_MODE line below and push.
+          # While it says "holding", only the temporary holding page is published.
+          SITE_MODE: holding
+          # Set these under Settings > Secrets and variables > Actions > Variables
+          # once a form service is chosen. Both are public values; never put a secret here.
+          PUBLIC_FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}
+          PUBLIC_FORM_ACCESS_KEY: ${{ vars.PUBLIC_FORM_ACCESS_KEY }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
