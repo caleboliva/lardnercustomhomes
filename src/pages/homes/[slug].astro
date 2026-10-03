@@ -7,8 +7,9 @@ import { copy } from '../../data/copy.ts';
 import { listings } from '../../data/homes.ts';
 import type { Listing } from '../../data/types.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatNumber, placeholder } from '../../lib/format.ts';
+import { placeholder } from '../../lib/format.ts';
 import { homeImage, toGalleryItem } from '../../lib/images.ts';
+import { listingFacts } from '../../lib/listing-facts.ts';
 
 export function getStaticPaths() {
   return listings.map((listing) => ({ params: { slug: listing.slug }, props: { listing } }));
@@ -21,25 +22,12 @@ interface Props {
 const { listing } = Astro.props;
 const isLot = listing.category === 'lot';
 const cover = homeImage(listing.slug, listing.cover);
-const coverAlt = listing.photos.find((photo) => photo.file === listing.cover)?.alt ?? listing.title;
+const coverAlt = listing.coverAlt ?? listing.photos.find((photo) => photo.file === listing.cover)?.alt ?? listing.title;
 const items = await Promise.all(
   listing.photos.map((photo) => toGalleryItem(homeImage(listing.slug, photo.file), photo.alt, listing.title)),
 );
 
-const facts: { label: string; value: string }[] = [];
-if (listing.neighborhood) facts.push({ label: 'Neighborhood', value: listing.neighborhood });
-if (listing.address) facts.push({ label: 'Address', value: listing.address });
-if (listing.price) facts.push({ label: 'Price', value: listing.price });
-if (listing.beds !== undefined) facts.push({ label: 'Bedrooms', value: String(listing.beds) });
-if (listing.baths !== undefined) facts.push({ label: 'Bathrooms', value: String(listing.baths) });
-if (listing.sqft !== undefined) facts.push({ label: 'Square feet', value: formatNumber(listing.sqft) });
-if (listing.lotSize) facts.push({ label: 'Lot size', value: listing.lotSize });
-if (facts.length === 0 && listing.placeholder) {
-  facts.push({
-    label: 'Details',
-    value: placeholder(isLot ? 'neighborhood, address, price, lot size' : 'neighborhood, address, price, beds, baths, square feet'),
-  });
-}
+const facts = listingFacts(listing);
 
 const description =
   listing.description ?? (listing.placeholder ? placeholder(`a short description of this ${isLot ? 'lot' : 'home'}`) : '');

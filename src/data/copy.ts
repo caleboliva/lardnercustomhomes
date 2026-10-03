@@ -1,5 +1,3 @@
-import { placeholder } from '../lib/format.ts';
-
 export const copy = {
   home: {
     // Source: lardnercustomhomes.com home page ("Design Matters." and
@@ -8,8 +6,8 @@ export const copy = {
       eyebrow: 'Design matters',
       title: 'Making Dallas better, one home at a time.',
       /** File name in src/assets/site/, for example 'hero.jpg'. Null shows a placeholder tile. */
-      image: null as string | null,
-      imageAlt: 'A home built by Lardner Custom Homes',
+      image: 'hero.jpg' as string | null,
+      imageAlt: '3805 Eaton Drive at dusk, with twin white brick gables',
       primaryCta: 'View homes',
       secondaryCta: 'See the gallery',
     },
@@ -55,7 +53,8 @@ export const copy = {
     buildOnYourLot: {
       title: 'Build on Your Lot',
       intro: 'Already have the land? We can design and build on it.',
-      body: [placeholder("how building on a client's own lot works, in a few sentences from Colin")],
+      // Add a few sentences from Colin on how building on a client's own lot works.
+      body: [] as string[],
       button: 'Start a conversation',
     },
   },
@@ -133,6 +132,12 @@ export const copy = {
     eyebrow: 'Inventory',
     title: "Let's find your home.",
     intro: 'Share a few details and Colin will follow up about current and upcoming homes and lots.',
+    // Shown instead of the form until a form service is connected.
+    offline: {
+      intro: "Tell Colin what you're looking for and he'll follow up about current and upcoming homes and lots.",
+      heading: 'Get in touch',
+      body: 'Call or email Colin directly.',
+    },
     galleryHeading: 'Previous projects',
     galleryLink: 'See the gallery',
   },

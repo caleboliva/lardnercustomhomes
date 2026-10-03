@@ -65,9 +65,12 @@ test('placeholder text anywhere in the page copy is reported with its location',
   assert.deepEqual(problems, ['Placeholder text remains at copy.homes.buildOnYourLot.body[1] (src/data/copy.ts).']);
 });
 
-test('a missing hero photo and an unconnected form are reported', () => {
-  const problems = prelaunchProblems({ ...ready, heroImage: null, formEndpoint: '' });
-  assert.equal(problems.length, 2);
+test('a missing hero photo is reported', () => {
+  const problems = prelaunchProblems({ ...ready, heroImage: null });
+  assert.equal(problems.length, 1);
   assert.match(problems[0] ?? '', /hero photo/);
-  assert.match(problems[1] ?? '', /form is not connected/);
+});
+
+test('an unconnected form does not block launch, because the page then shows Colin\'s phone and email instead', () => {
+  assert.deepEqual(prelaunchProblems({ ...ready, formEndpoint: '' }), []);
 });

@@ -37,6 +37,9 @@ if (holding) {
   console.log('Holding mode: only the holding page will be published, so the launch check is skipped.');
 } else if (problems.length === 0) {
   console.log('Ready to launch: no sample content, placeholders or missing settings found.');
+  if (!formEndpoint()) {
+    console.log("Note: the enquiry form is not connected, so the Inventory page shows Colin's phone and email instead.");
+  }
 } else {
   console.log(`Not ready to launch yet. ${problems.length} thing(s) to fix:\n`);
   for (const problem of problems) console.log(`  - ${problem}`);

@@ -51,13 +51,13 @@ Details are in the README under "Connect the Inventory form".
 
 ## 5. Check, then publish
 
-The domain already points at GitHub Pages, which publishes from the `caleboliva/lardnercustomhomes` repository on every push to `main`. Until launch it publishes only a holding page (logo and contact details).
+The site is live at lardnercustomhomes.com. GitHub Pages republishes it from the `caleboliva/lardnercustomhomes` repository on every push to `main`, so publishing an update is:
 
-1. Run `npm run launch-check`. It must say "Ready to launch". It lists any sample entry, placeholder or missing setting that is left.
-2. Run `npm test` and `npm run build`, and look through the full site in the local preview one last time.
-3. Add the form address on GitHub (Settings > Secrets and variables > Actions > Variables, named `PUBLIC_FORM_ENDPOINT`).
-4. Delete the `SITE_MODE: holding` line from `.github/workflows/deploy.yml`, commit and push. GitHub re-runs the launch check, then publishes the full site. Ask Claude to do this step.
-5. Open lardnercustomhomes.com a few minutes later and check every page.
+1. Run `npm test`, `npm run launch-check` and `npm run build`, and look through the changed pages in the local preview.
+2. Commit and push (ask Claude to do it). GitHub re-runs the launch check, then publishes.
+3. Open lardnercustomhomes.com a few minutes later and check the changed pages.
+
+To connect the form, add its address on GitHub (Settings > Secrets and variables > Actions > Variables, named `PUBLIC_FORM_ENDPOINT`) and push any change.
 
 ### Take care with the domain
 

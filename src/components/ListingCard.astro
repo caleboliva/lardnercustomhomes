@@ -12,7 +12,7 @@ interface Props {
 
 const { listing, eager = false } = Astro.props;
 const cover = homeImage(listing.slug, listing.cover);
-const coverAlt = listing.photos.find((photo) => photo.file === listing.cover)?.alt ?? listing.title;
+const coverAlt = listing.coverAlt ?? listing.photos.find((photo) => photo.file === listing.cover)?.alt ?? listing.title;
 const neighborhood = listing.neighborhood ?? (listing.placeholder ? placeholder('neighborhood') : '');
 const specs = specLine(listing);
 ---

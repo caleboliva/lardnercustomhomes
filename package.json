@@ -14,7 +14,8 @@
     "check": "astro check",
     "test": "node --test \"tests/**/*.test.ts\"",
     "brand-assets": "node scripts/make-brand-assets.mjs",
-    "launch-check": "node scripts/launch-check.ts"
+    "launch-check": "node scripts/launch-check.ts",
+    "placeholder-art": "node scripts/make-placeholder-art.mjs"
   },
   "dependencies": {
     "@fontsource-variable/cormorant-garamond": "^5.3.0",

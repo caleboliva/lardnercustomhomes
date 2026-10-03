@@ -1,4 +1,5 @@
 ---
+import ContactPanel from '../components/ContactPanel.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import Lightbox from '../components/Lightbox.astro';
 import PhotoGrid from '../components/PhotoGrid.astro';
@@ -9,6 +10,9 @@ import { previewPhotos } from '../lib/content.ts';
 import { projectImage, toGalleryItem } from '../lib/images.ts';
 
 const page = copy.inventory;
+// Without a form service the published page shows phone and email instead. Locally the form
+// stays visible so its states can still be previewed with ?formDemo=.
+const formConnected = Boolean(import.meta.env.PUBLIC_FORM_ENDPOINT) || import.meta.env.DEV;
 const items = await Promise.all(
   previewPhotos(projects, 2, 6).map(({ photo, project }) =>
     toGalleryItem(projectImage(project.slug, photo.file), photo.alt, project.name),
@@ -22,9 +26,9 @@ const items = await Promise.all(
       <div class="inventory__intro">
         <p class="eyebrow">{page.eyebrow}</p>
         <h1>{page.title}</h1>
-        <p class="lead">{page.intro}</p>
+        <p class="lead">{formConnected ? page.intro : page.offline.intro}</p>
       </div>
-      <InquiryForm />
+      {formConnected ? <InquiryForm /> : <ContactPanel />}
     </div>
     {
       items.length > 0 && (

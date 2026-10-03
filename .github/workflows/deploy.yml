@@ -32,9 +32,8 @@ jobs:
           # while sample content or placeholders remain.
           build-cmd: npm run build:deploy
         env:
-          # TO LAUNCH THE FULL SITE: delete the SITE_MODE line below and push.
-          # While it says "holding", only the temporary holding page is published.
-          SITE_MODE: holding
+          # The full site is published. To show only the temporary holding page instead,
+          # add the line `SITE_MODE: holding` here and push.
           # Set these under Settings > Secrets and variables > Actions > Variables
           # once a form service is chosen. Both are public values; never put a secret here.
           PUBLIC_FORM_ENDPOINT: ${{ vars.PUBLIC_FORM_ENDPOINT }}

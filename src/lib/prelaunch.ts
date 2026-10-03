@@ -61,11 +61,7 @@ export function prelaunchProblems(input: PrelaunchInput): string[] {
     problems.push('The home page hero photo is not set (copy.home.hero.image in src/data/copy.ts).');
   }
 
-  if (!input.formEndpoint) {
-    problems.push(
-      'The Inventory form is not connected (PUBLIC_FORM_ENDPOINT is empty), so enquiries would not reach Colin. See README.',
-    );
-  }
-
+  // An unconnected form is not a problem: the Inventory page then shows Colin's phone and
+  // email instead of the form. The launch check script mentions it as a note.
   return problems;
 }

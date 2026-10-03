@@ -19,7 +19,7 @@ export type Photo = {
 };
 
 export type ListingCategory = 'available' | 'lot';
-export type ListingStatus = 'For Sale' | 'Pending' | 'Coming Soon' | 'Sold';
+export type ListingStatus = 'Available' | 'For Sale' | 'Pending' | 'Coming Soon' | 'Sold';
 
 export type Listing = {
   /** Used in the address: /homes/<slug>/. Lowercase letters, numbers and hyphens. */
@@ -30,13 +30,22 @@ export type Listing = {
   neighborhood?: string;
   address?: string;
   price?: string;
+  /** For a lot, beds, baths, garage and features describe the home planned for it. */
   beds?: number;
   baths?: number;
   sqft?: number;
+  /** Number of cars. */
+  garage?: number;
+  /** For example 'Office', 'Game room', 'Flex room', 'Pool'. */
+  features?: string[];
+  /** For a lot planned for more than one home. */
+  units?: number;
   lotSize?: string;
   description?: string;
   /** File name in src/assets/homes/<slug>/, or null for a placeholder tile. */
   cover: string | null;
+  /** Describes the cover when it is not one of `photos`, such as the site-plan illustration. */
+  coverAlt?: string;
   photos: Photo[];
   /** True for sample entries that must be replaced before launch. */
   placeholder: boolean;

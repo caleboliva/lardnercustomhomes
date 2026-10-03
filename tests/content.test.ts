@@ -42,6 +42,18 @@ test('specLine() joins the specs that exist, with singular and plural', () => {
   assert.equal(specLine(listing({ category: 'lot', lotSize: '0.4 acre' })), '0.4 acre lot');
 });
 
+test('specLine() describes a lot by its size and the home planned for it', () => {
+  assert.equal(
+    specLine(listing({ category: 'lot', lotSize: '75 × 140 ft', beds: 4, baths: 5 })),
+    '75 × 140 ft lot · plans for 4 beds, 5 baths',
+  );
+  assert.equal(
+    specLine(listing({ category: 'lot', lotSize: '11,360 sq ft', units: 6, beds: 2, baths: 2.5 })),
+    '11,360 sq ft lot · plans for 6 units',
+  );
+  assert.equal(specLine(listing({ category: 'lot', beds: 4 })), 'Plans for 4 beds');
+});
+
 test('specLine() is empty for a real listing with no specs and a labelled placeholder for a sample', () => {
   assert.equal(specLine(listing({})), '');
   assert.equal(specLine(listing({ placeholder: true })), '[Placeholder: beds, baths, sq ft]');

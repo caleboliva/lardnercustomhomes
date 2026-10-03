@@ -76,17 +76,11 @@ To preview the form's states without sending anything, run `npm run dev` and ope
 
 The site is published by GitHub Pages from the `caleboliva/lardnercustomhomes` repository. Every push to the `main` branch rebuilds and republishes it at lardnercustomhomes.com; the steps are in `.github/workflows/deploy.yml`.
 
-**Right now only a holding page is published.** The workflow sets `SITE_MODE: holding`, which builds the single page in `holding/` instead of the full site in `src/`. Visitors see the logo and Colin's contact details; none of the sample content is public.
+**The full site is live.** Before publishing, GitHub runs `npm run launch-check` and stops if any sample entry or placeholder text has crept back in, so unfinished content cannot go live by accident.
 
-To launch the full site:
+Until a form service is connected, the Inventory page shows Colin's phone and email instead of the enquiry form. Once it is connected, add its address on GitHub under Settings > Secrets and variables > Actions > Variables, as `PUBLIC_FORM_ENDPOINT`, and push any change to republish.
 
-1. Run `npm run launch-check`. It must say "Ready to launch".
-2. If the form is connected, add its address on GitHub under Settings > Secrets and variables > Actions > Variables, as `PUBLIC_FORM_ENDPOINT`.
-3. Delete the `SITE_MODE: holding` line from `.github/workflows/deploy.yml` and push.
-
-GitHub runs the launch check again before publishing the full site and stops if anything is unfinished, so sample content cannot go live by accident.
-
-To see the holding page locally, build it and preview the result:
+A simple holding page (logo and contact details only) is kept in `holding/`. To publish it instead of the full site, add `SITE_MODE: holding` under `env:` in `.github/workflows/deploy.yml` and push. To see it locally, build it and preview the result:
 
 ```bash
 SITE_MODE=holding npm run build

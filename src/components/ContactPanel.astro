@@ -1,0 +1,52 @@
+---
+// Shown on the Inventory page in place of the enquiry form until a form service is connected,
+// so visitors are never handed a form that cannot send.
+import { copy } from '../data/copy.ts';
+import { site } from '../data/site.ts';
+
+const { heading, body } = copy.inventory.offline;
+---
+
+<section class="contact-panel" aria-labelledby="contact-panel-title">
+  <h2 id="contact-panel-title">{heading}</h2>
+  <p>{body}</p>
+  <p class="contact-panel__actions">
+    <a class="btn" href={site.phone.href}>Call {site.phone.display}</a>
+    <a class="btn btn--ghost" href={site.email.href}>Email {site.email.display}</a>
+  </p>
+  <p class="contact-panel__address">{site.address}</p>
+</section>
+
+<style>
+  .contact-panel {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-5);
+    background: var(--surface);
+  }
+
+  @media (min-width: 40rem) {
+    .contact-panel {
+      padding: var(--space-7) var(--space-6);
+    }
+  }
+
+  .contact-panel__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .contact-panel__actions .btn {
+    max-width: 100%;
+    letter-spacing: 0.06em;
+    overflow-wrap: anywhere;
+    text-transform: none;
+  }
+
+  .contact-panel__address {
+    color: var(--text-muted);
+  }
+</style>
