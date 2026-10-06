@@ -7,7 +7,9 @@ export const copy = {
       title: 'Making Dallas better, one home at a time.',
       /** File name in src/assets/site/, for example 'hero.jpg'. Null shows a placeholder tile. */
       image: 'hero.jpg' as string | null,
-      imageAlt: '3805 Eaton Drive at dusk, with twin white brick gables',
+      imageAlt: '4103 Saranac at dusk, with wood siding, pale brick and a dark metal roof',
+      /** The part of the photo kept in view when the screen crops it: across, then down. 'center' is the middle. */
+      imagePosition: '60% 18%',
       primaryCta: 'View homes',
       secondaryCta: 'See the gallery',
     },

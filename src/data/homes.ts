@@ -10,11 +10,12 @@ import type { Listing } from './types.ts';
   4. For a lot, beds, baths, garage, features and units describe the home planned for it.
   5. Run `npm test`: it lists any photo name that does not match a file exactly.
 
-  The lots and 4103 Saranac use a site-plan illustration (lot.png / home.png) until real photos
-  exist. To replace one, put the photo in that listing's folder and change `cover` to its name.
+  The lots use a site-plan illustration (lot.png) until real photos exist. To replace one, put
+  the photo in that lot's folder and change `cover` to its name.
 
-  Source for everything below: "Lardner Available Lots & Homes 2026" spreadsheet, plus the
-  current lardnercustomhomes.com site for 4103 Saranac's "Coming Soon" status.
+  Source for everything below: "Lardner Available Lots & Homes 2026" spreadsheet. 4103 Saranac's
+  "For Sale" status and photos were supplied in October 2026; the same home is in the gallery
+  (src/data/projects.ts), which keeps its own, shorter set of photos.
 */
 
 export const listings: Listing[] = [
@@ -22,12 +23,44 @@ export const listings: Listing[] = [
     slug: '4103-saranac',
     title: '4103 Saranac',
     category: 'available',
-    status: 'Coming Soon',
+    status: 'For Sale',
     neighborhood: 'Midway Hollow',
     lotSize: 'Approx. 14,000 sq ft',
-    cover: 'home.png',
-    coverAlt: 'Illustration of a home on its lot; photos coming soon',
-    photos: [],
+    cover: '01-exterior.jpg',
+    photos: [
+      { file: '01-exterior.jpg', room: 'exterior', alt: 'Front of the house at dusk, with wood siding, pale brick and a dark metal roof' },
+      { file: '02-exterior.jpg', room: 'exterior', alt: 'Front of the house in daylight, behind a large oak' },
+      { file: '03-exterior.jpg', room: 'exterior', alt: 'Front of the house seen through the branches of the oak' },
+      { file: '04-exterior.jpg', room: 'exterior', alt: 'Corner of the house from the lawn, with a wood fence beside it' },
+      { file: '05-exterior.jpg', room: 'exterior', alt: 'Glass front doors under the metal roof' },
+      { file: '06-other.jpg', room: 'other', alt: 'Entry hall with a slate floor and glass front doors' },
+      { file: '07-living.jpg', room: 'living', alt: 'Living room with two long sofas facing a fireplace wall' },
+      { file: '08-living.jpg', room: 'living', alt: 'Living room open to the kitchen, with sliding glass doors to the yard' },
+      { file: '09-living.jpg', room: 'living', alt: 'Dining table beside floor-to-ceiling windows' },
+      { file: '10-living.jpg', room: 'living', alt: 'Two armchairs at a window facing the courtyard' },
+      { file: '11-kitchen.jpg', room: 'kitchen', alt: 'Kitchen with a long white island, open to the dining and living areas' },
+      { file: '12-kitchen.jpg', room: 'kitchen', alt: 'Kitchen island sink with a brushed metal faucet' },
+      { file: '13-kitchen.jpg', room: 'kitchen', alt: 'Kitchen faucet with the dining table and yard beyond' },
+      { file: '14-other.jpg', room: 'other', alt: 'Vaulted room with a glass desk, two swivel chairs and a glass door to the courtyard' },
+      { file: '15-other.jpg', room: 'other', alt: 'Vaulted room with tall windows facing the street' },
+      { file: '16-other.jpg', room: 'other', alt: 'Glass desk with a lamp beside a window' },
+      { file: '17-other.jpg', room: 'other', alt: 'Wood staircase beside the living room' },
+      { file: '18-bath.jpg', room: 'bath', alt: 'Bath with a long white vanity and a black freestanding tub' },
+      { file: '19-bath.jpg', room: 'bath', alt: 'Bath vanity with two mirrors beside a walk-in shower' },
+      { file: '20-bath.jpg', room: 'bath', alt: 'Black freestanding tub against a fluted tile wall' },
+      { file: '21-bath.jpg', room: 'bath', alt: 'Walk-in shower with a bench and fluted tile' },
+      { file: '22-other.jpg', room: 'other', alt: 'Dressing room with built-in cabinets and an island of drawers' },
+      { file: '23-other.jpg', room: 'other', alt: 'Bedroom with a large window onto the trees' },
+      { file: '24-bath.jpg', room: 'bath', alt: 'Bath with a pale green vanity and a green tile wall' },
+      { file: '25-bath.jpg', room: 'bath', alt: 'Bath with a white vanity and a tall frosted window' },
+      { file: '26-other.jpg', room: 'other', alt: 'Laundry room with a sink and open shelves' },
+      { file: '27-other.jpg', room: 'other', alt: 'White cabinets, open shelves and a counter with a sink' },
+      { file: '28-exterior.jpg', room: 'exterior', alt: 'Covered balcony with outdoor seating and a view of the trees' },
+      { file: '29-exterior.jpg', room: 'exterior', alt: 'Covered balcony with wood-clad walls and a metal railing' },
+      { file: '30-exterior.jpg', room: 'exterior', alt: 'Back of the house at dusk, with glass doors opening to the lawn' },
+      { file: '31-exterior.jpg', room: 'exterior', alt: 'Back lawn with the house and a wood fence' },
+      { file: '32-exterior.jpg', room: 'exterior', alt: 'Aerial view of the house and yard, with a city skyline on the horizon' },
+    ],
     placeholder: false,
   },
   {

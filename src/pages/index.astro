@@ -15,7 +15,7 @@ const featuredList = featuredProjects(projects, 3);
 
 <BaseLayout title={site.name}>
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero__media">
+    <div class="hero__media" style={`--photo-position: ${hero.imagePosition}`}>
       <Photo image={heroImage} alt={hero.imageAlt} ratio="fill" sizes="100vw" eager placeholderLabel="Hero photo" />
     </div>
     <div class="hero__panel">

@@ -42,7 +42,7 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 
 - Project photos go in `src/assets/projects/<project-slug>/`.
 - Home and lot photos go in `src/assets/homes/<listing-slug>/`.
-- The home page hero goes in `src/assets/site/`; set its file name at `copy.home.hero.image` and describe it in `copy.home.hero.imageAlt`.
+- The home page hero goes in `src/assets/site/`; set its file name at `copy.home.hero.image` and describe it in `copy.home.hero.imageAlt`. Screens crop the hero to fit, and `copy.home.hero.imagePosition` chooses which part stays in view (`'center'`, or across then down, such as `'60% 18%'`).
 - Use JPG, PNG, WebP or AVIF. Upload the largest version you have; the site resizes and compresses automatically.
 - iPhone photos are often HEIC files, which the site cannot use. Export them as JPG first.
 - The name in the data must match the file name exactly, including capital letters: `IMG_0001.JPG` is not `img_0001.jpg`.

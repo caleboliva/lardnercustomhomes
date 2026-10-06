@@ -14,6 +14,32 @@ import type { Project } from './types.ts';
 
 export const projects: Project[] = [
   {
+    slug: '4103-saranac',
+    name: '4103 Saranac',
+    cover: '01-exterior.jpg',
+    photos: [
+      { file: '01-exterior.jpg', room: 'exterior', alt: '4103 Saranac: front of the house at dusk, with wood siding, pale brick and a dark metal roof' },
+      { file: '02-exterior.jpg', room: 'exterior', alt: '4103 Saranac: front of the house in daylight, behind a large oak' },
+      { file: '03-exterior.jpg', room: 'exterior', alt: '4103 Saranac: back of the house at dusk, with glass doors opening to the lawn' },
+      { file: '04-exterior.jpg', room: 'exterior', alt: '4103 Saranac: covered balcony with outdoor seating and a view of the trees' },
+      { file: '05-exterior.jpg', room: 'exterior', alt: '4103 Saranac: aerial view of the house and yard, with a city skyline on the horizon' },
+      { file: '06-living.jpg', room: 'living', alt: '4103 Saranac: living room with two long sofas facing a fireplace wall' },
+      { file: '07-living.jpg', room: 'living', alt: '4103 Saranac: living room open to the kitchen, with sliding glass doors to the yard' },
+      { file: '08-living.jpg', room: 'living', alt: '4103 Saranac: dining table beside floor-to-ceiling windows' },
+      { file: '09-living.jpg', room: 'living', alt: '4103 Saranac: two armchairs at a window facing the courtyard' },
+      { file: '10-kitchen.jpg', room: 'kitchen', alt: '4103 Saranac: kitchen with a long white island, open to the dining and living areas' },
+      { file: '11-kitchen.jpg', room: 'kitchen', alt: '4103 Saranac: kitchen island sink with a brushed metal faucet' },
+      { file: '12-bath.jpg', room: 'bath', alt: '4103 Saranac: bath with a long white vanity and a black freestanding tub' },
+      { file: '13-bath.jpg', room: 'bath', alt: '4103 Saranac: bath vanity with two mirrors beside a walk-in shower' },
+      { file: '14-bath.jpg', room: 'bath', alt: '4103 Saranac: bath with a pale green vanity and a green tile wall' },
+      { file: '15-other.jpg', room: 'other', alt: '4103 Saranac: entry hall with a slate floor and glass front doors' },
+      { file: '16-other.jpg', room: 'other', alt: '4103 Saranac: vaulted room with a glass desk, two swivel chairs and a glass door to the courtyard' },
+      { file: '17-other.jpg', room: 'other', alt: '4103 Saranac: bedroom with a large window onto the trees' },
+    ],
+    featured: true,
+    placeholder: false,
+  },
+  {
     slug: '3880-durango',
     name: '3880 Durango',
     cover: '01-exterior.jpg',

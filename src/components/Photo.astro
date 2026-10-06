@@ -70,6 +70,8 @@ const widths = image ? [...[480, 800, 1200, 1600].filter((w) => w < maxWidth), m
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* A parent can set --photo-position to choose which part survives the crop. */
+    object-position: var(--photo-position, center);
     transition: transform var(--dur-slow) var(--ease);
   }
 
