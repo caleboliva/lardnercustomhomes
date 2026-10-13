@@ -1,0 +1,340 @@
+---
+// The home page opening: a full-screen slideshow under a see-through header. The headline is
+// hidden at first and comes in over the photos as the visitor starts to scroll.
+// Without JavaScript, or when the visitor has asked for less motion, the headline simply shows.
+import { getImage } from 'astro:assets';
+import { copy } from '../data/copy.ts';
+import { siteImage } from '../lib/images.ts';
+import Icon from './Icon.astro';
+
+const { hero } = copy.home;
+const WIDTHS = [640, 960, 1280, 1600, 2000];
+
+const slides = (
+  await Promise.all(
+    hero.slides.map(async (slide) => {
+      const image = siteImage(slide.image);
+      if (!image) return null;
+      const largest = Math.min(image.width, WIDTHS.at(-1)!);
+      const widths = [...WIDTHS.filter((width) => width < largest), largest];
+      const picture = await getImage({ src: image, width: largest, widths, format: 'webp' });
+      return { ...slide, src: picture.src, srcset: picture.srcSet.attribute };
+    }),
+  )
+).filter((slide) => slide !== null);
+const first = slides[0];
+---
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <div class="hero__stage" data-hero-stage>
+    <div class="hero__slides" role="group" aria-roledescription="carousel" aria-label={hero.slidesLabel}>
+      {
+        slides.map((slide, i) => (
+          <div
+            class="hero__slide"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} of ${slides.length}`}
+            aria-hidden={i === 0 ? undefined : 'true'}
+            data-hero-slide
+            data-active={i === 0 ? '' : undefined}
+            data-label={slide.label}
+            data-href={slide.href}
+            style={`--photo-position: ${slide.position}`}
+          >
+            {/* Only the first photo loads with the page. The script fetches each of the others just before its turn. */}
+            <img
+              src={i === 0 ? slide.src : undefined}
+              srcset={i === 0 ? slide.srcset : undefined}
+              data-src={i === 0 ? undefined : slide.src}
+              data-srcset={i === 0 ? undefined : slide.srcset}
+              sizes="100vw"
+              alt={slide.alt}
+              decoding="async"
+              fetchpriority={i === 0 ? 'high' : undefined}
+            />
+          </div>
+        ))
+      }
+    </div>
+    <div class="hero__shade" aria-hidden="true"></div>
+
+    <div class="hero__content container" data-theme="dark">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1 id="hero-title">{hero.title}</h1>
+      <p class="hero__actions">
+        <a class="btn" href="/homes/">{hero.primaryCta}</a>
+        <a class="btn btn--ghost" href="/gallery/">{hero.secondaryCta}</a>
+      </p>
+    </div>
+
+    {
+      first && (
+        <div class="hero__bar container">
+          <a class="hero__caption" href={first.href} data-hero-caption>{first.label}</a>
+          {slides.length > 1 && (
+            <div class="hero__controls" data-hero-controls>
+              <ol class="hero__dots" role="list">
+                {slides.map((slide, i) => (
+                  <li>
+                    <button
+                      type="button"
+                      class="hero__dot"
+                      data-hero-dot
+                      aria-label={`Show photo ${i + 1} of ${slides.length}: ${slide.label}`}
+                      aria-current={i === 0 ? 'true' : undefined}
+                    ></button>
+                  </li>
+                ))}
+              </ol>
+              <button type="button" class="hero__toggle" data-hero-toggle aria-label="Pause slideshow">
+                <span class="hero__toggle-pause"><Icon name="pause" size={18} /></span>
+                <span class="hero__toggle-play"><Icon name="play" size={18} /></span>
+              </button>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    <p class="hero__cue" aria-hidden="true">{hero.scrollCue}<Icon name="chevron-down" size={16} /></p>
+  </div>
+</section>
+
+<script>
+  import { initHero } from '../scripts/hero.ts';
+  initHero();
+</script>
+
+<style>
+  .hero {
+    /* How far the page scrolls while the slideshow stays pinned and the headline comes in. */
+    --hero-travel: 70svh;
+    --hero-p: 1;
+    --hero-reveal: 1;
+    position: relative;
+    height: 100svh;
+    background: var(--color-midnight-deep);
+    color: var(--color-white);
+  }
+
+  .hero__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .hero__slides,
+  .hero__slide,
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* The new photo fades in on top of the old one, which stays solid underneath until the fade
+     is over. Fading both at once would let the dark background show through halfway. */
+  .hero__slide {
+    opacity: 0;
+    transition: opacity 0s linear 1.6s;
+  }
+
+  .hero__slide[data-active] {
+    z-index: 1;
+    opacity: 1;
+    transition: opacity 1.6s var(--ease);
+  }
+
+  .hero__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--photo-position, center);
+    /* Snap back to full frame only after the slide has faded out. */
+    transition: transform 0s linear 1.6s;
+  }
+
+  /* A slow drift toward the house while a slide is showing. */
+  .hero__slide[data-active] img {
+    transform: scale(1.06);
+    transition: transform 9s linear;
+  }
+
+  /* Darkens the top for the menu, and the whole photo as the headline comes in. */
+  .hero__shade {
+    z-index: 2;
+    background:
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-midnight-deep) 72%, transparent), transparent 14rem),
+      linear-gradient(to top, color-mix(in srgb, var(--color-midnight-deep) 60%, transparent), transparent 9rem),
+      color-mix(in srgb, var(--color-midnight-deep) calc(var(--hero-reveal) * 58%), transparent);
+  }
+
+  .hero__content {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: var(--space-4);
+    padding-block: calc(var(--header-h) + var(--space-5)) var(--space-9);
+    opacity: var(--hero-reveal);
+    transform: translateY(calc((1 - var(--hero-reveal)) * 2.5rem));
+    /* Clicks pass through to the slideshow until the words are there. */
+    pointer-events: none;
+  }
+
+  .hero__content > * {
+    pointer-events: auto;
+  }
+
+  .hero__content h1 {
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .hero__bar {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+  }
+
+  .hero__caption {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    text-underline-offset: 0.3em;
+    white-space: nowrap;
+  }
+
+  .hero__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* On a phone there is no room for the dots beside the caption; swiping changes the photo instead. */
+  .hero__dots {
+    display: none;
+    margin: 0;
+  }
+
+  @media (min-width: 40rem) {
+    .hero__dots {
+      display: flex;
+    }
+  }
+
+  /* A small mark inside a full-size tap target. */
+  .hero__dot,
+  .hero__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: var(--tap);
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .hero__dot::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    transition: background-color var(--dur) var(--ease);
+  }
+
+  .hero__dot[aria-current]::before {
+    background: currentColor;
+  }
+
+  .hero__toggle {
+    width: var(--tap);
+  }
+
+  .hero__toggle-play,
+  .hero[data-paused] .hero__toggle-pause {
+    display: none;
+  }
+
+  .hero[data-paused] .hero__toggle-play {
+    display: inline-flex;
+  }
+
+  .hero__cue {
+    display: none;
+  }
+
+  /* With JavaScript and no request for less motion: pin the slideshow, hide the words until the
+     page scrolls, and invite the scroll. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .hero {
+      height: calc(100svh + var(--hero-travel));
+      --hero-p: 0;
+      --hero-reveal: 0;
+    }
+
+    :global(html.js) .hero__content {
+      transition:
+        opacity 260ms linear,
+        transform 260ms ease-out;
+    }
+
+    :global(html.js) .hero__cue {
+      position: absolute;
+      inset: auto 0 var(--space-8);
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: var(--space-1);
+      font-size: var(--step--1);
+      font-weight: 500;
+      letter-spacing: var(--tracking-caps);
+      opacity: calc(1 - var(--hero-p) * 6);
+      pointer-events: none;
+      text-transform: uppercase;
+      transition: opacity 260ms linear;
+    }
+
+    :global(html.js) .hero__cue :global(svg) {
+      animation: hero-cue 2.4s var(--ease) infinite;
+    }
+  }
+
+  @keyframes hero-cue {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(0.4rem);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .hero__content {
+      padding-bottom: var(--space-8);
+    }
+  }
+</style>

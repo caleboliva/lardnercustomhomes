@@ -5,11 +5,59 @@ export const copy = {
     hero: {
       eyebrow: 'Design matters',
       title: 'Making Dallas better, one home at a time.',
-      /** File name in src/assets/site/, for example 'hero.jpg'. Null shows a placeholder tile. */
-      image: 'hero.jpg' as string | null,
-      imageAlt: '4103 Saranac at dusk, with wood siding, pale brick and a dark metal roof',
-      /** The part of the photo kept in view when the screen crops it: across, then down. 'center' is the middle. */
-      imagePosition: '60% 18%',
+      /*
+        The slideshow, in order. Each photo is a file in src/assets/site/, at least 2000px wide.
+        `position` is the part kept in view when the screen crops the photo: across, then down
+        ('center' is the middle). `label` and `href` are the small link under the photo.
+        The first photo is also the picture shown when the site is shared.
+      */
+      slides: [
+        {
+          image: 'hero.jpg',
+          alt: '4103 Saranac at dusk, with wood siding, pale brick and a dark metal roof',
+          position: '60% 18%',
+          label: '4103 Saranac',
+          href: '/gallery/4103-saranac/',
+        },
+        {
+          image: 'slide-3880-durango.jpg',
+          alt: '3880 Durango at dusk, a white gabled house lit from within',
+          position: '50% 30%',
+          label: '3880 Durango',
+          href: '/gallery/3880-durango/',
+        },
+        {
+          image: 'slide-3805-eaton-drive.jpg',
+          alt: '3805 Eaton Drive at dusk, with twin white brick gables under a pink sky',
+          position: '60% 35%',
+          label: '3805 Eaton Drive',
+          href: '/gallery/3805-eaton-drive/',
+        },
+        {
+          image: 'slide-4401-scurry-street.jpg',
+          alt: '4401 Scurry Street at dusk, three dark metal-clad gables in a row',
+          position: '50% 40%',
+          label: '4401 Scurry Street',
+          href: '/gallery/4401-scurry-street/',
+        },
+        {
+          image: 'slide-2208-moser-avenue.jpg',
+          alt: '2208 Moser Avenue at dusk, a white metal-clad house with a balcony',
+          position: '50% 45%',
+          label: '2208 Moser Avenue',
+          href: '/gallery/2208-moser-avenue/',
+        },
+        {
+          image: 'slide-721-eagles-landing.jpg',
+          alt: '721 Eagles Landing, a stone house with blue shutters and an arched wood door',
+          position: '50% 40%',
+          label: '721 Eagles Landing',
+          href: '/gallery/721-eagles-landing/',
+        },
+      ],
+      /** Read out by screen readers to name the slideshow. */
+      slidesLabel: 'Homes by Lardner Custom Homes',
+      scrollCue: 'Scroll',
       primaryCta: 'View homes',
       secondaryCta: 'See the gallery',
     },

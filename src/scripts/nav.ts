@@ -1,10 +1,13 @@
-import { nextHeaderState, type HeaderState } from '../lib/scroll.ts';
+import { headerOverHero, nextHeaderState, type HeaderState } from '../lib/scroll.ts';
 import { lockScroll, unlockScroll } from './scroll-lock.ts';
 
 const COMPACT_AFTER = 24;
 const DESKTOP = '(min-width: 64rem)';
 
 function initHeaderScroll(header: HTMLElement): void {
+  // On the home page the header starts see-through and turns solid once the hero has passed.
+  const hero = header.hasAttribute('data-overlay') ? document.querySelector<HTMLElement>('[data-hero]') : null;
+  const stage = hero?.querySelector<HTMLElement>('[data-hero-stage]') ?? hero;
   let state: HeaderState = { hidden: false, lastY: window.scrollY };
   let queued = false;
 
@@ -17,6 +20,10 @@ function initHeaderScroll(header: HTMLElement): void {
     const y = Math.max(window.scrollY, 0);
     state = nextHeaderState(state, y);
     header.toggleAttribute('data-compact', y > COMPACT_AFTER);
+    if (hero && stage) {
+      const box = { top: hero.offsetTop, height: hero.offsetHeight, pinned: stage.offsetHeight };
+      header.toggleAttribute('data-over-hero', headerOverHero(y, box, header.offsetHeight));
+    }
     header.toggleAttribute('data-hidden', state.hidden && !isPinned());
   };
 

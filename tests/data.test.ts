@@ -90,7 +90,7 @@ test('every photo named in the data exists on disk with exactly that name', () =
     if (project.cover) refs.push({ dir, file: project.cover });
     for (const photo of project.photos) if (photo.file) refs.push({ dir, file: photo.file });
   }
-  if (copy.home.hero.image) refs.push({ dir: 'site', file: copy.home.hero.image });
+  for (const slide of copy.home.hero.slides) refs.push({ dir: 'site', file: slide.image });
 
   // readdirSync, not existsSync: Windows treats names as case-insensitive, web servers do not.
   const readDir = (dir: string) => {

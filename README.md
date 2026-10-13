@@ -43,7 +43,7 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 
 - Project photos go in `src/assets/projects/<project-slug>/`.
 - Home and lot photos go in `src/assets/homes/<listing-slug>/`.
-- The home page hero goes in `src/assets/site/`; set its file name at `copy.home.hero.image` and describe it in `copy.home.hero.imageAlt`. Screens crop the hero to fit, and `copy.home.hero.imagePosition` chooses which part stays in view (`'center'`, or across then down, such as `'60% 18%'`).
+- The home page opens with a slideshow. Its photos go in `src/assets/site/` and are listed, in order, at `copy.home.hero.slides` in `src/data/copy.ts`. Each slide has the file name, a description (`alt`), the part of the photo to keep in view when a screen crops it (`position`: `'center'`, or across then down, such as `'60% 18%'`), and the small link shown under it (`label` and `href`). Use photos at least 2000px wide. The first slide is also the picture shown when the site is shared.
 - Use JPG, PNG, WebP or AVIF. Upload the largest version you have; the site resizes and compresses automatically.
 - iPhone photos are often HEIC files, which the site cannot use. Export them as JPG first.
 - The name in the data must match the file name exactly, including capital letters: `IMG_0001.JPG` is not `img_0001.jpg`.
@@ -119,7 +119,7 @@ src/styles/      design tokens and shared styles
 public/          files served as-is (PDFs, favicon)
 ```
 
-To regenerate the "L" mark and favicon from the logo: `npm run brand-assets`.
+To regenerate the "L" mark, the favicon and the light logo used over the home page slideshow: `npm run brand-assets`.
 
 ## Troubleshooting
 

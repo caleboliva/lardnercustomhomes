@@ -1,34 +1,20 @@
 ---
 import { pageSeo } from '../data/seo.ts';
-import Photo from '../components/Photo.astro';
+import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { copy } from '../data/copy.ts';
 import { projects } from '../data/projects.ts';
 import { site } from '../data/site.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { featuredProjects } from '../lib/content.ts';
-import { siteImage } from '../lib/images.ts';
 
-const { hero, intro, featured, neighborhoods, quote, cta } = copy.home;
-const heroImage = siteImage(hero.image);
+const { intro, featured, neighborhoods, quote, cta } = copy.home;
 const featuredList = featuredProjects(projects, 3);
 const seo = pageSeo.home;
 ---
 
-<BaseLayout title={site.name} description={seo.description} seo={seo}>
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero__media" style={`--photo-position: ${hero.imagePosition}`}>
-      <Photo image={heroImage} alt={hero.imageAlt} ratio="fill" sizes="100vw" eager placeholderLabel="Hero photo" />
-    </div>
-    <div class="hero__panel">
-      <p class="eyebrow">{hero.eyebrow}</p>
-      <h1 id="hero-title">{hero.title}</h1>
-      <p class="hero__actions">
-        <a class="btn" href="/homes/">{hero.primaryCta}</a>
-        <a class="btn btn--ghost" href="/gallery/">{hero.secondaryCta}</a>
-      </p>
-    </div>
-  </section>
+<BaseLayout title={site.name} description={seo.description} seo={seo} headerOverlay>
+  <HeroSlideshow />
 
   <section class="intro section container" aria-labelledby="intro-title">
     <div class="intro__heading" data-reveal>
@@ -93,32 +79,6 @@ const seo = pageSeo.home;
 </BaseLayout>
 
 <style>
-  .hero {
-    display: grid;
-    grid-template-rows: minmax(52svh, 1fr) auto;
-    min-height: calc(100svh - var(--header-h));
-  }
-
-  .hero__media {
-    grid-row: 1;
-  }
-
-  .hero__panel {
-    display: grid;
-    justify-items: start;
-    gap: var(--space-4);
-    grid-row: 2;
-    padding: var(--space-6) var(--gutter) var(--space-7);
-    background: var(--bg);
-  }
-
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-3);
-  }
-
   .intro {
     display: grid;
     gap: var(--space-6);
@@ -196,29 +156,6 @@ const seo = pageSeo.home;
   }
 
   @media (min-width: 64rem) {
-    .hero {
-      grid-template-rows: minmax(0, 1fr);
-    }
-
-    .hero__media,
-    .hero__panel {
-      grid-area: 1 / 1;
-    }
-
-    .hero__panel {
-      z-index: 1;
-      align-self: end;
-      justify-self: start;
-      max-width: 46rem;
-      padding: var(--space-7) var(--space-8) var(--space-7) var(--gutter);
-    }
-
-    /* Keep the placeholder label clear of the title panel until a hero photo is supplied. */
-    .hero__media :global(.photo__placeholder) {
-      justify-content: flex-start;
-      padding-top: var(--space-9);
-    }
-
     .intro {
       grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
       column-gap: var(--space-9);

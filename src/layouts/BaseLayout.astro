@@ -20,6 +20,8 @@ interface Props {
   description?: string;
   /** Set to false for immersive pages that supply their own way out (the project view). */
   header?: boolean;
+  /** Let the page's first section run under a see-through header. The page must start with a hero. */
+  headerOverlay?: boolean;
   /** What search engines and link previews read. See src/data/seo.ts. */
   seo?: {
     /** Replaces `title` in search results and browser tabs. The company name is added after it. */
@@ -34,7 +36,7 @@ interface Props {
   };
 }
 
-const { title, description = site.description, header = true, seo = {} } = Astro.props;
+const { title, description = site.description, header = true, headerOverlay = false, seo = {} } = Astro.props;
 const searchTitle = seo.title ?? title;
 const pageTitle = searchTitle === site.name ? searchTitle : `${searchTitle} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -44,7 +46,7 @@ const keywords = keywordList(seo.keywords ?? []);
 const absolute = (path: string) => new URL(path, Astro.site).href;
 const shareImage = async (image: ImageMetadata) =>
   absolute((await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src);
-const heroImage = siteImage(copy.home.hero.image);
+const heroImage = siteImage(copy.home.hero.slides[0]?.image ?? null);
 const defaultShare = heroImage ? await shareImage(heroImage) : undefined;
 const share = seo.image ? await shareImage(seo.image) : defaultShare;
 const logoUrl = absolute((await getImage({ src: logo, width: 512, format: 'png' })).src);
@@ -61,6 +63,9 @@ const toJson = (schema: object) => JSON.stringify(schema).replace(/</g, '\\u003c
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -88,9 +93,9 @@ const toJson = (schema: object) => JSON.stringify(schema).replace(/</g, '\\u003c
     <meta name="twitter:card" content={share ? 'summary_large_image' : 'summary'} />
     {schemas.map((schema) => <script type="application/ld+json" is:inline set:html={toJson(schema)} />)}
   </head>
-  <body data-site-header={header ? 'on' : 'off'}>
+  <body data-site-header={!header ? 'off' : headerOverlay ? 'overlay' : 'on'}>
     <a class="skip-link" href="#main">Skip to content</a>
-    {header && <Header />}
+    {header && <Header overlay={headerOverlay} />}
     <main id="main" tabindex="-1">
       <slot />
     </main>

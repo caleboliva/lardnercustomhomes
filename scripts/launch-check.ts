@@ -29,7 +29,7 @@ const problems = holding
       listings,
       projects,
       copy,
-      heroImage: copy.home.hero.image,
+      heroImage: copy.home.hero.slides[0]?.image ?? null,
       formEndpoint: formEndpoint(),
     });
 

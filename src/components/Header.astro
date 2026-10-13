@@ -1,16 +1,23 @@
 ---
 import { Image } from 'astro:assets';
 import logoFull from '../assets/brand/lardner-custom-homes-logo.webp';
+import logoLight from '../assets/brand/lardner-custom-homes-logo-light.webp';
 import logoMark from '../assets/brand/lardner-custom-homes-mark.png';
 import { primaryNav } from '../data/navigation.ts';
 import Icon from './Icon.astro';
 import MobileMenu from './MobileMenu.astro';
 import NavList from './NavList.astro';
 
+interface Props {
+  /** Start see-through over the page's hero and turn solid once it has scrolled past. */
+  overlay?: boolean;
+}
+
+const { overlay = false } = Astro.props;
 const { pathname } = Astro.url;
 ---
 
-<header class="header" data-header>
+<header class="header" data-header data-overlay={overlay ? '' : undefined} data-over-hero={overlay ? '' : undefined}>
   <div class="header__inner container">
     <button
       type="button"
@@ -27,6 +34,7 @@ const { pathname } = Astro.url;
       <NavList items={primaryNav.left} pathname={pathname} align="end" />
       <a class="header__logo" href="/" aria-label="Lardner Custom Homes, home page">
         <Image class="header__logo-full" src={logoFull} alt="" width={260} loading="eager" />
+        {overlay && <Image class="header__logo-full header__logo-light" src={logoLight} alt="" width={260} loading="eager" />}
         <Image class="header__logo-mark" src={logoMark} alt="" width={96} loading="eager" />
       </a>
       <NavList items={primaryNav.right} pathname={pathname} align="start" />
@@ -44,11 +52,33 @@ const { pathname } = Astro.url;
     background: var(--bg);
     transition:
       transform var(--dur) var(--ease),
-      border-color var(--dur) var(--ease);
+      border-color var(--dur) var(--ease),
+      background-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
   }
 
   .header[data-compact] {
     border-bottom-color: var(--rule);
+  }
+
+  /* See-through over a hero photo: white lettering, no bar. Needs JavaScript to turn solid again
+     further down the page, so without it the header simply stays solid. */
+  :global(html.js) .header[data-over-hero] {
+    border-bottom-color: transparent;
+    background-color: transparent;
+    color: var(--color-white);
+    /* A soft shadow keeps the white lettering readable where the photo is pale. */
+    text-shadow: 0 1px 0.75rem color-mix(in srgb, var(--color-midnight-deep) 60%, transparent);
+  }
+
+  :global(html.js) .header[data-over-hero] .header__logo :global(.header__logo-light) {
+    filter: drop-shadow(0 1px 0.5rem color-mix(in srgb, var(--color-midnight-deep) 55%, transparent));
+  }
+
+  /* The drop-down menus keep their own light background and dark lettering. */
+  .header[data-over-hero] :global(.nav-list__submenu) {
+    color: var(--text);
+    text-shadow: none;
   }
 
   .header[data-hidden] {
@@ -110,6 +140,10 @@ const { pathname } = Astro.url;
     height: 2.5rem;
   }
 
+  .header__logo :global(.header__logo-light) {
+    display: none;
+  }
+
   @media (min-width: 64rem) {
     .header__inner {
       grid-template-columns: minmax(0, 1fr);
@@ -139,6 +173,15 @@ const { pathname } = Astro.url;
 
     .header[data-compact] .header__logo :global(.header__logo-mark) {
       height: 2.75rem;
+    }
+
+    /* Over a photo, swap the logo for the one with white lettering. */
+    :global(html.js) .header[data-over-hero]:not([data-compact]) .header__logo :global(.header__logo-full:not(.header__logo-light)) {
+      display: none;
+    }
+
+    :global(html.js) .header[data-over-hero]:not([data-compact]) .header__logo :global(.header__logo-light) {
+      display: block;
     }
   }
 </style>

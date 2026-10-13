@@ -58,7 +58,7 @@ export function prelaunchProblems(input: PrelaunchInput): string[] {
   }
 
   if (!input.heroImage) {
-    problems.push('The home page hero photo is not set (copy.home.hero.image in src/data/copy.ts).');
+    problems.push('The home page hero photo is not set (copy.home.hero.slides in src/data/copy.ts).');
   }
 
   // An unconnected form is not a problem: the Inventory page then shows Colin's phone and
