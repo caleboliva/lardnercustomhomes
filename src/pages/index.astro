@@ -1,4 +1,5 @@
 ---
+import { pageSeo } from '../data/seo.ts';
 import Photo from '../components/Photo.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { copy } from '../data/copy.ts';
@@ -11,9 +12,10 @@ import { siteImage } from '../lib/images.ts';
 const { hero, intro, featured, neighborhoods, quote, cta } = copy.home;
 const heroImage = siteImage(hero.image);
 const featuredList = featuredProjects(projects, 3);
+const seo = pageSeo.home;
 ---
 
-<BaseLayout title={site.name}>
+<BaseLayout title={site.name} description={seo.description} seo={seo}>
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__media" style={`--photo-position: ${hero.imagePosition}`}>
       <Photo image={heroImage} alt={hero.imageAlt} ratio="fill" sizes="100vw" eager placeholderLabel="Hero photo" />

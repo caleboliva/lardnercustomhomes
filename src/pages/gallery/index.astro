@@ -1,4 +1,5 @@
 ---
+import { pageSeo } from '../../data/seo.ts';
 import PageHeader from '../../components/PageHeader.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import SubNav from '../../components/SubNav.astro';
@@ -8,9 +9,10 @@ import { projects } from '../../data/projects.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const { title, intro } = copy.gallery.index;
+const seo = pageSeo.gallery;
 ---
 
-<BaseLayout title={title} description="A portfolio of homes designed and built by Lardner Custom Homes in Dallas.">
+<BaseLayout title={title} description={seo.description} seo={seo}>
   <PageHeader title={title} intro={intro} />
   <SubNav label="Gallery sections" items={gallerySubNav} />
   <section class="section section--tight container" aria-label="Projects">

@@ -5,20 +5,56 @@ import '@fontsource-variable/cormorant-garamond/wght-italic.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/components.css';
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import logo from '../assets/brand/lardner-custom-homes-logo.webp';
+import { copy } from '../data/copy.ts';
 import { site } from '../data/site.ts';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import { siteImage } from '../lib/images.ts';
+import { breadcrumbSchema, businessSchema, keywordList } from '../lib/seo.ts';
 
 interface Props {
   title: string;
   description?: string;
   /** Set to false for immersive pages that supply their own way out (the project view). */
   header?: boolean;
+  /** What search engines and link previews read. See src/data/seo.ts. */
+  seo?: {
+    /** Replaces `title` in search results and browser tabs. The company name is added after it. */
+    title?: string;
+    keywords?: string[];
+    /** The picture shown when the page is shared. Defaults to the home page hero. */
+    image?: ImageMetadata | null;
+    /** Keep the page out of search results. */
+    noindex?: boolean;
+    /** Extra structured data for this page. */
+    schema?: object[];
+  };
 }
 
-const { title, description = site.description, header = true } = Astro.props;
-const pageTitle = title === site.name ? title : `${title} | ${site.name}`;
+const { title, description = site.description, header = true, seo = {} } = Astro.props;
+const searchTitle = seo.title ?? title;
+const pageTitle = searchTitle === site.name ? searchTitle : `${searchTitle} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const keywords = keywordList(seo.keywords ?? []);
+
+// Link previews want a 1200 × 630 JPG at a full web address.
+const absolute = (path: string) => new URL(path, Astro.site).href;
+const shareImage = async (image: ImageMetadata) =>
+  absolute((await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src);
+const heroImage = siteImage(copy.home.hero.image);
+const defaultShare = heroImage ? await shareImage(heroImage) : undefined;
+const share = seo.image ? await shareImage(seo.image) : defaultShare;
+const logoUrl = absolute((await getImage({ src: logo, width: 512, format: 'png' })).src);
+
+const schemas: object[] = [businessSchema({ image: defaultShare, logo: logoUrl })];
+const breadcrumbs = breadcrumbSchema(Astro.url.pathname, title);
+if (breadcrumbs) schemas.push(breadcrumbs);
+schemas.push(...(seo.schema ?? []));
+// "<" is escaped so no text in the data can close the script tag early.
+const toJson = (schema: object) => JSON.stringify(schema).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -28,14 +64,29 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(', ')} />
+    {seo.noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <meta name="theme-color" content="#f0fff0" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    {
+      share && (
+        <Fragment>
+          <meta property="og:image" content={share} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+        </Fragment>
+      )
+    }
+    <meta name="twitter:card" content={share ? 'summary_large_image' : 'summary'} />
+    {schemas.map((schema) => <script type="application/ld+json" is:inline set:html={toJson(schema)} />)}
   </head>
   <body data-site-header={header ? 'on' : 'off'}>
     <a class="skip-link" href="#main">Skip to content</a>

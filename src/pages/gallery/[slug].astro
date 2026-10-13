@@ -8,6 +8,7 @@ import { projects } from '../../data/projects.ts';
 import type { Project } from '../../data/types.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projectImage, toGalleryItem } from '../../lib/images.ts';
+import { projectSeo } from '../../lib/seo.ts';
 
 export function getStaticPaths() {
   return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
@@ -18,12 +19,18 @@ interface Props {
 }
 
 const { project } = Astro.props;
+const seo = projectSeo(project);
 const items = await Promise.all(
   project.photos.map((photo) => toGalleryItem(projectImage(project.slug, photo.file), photo.alt, project.name)),
 );
 ---
 
-<BaseLayout title={project.name} description={`Photos of ${project.name} by Lardner Custom Homes.`} header={false}>
+<BaseLayout
+  title={project.name}
+  description={seo.description}
+  seo={{ title: seo.title, keywords: seo.keywords, image: projectImage(project.slug, project.cover) }}
+  header={false}
+>
   <div class="project" data-theme="dark" data-project-view>
     <a class="project__close" href="/gallery/" data-project-close>
       <Icon name="close" />

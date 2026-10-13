@@ -1,8 +1,10 @@
 ---
+import { pageSeo } from '../../data/seo.ts';
 import RoomView from '../../components/RoomView.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+const seo = pageSeo.kitchen;
 ---
 
-<BaseLayout title="Kitchen" description="Kitchen photos from homes built by Lardner Custom Homes in Dallas.">
+<BaseLayout title="Kitchen" description={seo.description} seo={seo}>
   <RoomView room="kitchen" />
 </BaseLayout>

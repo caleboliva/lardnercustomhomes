@@ -32,7 +32,7 @@ If the Browser pane's preview will not start on a Mac, change `runtimeExecutable
 ## Rules
 
 - **Never invent facts** about the company, Colin, homes, prices, specs or projects. Use what Colin provides. Where something is missing, use `placeholder('what is needed')` from `src/lib/format.ts`.
-- **Content lives in `src/data/`**: `site.ts` (contact details), `navigation.ts`, `homes.ts`, `projects.ts`, `copy.ts`. Change content there, not in components. `homes.ts` and `projects.ts` start with instructions and an example entry.
+- **Content lives in `src/data/`**: `site.ts` (contact details), `navigation.ts`, `homes.ts`, `projects.ts`, `copy.ts`, `seo.ts` (search titles, descriptions and keywords). Change content there, not in components. `homes.ts` and `projects.ts` start with instructions and an example entry.
 - **Photos** go in `src/assets/projects/<slug>/`, `src/assets/homes/<slug>/` and `src/assets/site/`. Names in the data must match file names exactly, including capital letters. JPG, PNG, WebP or AVIF only; convert HEIC first. Every photo needs `alt` text describing it and a `room` (`exterior`, `kitchen`, `bath`, `living` or `other`).
 - **Delete the "Sample" entries** as real ones replace them. Sample entries have `placeholder: true`; real entries have `placeholder: false`.
 - **The palette is fixed**: Honeydew `#F0FFF0`, Champagne `#F7E6CA`, Powder Blue `#B8E3E9`, Midnight Blue `#272757`, plus `#12122B` and white. Text is Midnight Blue, or white on dark. Champagne is never a text colour. Colours, fonts and spacing are tokens in `src/styles/tokens.css`.

@@ -36,6 +36,7 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 | Homes and lots | `src/data/homes.ts` (instructions at the top of the file) |
 | Gallery projects and photos | `src/data/projects.ts` (instructions at the top of the file) |
 | Page text | `src/data/copy.ts` |
+| Search titles, descriptions and keywords (SEO) | `src/data/seo.ts` (notes at the top of the file) |
 | Colours, fonts, spacing | `src/styles/tokens.css` |
 
 ### Photos
@@ -56,6 +57,17 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 ### Placeholders
 
 Text that reads `[Placeholder: …]` with a blue highlight, and tiles labelled "Placeholder", mark content that still has to be supplied. `CONTENT-TODO.md` lists all of it.
+
+## Search engines (SEO)
+
+Each page carries a search title, a description, keywords, a share picture and structured data (the company's details, and each home's or lot's address, size and price). Homes, lots and projects write theirs from their own details, so adding one needs nothing extra. The fixed pages take theirs from `src/data/seo.ts`.
+
+The site also publishes `/sitemap.xml` and `/robots.txt`, rebuilt on every publish.
+
+Two jobs happen outside the site and matter as much as anything in it:
+
+1. **Google Search Console** (search.google.com/search-console): add lardnercustomhomes.com, verify it, and submit `https://lardnercustomhomes.com/sitemap.xml`. This is how Google is told about new pages.
+2. **Google Business Profile** (business.google.com): claim or create the "Lardner Custom Homes" profile with the category "Custom home builder", the same phone number as the site, the service areas and photos. Local searches such as "custom home builder near me" are answered from these profiles.
 
 ## Connect the Inventory form
 

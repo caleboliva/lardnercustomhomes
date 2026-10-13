@@ -6,7 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const { title, body } = copy.notFound;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} seo={{ noindex: true }}>
   <PageHeader title={title} intro={body} />
   <section class="container">
     <p class="links">

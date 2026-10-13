@@ -1,4 +1,5 @@
 ---
+import { pageSeo } from '../data/seo.ts';
 import { Image } from 'astro:assets';
 import colinPhoto from '../assets/people/colin-lardner.jpg';
 import PageHeader from '../components/PageHeader.astro';
@@ -6,9 +7,10 @@ import { copy } from '../data/copy.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const { title, colin, company, values } = copy.about;
+const seo = pageSeo.about;
 ---
 
-<BaseLayout title={title} description="Meet Colin Lardner and the team behind Lardner Custom Homes in Dallas.">
+<BaseLayout title={title} description={seo.description} seo={seo}>
   <PageHeader title={title} />
 
   <section class="colin container" aria-labelledby="colin-name">

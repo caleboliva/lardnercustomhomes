@@ -1,4 +1,5 @@
 ---
+import { pageSeo } from '../data/seo.ts';
 import ContactPanel from '../components/ContactPanel.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import Lightbox from '../components/Lightbox.astro';
@@ -18,9 +19,10 @@ const items = await Promise.all(
     toGalleryItem(projectImage(project.slug, photo.file), photo.alt, project.name),
   ),
 );
+const seo = pageSeo.inventory;
 ---
 
-<BaseLayout title="Inventory" description="Tell Lardner Custom Homes what you're looking for and hear about current and upcoming homes and lots in Dallas.">
+<BaseLayout title="Inventory" description={seo.description} seo={seo}>
   <div class="inventory container">
     <div class="inventory__form">
       <div class="inventory__intro">
