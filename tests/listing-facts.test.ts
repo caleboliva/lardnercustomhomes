@@ -20,7 +20,8 @@ test('a lot lists its neighborhood, price, size, the planned home and its featur
     facts({
       neighborhood: 'Preston Hollow',
       price: '$3,995,000',
-      lotSize: '75 × 140 ft',
+      lotSize: '10,500 sq ft',
+      lotDimensions: '75 × 140 ft',
       beds: 4,
       baths: 5,
       garage: 2,
@@ -29,7 +30,8 @@ test('a lot lists its neighborhood, price, size, the planned home and its featur
     [
       'Neighborhood: Preston Hollow',
       'Price: $3,995,000',
-      'Lot size: 75 × 140 ft',
+      'Lot size: 10,500 sq ft',
+      'Lot dimensions: 75 × 140 ft',
       'Planned home: 4 beds · 5 baths · 2-car garage',
       'Features: Game room, flex room',
     ],
@@ -48,6 +50,13 @@ test('a home lists its own rooms rather than a plan', () => {
     facts({ category: 'available', status: 'For Sale', beds: 4, baths: 1, sqft: 4250, garage: 1, features: ['Pool'] }),
     ['Bedrooms: 4', 'Bathrooms: 1', 'Square feet: 4,250', 'Garage: 1-car', 'Features: Pool'],
   );
+});
+
+test('an irregular lot lists its area without dimensions', () => {
+  assert.deepEqual(facts({ address: '9903 Coppedge Lane, Dallas, TX', lotSize: '16,707 sq ft' }), [
+    'Address: 9903 Coppedge Lane, Dallas, TX',
+    'Lot size: 16,707 sq ft',
+  ]);
 });
 
 test('only the facts that exist are listed', () => {

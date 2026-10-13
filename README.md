@@ -49,6 +49,8 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 - If a name does not match a file, the site shows a "Placeholder" tile instead of a broken image. Run `npm test` after adding photos: it lists any name that does not match.
 - Cards and cover images crop photos to a fixed shape from the centre, so landscape photos work best there. The project page and the photo viewer show each photo uncropped.
 - Each photo's `room` decides which Gallery room page it also appears on.
+- A lot drawing goes in the lot's folder as `lot-drawing.jpg`, with the lot's `cover` set to that name. A square or tall cover is shown whole beside the lot's details instead of being cropped to a banner.
+- A listing with an `address` gets a Location section: a map with a pin and a link that opens Google Maps.
 - Write `alt` text that describes the photo for someone who cannot see it.
 
 ### Placeholders

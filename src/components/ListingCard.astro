@@ -17,7 +17,7 @@ const neighborhood = listing.neighborhood ?? (listing.placeholder ? placeholder(
 const specs = specLine(listing);
 ---
 
-<article class="card">
+<article class="card" style={listing.coverPosition ? `--photo-position: ${listing.coverPosition}` : undefined}>
   <a class="card__link" href={`/homes/${listing.slug}/`}>
     <Photo
       image={cover}

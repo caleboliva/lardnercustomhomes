@@ -28,6 +28,7 @@ export type Listing = {
   category: ListingCategory;
   status: ListingStatus;
   neighborhood?: string;
+  /** Street, city and state, for example '6616 Deloache Avenue, Dallas, TX'. Also places the map pin. */
   address?: string;
   price?: string;
   /** For a lot, beds, baths, garage and features describe the home planned for it. */
@@ -40,12 +41,21 @@ export type Listing = {
   features?: string[];
   /** For a lot planned for more than one home. */
   units?: number;
+  /** The lot's area, for example '10,500 sq ft'. */
   lotSize?: string;
+  /** Frontage by depth, for example '75 × 140 ft'. Leave out for an irregular lot. */
+  lotDimensions?: string;
   description?: string;
   /** File name in src/assets/homes/<slug>/, or null for a placeholder tile. */
   cover: string | null;
-  /** Describes the cover when it is not one of `photos`, such as the site-plan illustration. */
+  /** Describes the cover when it is not one of `photos`, such as a lot drawing. */
   coverAlt?: string;
+  /** The part of the cover kept in view when a card crops it: across, then down. Default 'center'. */
+  coverPosition?: string;
+  /** A short note shown under the cover, for example 'Concept rendering of the planned home'. */
+  coverCaption?: string;
+  /** The heading over `photos` when they are not photographs. Default 'Photos'. */
+  photosHeading?: string;
   photos: Photo[];
   /** True for sample entries that must be replaced before launch. */
   placeholder: boolean;

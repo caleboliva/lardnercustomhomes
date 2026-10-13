@@ -23,6 +23,7 @@ export function listingFacts(listing: Listing): Fact[] {
 
   if (listing.category === 'lot') {
     add('Lot size', listing.lotSize);
+    add('Lot dimensions', listing.lotDimensions);
     const plan: string[] = [];
     if (listing.units !== undefined) plan.push(count(listing.units, 'unit', 'units'));
     if (listing.beds !== undefined) plan.push(count(listing.beds, 'bed', 'beds'));
@@ -35,6 +36,7 @@ export function listingFacts(listing: Listing): Fact[] {
     if (listing.sqft !== undefined) add('Square feet', formatNumber(listing.sqft));
     if (listing.garage !== undefined) add('Garage', `${listing.garage}-car`);
     add('Lot size', listing.lotSize);
+    add('Lot dimensions', listing.lotDimensions);
   }
 
   if (listing.features && listing.features.length > 0) add('Features', featureList(listing.features));

@@ -1,6 +1,8 @@
 ---
 import Copy from '../../components/Copy.astro';
+import Icon from '../../components/Icon.astro';
 import Lightbox from '../../components/Lightbox.astro';
+import LightboxTrigger from '../../components/LightboxTrigger.astro';
 import Photo from '../../components/Photo.astro';
 import PhotoGrid from '../../components/PhotoGrid.astro';
 import { copy } from '../../data/copy.ts';
@@ -10,6 +12,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { placeholder } from '../../lib/format.ts';
 import { homeImage, toGalleryItem } from '../../lib/images.ts';
 import { listingFacts } from '../../lib/listing-facts.ts';
+import { mapEmbedUrl, mapLinkUrl } from '../../lib/maps.ts';
 
 export function getStaticPaths() {
   return listings.map((listing) => ({ params: { slug: listing.slug }, props: { listing } }));
@@ -23,6 +26,10 @@ const { listing } = Astro.props;
 const isLot = listing.category === 'lot';
 const cover = homeImage(listing.slug, listing.cover);
 const coverAlt = listing.coverAlt ?? listing.photos.find((photo) => photo.file === listing.cover)?.alt ?? listing.title;
+// A square or tall cover, such as a lot drawing, is shown whole beside the details.
+// A wide one runs across the page as a banner.
+const wholeCover = cover !== null && cover.width / cover.height < 1.25;
+const coverItem = wholeCover ? await toGalleryItem(cover, coverAlt, listing.title) : null;
 const items = await Promise.all(
   listing.photos.map((photo) => toGalleryItem(homeImage(listing.slug, photo.file), photo.alt, listing.title)),
 );
@@ -33,6 +40,7 @@ const description =
   listing.description ?? (listing.placeholder ? placeholder(`a short description of this ${isLot ? 'lot' : 'home'}`) : '');
 const back = isLot ? { href: '/homes/lots/', label: 'All lots' } : { href: '/homes/available/', label: 'Available homes' };
 const inquiryHref = `/inventory/?home=${encodeURIComponent(listing.title)}`;
+const { location } = copy.homes;
 ---
 
 <BaseLayout title={listing.title} description={`${listing.title} from Lardner Custom Homes in Dallas.`}>
@@ -43,39 +51,69 @@ const inquiryHref = `/inventory/?home=${encodeURIComponent(listing.title)}`;
       <h1>{listing.title}</h1>
     </header>
 
-    <div class="container">
-      <Photo
-        image={cover}
-        alt={coverAlt}
-        ratio="16/9"
-        sizes="(min-width: 90rem) 82rem, 92vw"
-        eager
-        placeholderLabel={isLot ? 'Lot photo' : 'Home photo'}
-      />
-    </div>
-
-    <section class="listing__summary section section--tight container" aria-label="Details">
-      <dl class="listing__facts">
+    <div class:list={['listing__top container', { 'listing__top--whole': wholeCover }]}>
+      <figure class="listing__cover" data-lightbox-group={coverItem ? '' : undefined}>
         {
-          facts.map((fact) => (
-            <div class="listing__fact">
-              <dt>{fact.label}</dt>
-              <dd><Copy text={fact.value} /></dd>
-            </div>
-          ))
+          coverItem ? (
+            <LightboxTrigger item={coverItem}>
+              <Photo image={cover} alt={coverAlt} ratio="natural" sizes="(min-width: 64rem) 46vw, 92vw" eager />
+            </LightboxTrigger>
+          ) : (
+            <Photo
+              image={cover}
+              alt={coverAlt}
+              ratio="16/9"
+              sizes="(min-width: 90rem) 82rem, 92vw"
+              eager
+              placeholderLabel={isLot ? 'Lot photo' : 'Home photo'}
+            />
+          )
         }
-      </dl>
-      <div class="listing__about">
-        {description && <p class="lead"><Copy text={description} /></p>}
-        <a class="btn" href={inquiryHref}>{isLot ? copy.homes.lotDetailCta : copy.homes.detailCta}</a>
-      </div>
-    </section>
+        {listing.coverCaption && <figcaption class="listing__caption">{listing.coverCaption}</figcaption>}
+      </figure>
+
+      <section class="listing__summary" aria-label="Details">
+        <dl class="listing__facts">
+          {
+            facts.map((fact) => (
+              <div class="listing__fact">
+                <dt>{fact.label}</dt>
+                <dd><Copy text={fact.value} /></dd>
+              </div>
+            ))
+          }
+        </dl>
+        <div class="listing__about">
+          {description && <p class="lead"><Copy text={description} /></p>}
+          <a class="btn" href={inquiryHref}>{isLot ? copy.homes.lotDetailCta : copy.homes.detailCta}</a>
+        </div>
+      </section>
+    </div>
 
     {
       items.length > 0 && (
         <section class="listing__photos container" aria-labelledby="photos-heading">
-          <h2 id="photos-heading">Photos</h2>
+          <h2 id="photos-heading">{listing.photosHeading ?? 'Photos'}</h2>
           <PhotoGrid items={items} layout="three" ratio="4/3" />
+        </section>
+      )
+    }
+
+    {
+      listing.address && (
+        <section class="listing__location container" aria-labelledby="location-heading">
+          <div class="listing__location-text">
+            <h2 id="location-heading">{location.heading}</h2>
+            <p class="listing__address"><Icon name="pin" size={20} /> {listing.address}</p>
+            <a class="link-arrow" href={mapLinkUrl(listing.address)} target="_blank" rel="noopener noreferrer">{location.link}<span class="visually-hidden"> (opens in a new tab)</span></a>
+          </div>
+          <iframe
+            class="listing__map"
+            title={`Map with a pin at ${listing.address}`}
+            src={mapEmbedUrl(listing.address)}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
         </section>
       )
     }
@@ -100,6 +138,23 @@ const inquiryHref = `/inventory/?home=${encodeURIComponent(listing.title)}`;
     font-weight: 500;
     letter-spacing: var(--tracking-caps);
     text-transform: uppercase;
+  }
+
+  .listing__top {
+    display: grid;
+    gap: calc(var(--space-section) * 0.6);
+    padding-bottom: calc(var(--space-section) * 0.6);
+  }
+
+  .listing__cover {
+    margin: 0;
+  }
+
+  .listing__caption {
+    margin-top: var(--space-3);
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
   }
 
   .listing__summary {
@@ -143,10 +198,54 @@ const inquiryHref = `/inventory/?home=${encodeURIComponent(listing.title)}`;
     padding-bottom: var(--space-section);
   }
 
+  .listing__location {
+    display: grid;
+    gap: var(--space-6);
+    padding-bottom: var(--space-section);
+  }
+
+  .listing__location-text {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  .listing__address {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .listing__map {
+    display: block;
+    width: 100%;
+    height: clamp(18rem, 50vw, 28rem);
+    border: 1px solid var(--rule);
+    background: var(--surface);
+  }
+
   @media (min-width: 64rem) {
     .listing__summary {
       grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
       column-gap: var(--space-9);
+    }
+
+    /* The whole cover sits on the left and the details stack on the right. */
+    .listing__top--whole {
+      align-items: start;
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      column-gap: var(--space-8);
+    }
+
+    .listing__top--whole .listing__summary {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .listing__location {
+      align-items: start;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      column-gap: var(--space-8);
     }
   }
 </style>

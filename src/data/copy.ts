@@ -52,6 +52,7 @@ export const copy = {
     },
     detailCta: 'Ask about this home',
     lotDetailCta: 'Ask about this lot',
+    location: { heading: 'Location', link: 'Open in Google Maps' },
     buildOnYourLot: {
       title: 'Build on Your Lot',
       intro: 'Already have the land? We can design and build on it.',
