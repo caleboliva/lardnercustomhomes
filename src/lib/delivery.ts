@@ -23,8 +23,10 @@ const DEFAULT_TIMEOUT_MS = 15_000;
 
 /**
  * Sends an enquiry and says what happened. Only a 2xx reply from the form service counts
- * as "sent": a tripped spam trap, a missing endpoint, an error reply, a network failure
- * and a timeout are each reported so the page never claims a delivery that did not happen.
+ * as "sent", and not even that if the reply says `"success": false` (Web3Forms and similar
+ * services answer that way). A tripped spam trap, a missing endpoint, an error reply, a
+ * network failure and a timeout are each reported, so the page never claims a delivery that
+ * did not happen.
  */
 export async function deliverInquiry(values: InquiryValues, options: DeliveryOptions): Promise<DeliveryOutcome> {
   if (options.trap !== '') return 'rejected';
@@ -39,7 +41,10 @@ export async function deliverInquiry(values: InquiryValues, options: DeliveryOpt
       body: JSON.stringify(buildPayload(values, options.accessKey)),
       signal: controller.signal,
     });
-    return response.ok ? 'sent' : 'failed';
+    if (!response.ok) return 'failed';
+    const reply: unknown = await response.json().catch(() => null);
+    const refused = typeof reply === 'object' && reply !== null && (reply as { success?: unknown }).success === false;
+    return refused ? 'failed' : 'sent';
   } catch {
     return 'failed';
   } finally {

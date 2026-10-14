@@ -69,6 +69,19 @@ test('a 2xx response is sent, posted once as JSON with the payload', async () =>
   assert.equal(body.access_key, 'public-key');
 });
 
+test('a 2xx reply that says the service refused it is failed', async () => {
+  const refused = () => Promise.resolve(new Response('{"success":false,"message":"Invalid access key"}', { status: 200 }));
+  const { fetchFn } = recordingFetch(refused);
+  assert.equal(await deliverInquiry(values, { endpoint: 'https://forms.test/submit', trap: '', fetchFn }), 'failed');
+});
+
+test('a 2xx reply that confirms delivery, or has no JSON, is sent', async () => {
+  const confirmed = () => Promise.resolve(new Response('{"success":true,"message":"Email sent successfully!"}', { status: 200 }));
+  assert.equal(await deliverInquiry(values, { endpoint: 'https://forms.test/submit', trap: '', fetchFn: recordingFetch(confirmed).fetchFn }), 'sent');
+  const plain = () => Promise.resolve(new Response('OK', { status: 200 }));
+  assert.equal(await deliverInquiry(values, { endpoint: 'https://forms.test/submit', trap: '', fetchFn: recordingFetch(plain).fetchFn }), 'sent');
+});
+
 test('a non-2xx response is failed', async () => {
   const { fetchFn } = recordingFetch(() => Promise.resolve(new Response('{}', { status: 500 })));
   assert.equal(await deliverInquiry(values, { endpoint: 'https://forms.test/submit', trap: '', fetchFn }), 'failed');

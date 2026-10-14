@@ -130,6 +130,8 @@ export function buildPayload(values: InquiryValues, accessKey = ''): Record<stri
 
   const payload: Record<string, string> = {
     subject: `Inventory sign-up from ${firstName} ${lastName}`,
+    // The sender name on the notification email (Web3Forms reads this field).
+    from_name: 'Lardner Custom Homes website',
     name: `${firstName} ${lastName}`,
     firstName,
     lastName,
