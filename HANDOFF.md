@@ -41,7 +41,7 @@ After each batch, look at the preview on both a wide window and a narrow one.
 
 ## 4. Connect the enquiry form
 
-The form shows "not connected" until this is done.
+Until this is done, the Inventory sign-up opens the visitor's email app with their details written out to Colin. The README lists the options for receiving sign-ups directly.
 
 1. Colin creates an account with a form service that forwards submissions by email (for example Formspree or Web3Forms) and sets the recipient to colin@lardnergroup.com.
 2. Tell Claude the address the service gives you. Claude puts it in a `.env` file.

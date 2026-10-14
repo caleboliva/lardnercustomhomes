@@ -327,6 +327,11 @@ textarea.field__input {
   content: '';
 }
 
+/* Choices that can each be ticked are square, like a tick box. */
+.choice__input[type='checkbox'] + .choice__label::before {
+  border-radius: 2px;
+}
+
 .choice__input:hover + .choice__label {
   background: var(--accent);
 }

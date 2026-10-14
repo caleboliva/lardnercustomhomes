@@ -26,13 +26,13 @@ If the Browser pane's preview will not start on a Mac, change `runtimeExecutable
 
 - The site is published by GitHub Pages from `caleboliva/lardnercustomhomes` (remote `origin`). Every push to `main` deploys to lardnercustomhomes.com through `.github/workflows/deploy.yml`.
 - **The full site is live.** The workflow runs the launch check before building and refuses to publish while sample entries or placeholder text remain. A holding page (logo and contact details) lives in `holding/` and is published instead if `SITE_MODE: holding` is added to the workflow's `env:`.
-- Until a form service is connected (`PUBLIC_FORM_ENDPOINT`), the published Inventory page shows Colin's phone and email instead of the form. Locally the form still shows, so its states can be previewed.
+- Until a form service is connected (`PUBLIC_FORM_ENDPOINT`), the Inventory sign-up opens the visitor's email app with the sign-up written out to Colin (`buildMailto` in `src/lib/validation.ts`). That is never shown as a success. Locally, `?formDemo=success` or `?formDemo=error` previews the connected states.
 - A push is a public deployment. Confirm with the user before pushing.
 
 ## Rules
 
 - **Never invent facts** about the company, Colin, homes, prices, specs or projects. Use what Colin provides. Where something is missing, use `placeholder('what is needed')` from `src/lib/format.ts`.
-- **Content lives in `src/data/`**: `site.ts` (contact details), `navigation.ts`, `homes.ts`, `projects.ts`, `copy.ts`, `seo.ts` (search titles, descriptions and keywords). Change content there, not in components. `homes.ts` and `projects.ts` start with instructions and an example entry.
+- **Content lives in `src/data/`**: `site.ts` (contact details), `navigation.ts`, `homes.ts`, `projects.ts`, `copy.ts`, `seo.ts` (search titles, descriptions and keywords), `press.ts` (press coverage), `neighborhoods.ts` (neighborhood descriptions). Change content there, not in components. `homes.ts` and `projects.ts` start with instructions and an example entry.
 - **Photos** go in `src/assets/projects/<slug>/`, `src/assets/homes/<slug>/` and `src/assets/site/`. Names in the data must match file names exactly, including capital letters. JPG, PNG, WebP or AVIF only; convert HEIC first. Every photo needs `alt` text describing it and a `room` (`exterior`, `kitchen`, `bath`, `living` or `other`).
 - **Delete the "Sample" entries** as real ones replace them. Sample entries have `placeholder: true`; real entries have `placeholder: false`.
 - **The palette is fixed**: Honeydew `#F0FFF0`, Champagne `#F7E6CA`, Powder Blue `#B8E3E9`, Midnight Blue `#272757`, plus `#12122B` and white. Text is Midnight Blue, or white on dark. Champagne is never a text colour. Colours, fonts and spacing are tokens in `src/styles/tokens.css`.

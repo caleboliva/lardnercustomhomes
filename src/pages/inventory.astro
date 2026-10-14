@@ -1,19 +1,18 @@
 ---
 import { pageSeo } from '../data/seo.ts';
-import ContactPanel from '../components/ContactPanel.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import Lightbox from '../components/Lightbox.astro';
+import Photo from '../components/Photo.astro';
 import PhotoGrid from '../components/PhotoGrid.astro';
 import { copy } from '../data/copy.ts';
 import { projects } from '../data/projects.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { previewPhotos } from '../lib/content.ts';
-import { projectImage, toGalleryItem } from '../lib/images.ts';
+import { projectImage, siteImage, toGalleryItem } from '../lib/images.ts';
 
+// The sign-up form always shows. Until a form service is connected (PUBLIC_FORM_ENDPOINT),
+// sending it opens the visitor's email app with the sign-up written out for Colin.
 const page = copy.inventory;
-// Without a form service the published page shows phone and email instead. Locally the form
-// stays visible so its states can still be previewed with ?formDemo=.
-const formConnected = Boolean(import.meta.env.PUBLIC_FORM_ENDPOINT) || import.meta.env.DEV;
 const items = await Promise.all(
   previewPhotos(projects, 2, 6).map(({ photo, project }) =>
     toGalleryItem(projectImage(project.slug, photo.file), photo.alt, project.name),
@@ -23,29 +22,101 @@ const seo = pageSeo.inventory;
 ---
 
 <BaseLayout title="Inventory" description={seo.description} seo={seo}>
-  <div class="inventory container">
-    <div class="inventory__form">
-      <div class="inventory__intro">
-        <p class="eyebrow">{page.eyebrow}</p>
-        <h1>{page.title}</h1>
-        <p class="lead">{formConnected ? page.intro : page.offline.intro}</p>
-      </div>
-      {formConnected ? <InquiryForm /> : <ContactPanel />}
+  <section class="access" aria-labelledby="inventory-title">
+    <div class="access__media">
+      <Photo image={siteImage(page.image)} alt={page.imageAlt} ratio="fill" sizes="100vw" eager placeholderLabel="Inventory photo" />
     </div>
-    {
-      items.length > 0 && (
-        <aside class="inventory__gallery" aria-labelledby="inventory-gallery-title">
-          <h2 class="eyebrow" id="inventory-gallery-title">{page.galleryHeading}</h2>
-          <PhotoGrid items={items} layout="dense" ratio="3/2" eagerCount={2} />
-          <a class="link-arrow" href="/gallery/">{page.galleryLink}</a>
-        </aside>
-      )
-    }
+    <div class="access__content container" data-theme="dark">
+      <p class="eyebrow">{page.eyebrow}</p>
+      <h1 id="inventory-title">{page.title}</h1>
+      <p class="lead">{page.intro}</p>
+      <p class="access__actions">
+        <a class="btn" href="#signup">{page.signupCta}</a>
+        <a class="btn btn--ghost" href="/homes/">{page.browseCta}</a>
+      </p>
+    </div>
+  </section>
+
+  <div class="inventory container">
+    <section class="inventory__form" id="signup" aria-labelledby="signup-title">
+      <div class="inventory__intro">
+        <h2 id="signup-title">{page.form.heading}</h2>
+        <p>{page.form.intro}</p>
+      </div>
+      <InquiryForm />
+    </section>
+
+    <aside class="inventory__side">
+      <section class="brokerage" aria-labelledby="brokerage-title">
+        <h2 id="brokerage-title">{page.brokerage.heading}</h2>
+        <p>{page.brokerage.body}</p>
+        <p class="brokerage__links">
+          <a class="btn" href={page.brokerage.link.href} target="_blank" rel="noopener noreferrer">{page.brokerage.link.label}<span class="visually-hidden"> (opens in a new tab)</span></a>
+          <a class="link-arrow" href={page.brokerage.searchLink.href} target="_blank" rel="noopener noreferrer">{page.brokerage.searchLink.label}<span class="visually-hidden"> (opens in a new tab)</span></a>
+        </p>
+      </section>
+
+      {
+        items.length > 0 && (
+          <section class="inventory__gallery" aria-labelledby="inventory-gallery-title">
+            <h2 class="eyebrow" id="inventory-gallery-title">{page.galleryHeading}</h2>
+            <PhotoGrid items={items} layout="dense" ratio="3/2" />
+            <a class="link-arrow" href="/gallery/">{page.galleryLink}</a>
+          </section>
+        )
+      }
+    </aside>
   </div>
   <Lightbox />
 </BaseLayout>
 
 <style>
+  /* The opening band: a photo behind the invitation to sign up. */
+  .access {
+    position: relative;
+    display: grid;
+    min-height: min(36rem, 70svh);
+    background: var(--color-midnight-deep);
+    color: var(--color-white);
+  }
+
+  .access__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .access__media::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-midnight-deep) 78%, transparent),
+      color-mix(in srgb, var(--color-midnight-deep) 35%, transparent)
+    );
+    content: '';
+  }
+
+  .access__content {
+    position: relative;
+    display: grid;
+    align-content: end;
+    justify-items: start;
+    gap: var(--space-4);
+    padding-block: var(--space-9) var(--space-8);
+  }
+
+  .access__content h1 {
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .access__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
   .inventory {
     display: grid;
     gap: var(--space-8);
@@ -54,13 +125,38 @@ const seo = pageSeo.inventory;
 
   .inventory__intro {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-3);
     margin-bottom: var(--space-6);
+  }
+
+  .inventory__intro p {
+    max-width: var(--measure);
+  }
+
+  .inventory__side {
+    display: grid;
+    align-content: start;
+    gap: var(--space-8);
+  }
+
+  .brokerage {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-5);
+    background: var(--surface);
+  }
+
+  .brokerage__links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    margin-top: var(--space-2);
   }
 
   .inventory__gallery {
     display: grid;
-    align-content: start;
     justify-items: start;
     gap: var(--space-4);
   }
@@ -69,28 +165,17 @@ const seo = pageSeo.inventory;
     width: 100%;
   }
 
-  @media (min-width: 64rem) {
-    .inventory {
-      align-items: start;
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-      column-gap: var(--space-9);
-    }
-
-    /*
-      The gallery is three rows of 3:2 tiles, so its height is its width plus about 7rem.
-      Capping the width by the window height keeps the whole gallery visible under the header
-      on short laptop screens as well as tall ones.
-    */
-    .inventory__gallery {
-      max-width: min(36rem, max(18rem, calc(100dvh - 13rem)));
+  @media (min-width: 40rem) {
+    .brokerage {
+      padding: var(--space-7) var(--space-6);
     }
   }
 
-  /* Keep the gallery in view beside the form. Below 32rem tall there is no room for it. */
-  @media (min-width: 64rem) and (min-height: 32rem) {
-    .inventory__gallery {
-      position: sticky;
-      top: calc(var(--header-h-compact) + var(--space-5));
+  @media (min-width: 64rem) {
+    .inventory {
+      align-items: start;
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      column-gap: var(--space-9);
     }
   }
 </style>

@@ -4,9 +4,11 @@ import { Image } from 'astro:assets';
 import colinPhoto from '../assets/people/colin-lardner.jpg';
 import PageHeader from '../components/PageHeader.astro';
 import { copy } from '../data/copy.ts';
+import { press } from '../data/press.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const { title, colin, company, values } = copy.about;
+const { title, colin, services, company, values } = copy.about;
+const isExternal = (href: string) => href.startsWith('http');
 const seo = pageSeo.about;
 ---
 
@@ -26,6 +28,29 @@ const seo = pageSeo.about;
         {colin.bio.map((paragraph) => <p>{paragraph}</p>)}
       </div>
     </div>
+  </section>
+
+  <section class="section section--tight container" aria-labelledby="services-title">
+    <div class="split" data-reveal>
+      <h2 id="services-title">{services.heading}</h2>
+      <p class="lead">{services.intro}</p>
+    </div>
+    <ul class="services" role="list">
+      {
+        services.items.map((service, i) => (
+          <li class="services__item" data-reveal style={`--reveal-i: ${i}`}>
+            <h3>{service.title}</h3>
+            <p>{service.body}</p>
+            <a
+              class="link-arrow"
+              href={service.link.href}
+              target={isExternal(service.link.href) ? '_blank' : undefined}
+              rel={isExternal(service.link.href) ? 'noopener noreferrer' : undefined}
+            >{service.link.label}{isExternal(service.link.href) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <section class="section section--surface" aria-labelledby="company-title">
@@ -50,6 +75,33 @@ const seo = pageSeo.about;
       }
     </ul>
   </section>
+
+  {
+    press.length > 0 && (
+      <section class="section section--surface" id="press" aria-labelledby="press-title">
+        <div class="container">
+          <div class="split" data-reveal>
+            <h2 id="press-title">{copy.about.press.heading}</h2>
+            <p class="lead">{copy.about.press.intro}</p>
+          </div>
+          <ul class="press" role="list">
+            {press.map((item) => (
+              <li class="press__item" data-reveal>
+                <p class="eyebrow">{item.outlet} · {item.date}</p>
+                <div class="press__text">
+                  <h3 class="press__title">
+                    <a href={item.href} target="_blank" rel="noopener noreferrer">{item.title}<span class="visually-hidden"> (opens in a new tab)</span></a>
+                  </h3>
+                  <p>{item.summary}</p>
+                  {item.project && <a class="link-arrow" href={item.project.href}>{copy.about.press.projectLink}: {item.project.label}</a>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 </BaseLayout>
 
 <style>
@@ -91,6 +143,51 @@ const seo = pageSeo.about;
     margin: var(--space-6) 0 0;
   }
 
+  .services {
+    display: grid;
+    gap: var(--space-6);
+    margin: var(--space-7) 0 0;
+  }
+
+  .services__item {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: var(--space-3);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule);
+  }
+
+  .press {
+    margin: var(--space-7) 0 0;
+  }
+
+  .press__item {
+    display: grid;
+    gap: var(--space-2) var(--space-9);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--rule);
+  }
+
+  .press__text {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+  }
+
+  .press__text p {
+    max-width: var(--measure);
+  }
+
+  .press__title {
+    font-size: var(--step-2);
+  }
+
+  .press__title a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
   .values__item {
     display: grid;
     gap: var(--space-2);
@@ -106,13 +203,19 @@ const seo = pageSeo.about;
     /* All three bands share one left column so their text lines up down the page. */
     .colin,
     .split,
-    .values__item {
+    .values__item,
+    .press__item {
       grid-template-columns: 25rem minmax(0, 1fr);
       column-gap: var(--space-9);
     }
 
     .colin {
       align-items: start;
+    }
+
+    .services {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: var(--space-7);
     }
   }
 </style>

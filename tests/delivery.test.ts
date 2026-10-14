@@ -8,6 +8,8 @@ const values: InquiryValues = {
   lastName: 'Lovelace',
   email: 'ada@example.com',
   phone: '(214) 555-0100',
+  interest: '',
+  timeline: '',
   message: 'A lot in Uptown.',
   pricePoint: '$1M–$2M',
   realtor: 'No',

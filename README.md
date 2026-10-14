@@ -35,7 +35,9 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 | Menu items | `src/data/navigation.ts` |
 | Homes and lots | `src/data/homes.ts` (instructions at the top of the file) |
 | Gallery projects and photos | `src/data/projects.ts` (instructions at the top of the file) |
-| Page text | `src/data/copy.ts` |
+| Page text, including the About page services and the Inventory sign-up | `src/data/copy.ts` |
+| Press coverage (About page and the home page's "As featured in" line) | `src/data/press.ts` |
+| A few paragraphs about each neighborhood, shown on its homes and lots | `src/data/neighborhoods.ts` |
 | Search titles, descriptions and keywords (SEO) | `src/data/seo.ts` (notes at the top of the file) |
 | Colours, fonts, spacing | `src/styles/tokens.css` |
 
@@ -52,6 +54,7 @@ Everything that changes often lives in `src/data/`. You should not need to edit 
 - Each photo's `room` decides which Gallery room page it also appears on.
 - A lot drawing goes in the lot's folder as `lot-drawing.jpg`, with the lot's `cover` set to that name. A square or tall cover is shown whole beside the lot's details instead of being cropped to a banner.
 - A listing with an `address` gets a Location section: a map with a pin and a link that opens Google Maps.
+- On a lot's page, the lot's `description` appears under "The planned home". Text about the neighborhood comes from `src/data/neighborhoods.ts` and appears on every home and lot in it. In the local preview, outlined boxes show where text can still be added; they never appear on the live site.
 - Write `alt` text that describes the photo for someone who cannot see it.
 
 ### Placeholders
@@ -71,7 +74,16 @@ Two jobs happen outside the site and matter as much as anything in it:
 
 ## Connect the Inventory form
 
-The form does not send email until it is connected to a form service. Until then it tells visitors it isn't connected and shows Colin's phone and email.
+The Inventory page is a sign-up for early access to homes and lots. Until a form service is connected, pressing "Sign up" opens the visitor's own email app with their details written out to Colin, ready to send. Nothing passes through a third party, but it relies on the visitor having an email app and pressing send, so connecting a service is better.
+
+A static site cannot receive form entries by itself; something has to accept them. Options, simplest first:
+
+- **Web3Forms or Formspree**: each sign-up arrives in Colin's inbox. Free tiers cover a small site. Set up as below; nothing else changes.
+- **Lardner Group's own lead system**: lardnergroup.com runs on Luxury Presence, which captures leads for agents. Ask them whether sign-ups from this site can go into the same lead inbox or CRM, so every lead is in one place.
+- **A CRM with tickets, such as HubSpot (free plan)**: each sign-up becomes a contact Colin can track and follow up. HubSpot's forms can accept entries posted from another site.
+- **A small function of your own** (for example a free Cloudflare Worker) that turns each sign-up into an email or a GitHub issue. This avoids a form company, but someone has to look after it.
+
+To connect a form service:
 
 1. Create an account with a form service that forwards submissions to email (for example Formspree or Web3Forms) and set the recipient to colin@lardnergroup.com in that service.
 2. Copy `.env.example` to `.env`.

@@ -74,6 +74,8 @@ export const copy = {
       link: 'About us',
     },
     featured: { eyebrow: 'Gallery', heading: 'Recent work', link: 'See the gallery' },
+    // The outlets come from src/data/press.ts.
+    press: { heading: 'As featured in', link: 'Read the coverage' },
     // Source: lardnercustomhomes.com home page neighborhood list ("…And more to come!").
     neighborhoods: {
       eyebrow: 'Where we build',
@@ -101,6 +103,10 @@ export const copy = {
     detailCta: 'Ask about this home',
     lotDetailCta: 'Ask about this lot',
     location: { heading: 'Location', link: 'Open in Google Maps' },
+    // Lot pages: the lot's `description` appears under this heading.
+    plannedHome: 'The planned home',
+    // Followed by the neighborhood's name. The text comes from src/data/neighborhoods.ts.
+    aboutNeighborhood: 'About',
     buildOnYourLot: {
       title: 'Build on Your Lot',
       intro: 'Already have the land? We can design and build on it.',
@@ -156,6 +162,36 @@ export const copy = {
     // business.", "maximizing the beauty, uniqueness and efficiency of each home", "Making Dallas
     // Better, One Home at a Time.") and lardnergroup.com home page ("Relationships built on
     // trust, has given us a solid, reputable name in the business.").
+    // Sources: lardnergroup.com (Residential Property Management, Builder Services, and the
+    // home page: buying and selling, home valuation, buyer's and seller's guides) and Colin's
+    // licences as stated in the bio above.
+    services: {
+      heading: 'Services',
+      intro: 'Through Lardner Custom Homes and Lardner Group, his brokerage, Colin offers three services.',
+      items: [
+        {
+          title: 'Luxury management',
+          body: 'Management for homes and rental properties in Dallas: leasing and marketing vacancies, rent collection and bookkeeping, getting homes ready between tenants, and steady communication with owners and tenants.',
+          link: { label: 'Property management', href: 'https://lardnergroup.com/residential-property-management' },
+        },
+        {
+          title: 'Brokerage',
+          body: "Colin is a licensed Texas real estate broker. Lardner Group represents buyers and sellers across Dallas, with home searches, home valuations, and buyer's and seller's guides.",
+          link: { label: 'Visit Lardner Group', href: 'https://lardnergroup.com/' },
+        },
+        {
+          title: 'Development',
+          body: 'From the land to the finished homes: market and feasibility studies, land acquisition and platting, design with architects, construction by Lardner Custom Homes, then marketing, sales and leasing.',
+          link: { label: 'Builder services', href: 'https://lardnergroup.com/builder-services' },
+        },
+      ],
+    },
+    // The articles come from src/data/press.ts.
+    press: {
+      heading: 'Press',
+      intro: "Coverage of Colin's homes and developments.",
+      projectLink: 'See the project',
+    },
     values: {
       heading: 'What we value',
       items: [
@@ -179,15 +215,29 @@ export const copy = {
     },
   },
 
+  // Exclusive-access sign-up, added at Colin's request in October 2026: early access to homes
+  // and lots, and a pointer to his brokerage for anything else. First draft for Colin to review.
   inventory: {
     eyebrow: 'Inventory',
-    title: "Let's find your home.",
-    intro: 'Share a few details and Colin will follow up about current and upcoming homes and lots.',
-    // Shown instead of the form until a form service is connected.
-    offline: {
-      intro: "Tell Colin what you're looking for and he'll follow up about current and upcoming homes and lots.",
-      heading: 'Get in touch',
-      body: 'Call or email Colin directly.',
+    title: 'Get exclusive access to our inventory.',
+    intro: "Join Colin's list for first access to Lardner homes and lots, including upcoming projects before they come to market.",
+    /** File name in src/assets/site/ for the photo behind the title. */
+    image: 'slide-3880-durango.jpg',
+    imageAlt: '3880 Durango at dusk, a white gabled house lit from within',
+    signupCta: 'Sign up',
+    browseCta: 'See homes and lots',
+    form: {
+      heading: 'Sign up for early access',
+      intro: "Tell Colin what you're looking for. He'll be in touch as homes and lots that fit come up.",
+      submit: 'Sign up',
+      /** Shown until a form service is connected, when sending opens the visitor's email app. */
+      emailNote: 'Signing up opens your email app with your details filled in, ready to send to Colin.',
+    },
+    brokerage: {
+      heading: 'Buying or selling another home?',
+      body: "Lardner Group, Colin's brokerage, represents buyers and sellers across Dallas. Search homes for sale or get a home valuation on the Lardner Group website.",
+      link: { label: 'Visit Lardner Group', href: 'https://lardnergroup.com/' },
+      searchLink: { label: 'Search homes for sale', href: 'https://lardnergroup.com/home-search/listings' },
     },
     galleryHeading: 'Previous projects',
     galleryLink: 'See the gallery',

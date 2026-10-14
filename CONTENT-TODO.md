@@ -28,6 +28,11 @@ The site is live with real projects, lots and Colin's details. These items are s
 
 ## Text
 
+- [ ] **Neighborhood descriptions**: a few paragraphs each for Midway Hollow, Preston Hollow, Richardson Heights, Sparkman Estates and East Village Dallas, in `src/data/neighborhoods.ts`. They appear on every home and lot in that neighborhood.
+- [ ] **Planned home descriptions**: a short description of the home planned for each lot, as `description` on that lot in `src/data/homes.ts`. It appears under "The planned home".
+- [ ] **Services wording** (About page): written from the Residential Property Management and Builder Services pages on lardnergroup.com. Confirm Colin is happy with how "Luxury management", "Brokerage" and "Development" are described.
+- [ ] **Inventory wording**: the page promises "first access to Lardner homes and lots, including upcoming projects before they come to market". Confirm Colin is comfortable making that promise.
+- [ ] **Press**: the five articles come from the Press & Media page on lardnergroup.com. Add any newer coverage to `src/data/press.ts`.
 - [ ] **Build on Your Lot**: a few sentences on how it works (`copy.homes.buildOnYourLot.body`).
 - [ ] **Biography**: confirm the three paragraphs, adapted from lardnercustomhomes.com/about and lardnergroup.com. They name Colin's wife and daughter because the old site did; remove that sentence if he prefers.
 - [ ] **Company description and values**: confirm the wording, adapted from the old site.
@@ -44,4 +49,4 @@ The site is live with real projects, lots and Colin's details. These items are s
 - [ ] **Google Search Console**: add and verify lardnercustomhomes.com, then submit `https://lardnercustomhomes.com/sitemap.xml` (see "Search engines" in the README). Colin signs in with his own Google account.
 - [ ] **Google Business Profile**: claim or create the "Lardner Custom Homes" profile (category "Custom home builder"), with the same phone number as the site. This is what local searches use.
 - [ ] **Search keywords**: review the phrases in `src/data/seo.ts`. They lean on Midway Hollow, modern homes, available lots and building on a client's lot. Add a neighborhood only if Lardner works there.
-- [ ] **Connect the enquiry form** (see README). Until then, the Inventory page shows Colin's phone and email instead of the form.
+- [ ] **Connect the sign-up form** (see "Connect the Inventory form" in the README for the options). Until then, signing up opens the visitor's email app with their details written out to Colin.

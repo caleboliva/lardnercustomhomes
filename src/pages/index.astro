@@ -3,12 +3,14 @@ import { pageSeo } from '../data/seo.ts';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { copy } from '../data/copy.ts';
+import { pressOutlets } from '../data/press.ts';
 import { projects } from '../data/projects.ts';
 import { site } from '../data/site.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { featuredProjects } from '../lib/content.ts';
 
-const { intro, featured, neighborhoods, quote, cta } = copy.home;
+const { intro, featured, press, neighborhoods, quote, cta } = copy.home;
+const outlets = pressOutlets();
 const featuredList = featuredProjects(projects, 3);
 const seo = pageSeo.home;
 ---
@@ -48,6 +50,22 @@ const seo = pageSeo.home;
             </li>
           ))}
         </ul>
+      </section>
+    )
+  }
+
+  {
+    outlets.length > 0 && (
+      <section class="press-line container" aria-labelledby="press-line-title" data-reveal>
+        <h2 class="eyebrow" id="press-line-title">{press.heading}</h2>
+        <ul class="press-line__list" role="list">
+          {outlets.map((item) => (
+            <li>
+              <a href={item.href} target="_blank" rel="noopener noreferrer">{item.outlet}<span class="visually-hidden">{`: ${item.title} (opens in a new tab)`}</span></a>
+            </li>
+          ))}
+        </ul>
+        <a class="link-arrow" href="/about/#press">{press.link}</a>
       </section>
     )
   }
@@ -106,6 +124,36 @@ const seo = pageSeo.home;
   .featured__header > div {
     display: grid;
     gap: var(--space-3);
+  }
+
+  .press-line {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding-block: 0 calc(var(--space-section) * 0.6);
+  }
+
+  .press-line__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-7);
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.25;
+  }
+
+  .press-line__list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    text-decoration: none;
+  }
+
+  .press-line__list a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
   }
 
   .neighborhoods {

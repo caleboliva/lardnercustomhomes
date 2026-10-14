@@ -1,5 +1,6 @@
 import { deliverInquiry, TRAP_FIELD, type DeliveryOutcome } from '../lib/delivery.ts';
 import {
+  buildMailto,
   formatPhone,
   normalizePhone,
   validateField,
@@ -10,7 +11,7 @@ import {
   type InquiryValues,
 } from '../lib/validation.ts';
 
-type Status = 'idle' | 'submitting' | 'success' | 'error';
+type Status = 'idle' | 'submitting' | 'success' | 'error' | 'handoff';
 
 const DEMO_DELAY_MS = 1_200;
 const MESSAGES = {
@@ -32,11 +33,12 @@ export function initInquiryForm(): void {
   const submitLabel = form?.querySelector<HTMLElement>('[data-inquiry-submit-label]');
   const alert = form?.querySelector<HTMLElement>('[data-inquiry-alert]');
   const alertTitle = form?.querySelector<HTMLElement>('[data-inquiry-alert-title]');
+  const handoff = form?.querySelector<HTMLElement>('[data-inquiry-handoff]');
   const success = root?.querySelector<HTMLElement>('[data-inquiry-success]');
   const successText = root?.querySelector<HTMLElement>('[data-inquiry-success-text]');
   const referral = form?.querySelector<HTMLSelectElement>('select[name="referral"]');
   const referralOther = form?.querySelector<HTMLElement>('[data-referral-other]');
-  if (!form || !submit || !submitLabel || !alert || !alertTitle || !success || !successText || !referral || !referralOther) {
+  if (!form || !submit || !submitLabel || !alert || !alertTitle || !handoff || !success || !successText || !referral || !referralOther) {
     return;
   }
 
@@ -55,8 +57,10 @@ export function initInquiryForm(): void {
       lastName: get('lastName'),
       email: get('email'),
       phone: get('phone'),
+      interest: data.getAll('interest').map(String).join(', '),
       message: get('message'),
       pricePoint: get('pricePoint'),
+      timeline: get('timeline'),
       realtor: get('realtor'),
       referral: get('referral'),
       referralOther: get('referralOther'),
@@ -101,7 +105,8 @@ export function initInquiryForm(): void {
     form.setAttribute('aria-busy', String(busy));
     submit.setAttribute('aria-disabled', String(busy));
     submit.toggleAttribute('data-loading', busy);
-    submitLabel.textContent = busy ? 'Sending…' : next === 'error' ? 'Try again' : 'Send';
+    const label = submit.dataset.label ?? 'Send';
+    submitLabel.textContent = busy ? 'Sending…' : next === 'error' ? 'Try again' : label;
 
     if (next === 'error') {
       alertTitle.textContent = message;
@@ -110,6 +115,9 @@ export function initInquiryForm(): void {
     } else {
       alert.hidden = true;
     }
+
+    handoff.hidden = next !== 'handoff';
+    if (next === 'handoff') handoff.focus();
 
     if (next === 'success') {
       if (message) successText.textContent = message;
@@ -146,6 +154,15 @@ export function initInquiryForm(): void {
     if (firstInvalid) {
       const wrapper = wrapperFor(firstInvalid);
       if (wrapper) controlIn(wrapper)?.focus();
+      return;
+    }
+
+    // No form service yet: open the visitor's own email app with the sign-up written out.
+    // This is not reported as a success, because the visitor still has to press send.
+    const trap = String(new FormData(form).get(TRAP_FIELD) ?? '');
+    if (!form.dataset.endpoint && !demo && !trap) {
+      window.location.href = buildMailto(values, form.dataset.mailto ?? '');
+      setStatus('handoff');
       return;
     }
 

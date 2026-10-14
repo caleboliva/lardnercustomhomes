@@ -1,7 +1,15 @@
 ---
+import { copy } from '../data/copy.ts';
 import { site } from '../data/site.ts';
 import { TRAP_FIELD } from '../lib/delivery.ts';
-import { LIMITS, PRICE_POINTS, REALTOR_OPTIONS, REFERRAL_OPTIONS } from '../lib/validation.ts';
+import {
+  INTEREST_OPTIONS,
+  LIMITS,
+  PRICE_POINTS,
+  REALTOR_OPTIONS,
+  REFERRAL_OPTIONS,
+  TIMELINE_OPTIONS,
+} from '../lib/validation.ts';
 import ChoiceField from './ChoiceField.astro';
 import Field from './Field.astro';
 import FieldError from './FieldError.astro';
@@ -9,6 +17,7 @@ import Icon from './Icon.astro';
 
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
 const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
+const text = copy.inventory.form;
 ---
 
 <div class="inquiry" data-inquiry>
@@ -19,6 +28,7 @@ const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
     action={endpoint || undefined}
     data-endpoint={endpoint}
     data-access-key={accessKey}
+    data-mailto={site.email.display}
     data-demo={import.meta.env.DEV ? '' : undefined}
   >
     <p class="inquiry__note"><span aria-hidden="true">*</span> marks a required field.</p>
@@ -31,9 +41,23 @@ const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
       <Field name="email" label="Email" type="email" autocomplete="email" maxlength={LIMITS.email} required />
       <Field name="phone" label="Phone" type="tel" autocomplete="tel" maxlength={24} required />
     </div>
-    <Field name="message" label="Tell us what you're looking for" maxlength={LIMITS.message} multiline />
+    <ChoiceField name="interest" legend="I'm looking for" options={INTEREST_OPTIONS} multiple />
     <ChoiceField name="pricePoint" legend="Price point" options={PRICE_POINTS} required />
+
+    <div class="field" data-field="timeline">
+      <label class="field__label" for="inq-timeline">When are you hoping to move?</label>
+      <div class="select">
+        <select class="field__input" id="inq-timeline" name="timeline">
+          <option value="">Select one</option>
+          {TIMELINE_OPTIONS.map((option) => <option value={option}>{option}</option>)}
+        </select>
+        <Icon name="chevron-down" size={18} />
+      </div>
+      <FieldError id="inq-timeline-error" />
+    </div>
+
     <ChoiceField name="realtor" legend="Are you working with a realtor?" options={REALTOR_OPTIONS} required />
+    <Field name="message" label="Anything else Colin should know?" maxlength={LIMITS.message} multiline />
 
     <div class="field" data-field="referral">
       <label class="field__label" for="inq-referral">How did you hear about us?</label>
@@ -64,9 +88,18 @@ const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
       </div>
     </div>
 
-    <button class="btn inquiry__submit" type="submit" data-inquiry-submit>
-      <span data-inquiry-submit-label>Send</span>
+    <div class="inquiry__handoff" data-inquiry-handoff role="status" tabindex="-1" hidden>
+      <Icon name="check" />
+      <div>
+        <p class="inquiry__alert-title">Almost done: your email app should now be open.</p>
+        <p>Your details are filled in, ready to send to Colin. Press send there to finish signing up. If nothing opened, email <a href={site.email.href}>{site.email.display}</a> or call <a href={site.phone.href}>{site.phone.display}</a>.</p>
+      </div>
+    </div>
+
+    <button class="btn inquiry__submit" type="submit" data-inquiry-submit data-label={text.submit}>
+      <span data-inquiry-submit-label>{text.submit}</span>
     </button>
+    {!endpoint && <p class="inquiry__note">{text.emailNote}</p>}
 
     <noscript>
       <p class="inquiry__note">This form needs JavaScript. You can also reach Colin at {site.email.display} or {site.phone.display}.</p>
@@ -76,7 +109,7 @@ const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
   <div class="inquiry__success" data-inquiry-success role="status" tabindex="-1" hidden>
     <Icon name="check" size={32} />
     <h2>Thank you.</h2>
-    <p class="lead" data-inquiry-success-text>Your message is on its way to Colin. We'll be in touch soon.</p>
+    <p class="lead" data-inquiry-success-text>You're signed up. Colin will be in touch as homes and lots that fit come up.</p>
   </div>
 </div>
 
@@ -117,6 +150,25 @@ const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
 
   .inquiry__alert-title {
     font-weight: 500;
+  }
+
+  /* Not a success message: the sign-up still has to be sent from the visitor's email app. */
+  .inquiry__handoff {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--text);
+    background: var(--accent);
+  }
+
+  .inquiry__handoff :global(svg) {
+    flex: none;
+    margin-top: 0.15em;
+  }
+
+  .inquiry__handoff:focus {
+    outline: none;
   }
 
   .inquiry__submit {

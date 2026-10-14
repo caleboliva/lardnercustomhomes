@@ -7,6 +7,7 @@ import Photo from '../../components/Photo.astro';
 import PhotoGrid from '../../components/PhotoGrid.astro';
 import { copy } from '../../data/copy.ts';
 import { listings } from '../../data/homes.ts';
+import { neighborhoods } from '../../data/neighborhoods.ts';
 import type { Listing } from '../../data/types.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { placeholder } from '../../lib/format.ts';
@@ -41,7 +42,11 @@ const description =
   listing.description ?? (listing.placeholder ? placeholder(`a short description of this ${isLot ? 'lot' : 'home'}`) : '');
 const back = isLot ? { href: '/homes/lots/', label: 'All lots' } : { href: '/homes/available/', label: 'Available homes' };
 const inquiryHref = `/inventory/?home=${encodeURIComponent(listing.title)}`;
-const { location } = copy.homes;
+const { location, plannedHome, aboutNeighborhood } = copy.homes;
+const areaText = listing.neighborhood ? (neighborhoods[listing.neighborhood] ?? []) : [];
+// In the local preview, outlined boxes mark where text can still be added. They never reach
+// the live site.
+const showHints = import.meta.env.DEV;
 
 const seo = listingSeo(listing);
 const shared = items.flatMap((item) => (item.full ? [new URL(item.full.src, Astro.site).href] : [])).slice(0, 6);
@@ -93,7 +98,16 @@ const schema = listingSchema(listing, new URL(Astro.url.pathname, Astro.site).hr
           }
         </dl>
         <div class="listing__about">
-          {description && <p class="lead"><Copy text={description} /></p>}
+          {isLot && (description || showHints) && <h2 class="listing__subhead">{plannedHome}</h2>}
+          {
+            description ? (
+              <p class="lead"><Copy text={description} /></p>
+            ) : (
+              showHints && (
+                <p class="listing__hint">Room for a description of {isLot ? 'the planned home' : 'this home'}: add <code>description</code> to this listing in src/data/homes.ts. This box only shows in the local preview.</p>
+              )
+            )
+          }
           <a class="btn" href={inquiryHref}>{isLot ? copy.homes.lotDetailCta : copy.homes.detailCta}</a>
         </div>
       </section>
@@ -104,6 +118,21 @@ const schema = listingSchema(listing, new URL(Astro.url.pathname, Astro.site).hr
         <section class="listing__photos container" aria-labelledby="photos-heading">
           <h2 id="photos-heading">{listing.photosHeading ?? 'Photos'}</h2>
           <PhotoGrid items={items} layout="three" ratio="4/3" />
+        </section>
+      )
+    }
+
+    {
+      listing.neighborhood && (areaText.length > 0 || showHints) && (
+        <section class="listing__area container" aria-labelledby="area-heading">
+          <h2 id="area-heading">{aboutNeighborhood} {listing.neighborhood}</h2>
+          {areaText.length > 0 ? (
+            <div class="prose">
+              {areaText.map((paragraph) => <p>{paragraph}</p>)}
+            </div>
+          ) : (
+            <p class="listing__hint">Room for a few paragraphs about {listing.neighborhood}: add them to src/data/neighborhoods.ts. They will show on every listing in {listing.neighborhood}. This box only shows in the local preview.</p>
+          )}
         </section>
       )
     }
@@ -201,6 +230,24 @@ const schema = listingSchema(listing, new URL(Astro.url.pathname, Astro.site).hr
     gap: var(--space-5);
   }
 
+  .listing__subhead {
+    font-size: var(--step-2);
+  }
+
+  .listing__hint {
+    max-width: var(--measure);
+    padding: var(--space-4);
+    border: 1px dashed var(--field-border);
+    color: var(--text-muted);
+    font-size: var(--step--1);
+  }
+
+  .listing__area {
+    display: grid;
+    gap: var(--space-5);
+    padding-bottom: var(--space-section);
+  }
+
   .listing__photos {
     display: grid;
     gap: var(--space-6);
@@ -249,6 +296,12 @@ const schema = listingSchema(listing, new URL(Astro.url.pathname, Astro.site).hr
 
     .listing__top--whole .listing__summary {
       grid-template-columns: minmax(0, 1fr);
+    }
+
+    .listing__area {
+      align-items: start;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      column-gap: var(--space-8);
     }
 
     .listing__location {

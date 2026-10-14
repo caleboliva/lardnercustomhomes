@@ -1,4 +1,6 @@
 export const PRICE_POINTS = ['Under $1M', '$1M–$2M', '$2M–$3M', '$3M+'] as const;
+export const INTEREST_OPTIONS = ['Homes for sale', 'Lots', 'Building on my own lot'] as const;
+export const TIMELINE_OPTIONS = ['Within 3 months', '3 to 6 months', '6 to 12 months', 'More than a year', 'Just exploring'] as const;
 export const REALTOR_OPTIONS = ['Yes', 'No'] as const;
 export const REFERRAL_OPTIONS = [
   'Friend or family',
@@ -18,8 +20,11 @@ export type InquiryValues = {
   lastName: string;
   email: string;
   phone: string;
+  /** The boxes ticked under "I'm looking for", joined with commas. */
+  interest: string;
   message: string;
   pricePoint: string;
+  timeline: string;
   realtor: string;
   referral: string;
   referralOther: string;
@@ -34,9 +39,11 @@ export const INQUIRY_FIELDS: readonly InquiryField[] = [
   'lastName',
   'email',
   'phone',
-  'message',
+  'interest',
   'pricePoint',
+  'timeline',
   'realtor',
+  'message',
   'referral',
   'referralOther',
 ];
@@ -67,6 +74,11 @@ function isOneOf(options: readonly string[], value: string): boolean {
   return options.includes(value);
 }
 
+/** "Lots, Homes for sale" becomes ['Lots', 'Homes for sale']. */
+function interestList(value: string): string[] {
+  return value.split(',').map((item) => item.trim()).filter(Boolean);
+}
+
 /** Returns a message for the visitor, or undefined when the field is fine. */
 export function validateField(field: InquiryField, values: InquiryValues): string | undefined {
   const value = values[field].trim();
@@ -83,6 +95,10 @@ export function validateField(field: InquiryField, values: InquiryValues): strin
     case 'phone':
       if (!value) return 'Enter your phone number.';
       return normalizePhone(value) ? undefined : 'Enter a 10-digit phone number, like (214) 555-0100.';
+    case 'interest':
+      return interestList(value).every((item) => isOneOf(INTEREST_OPTIONS, item)) ? undefined : 'Choose from the options shown.';
+    case 'timeline':
+      return !value || isOneOf(TIMELINE_OPTIONS, value) ? undefined : 'Choose an option from the list.';
     case 'message':
       return tooLong(value, LIMITS.message, 'Your message');
     case 'pricePoint':
@@ -113,18 +129,46 @@ export function buildPayload(values: InquiryValues, accessKey = ''): Record<stri
   const other = values.referralOther.trim();
 
   const payload: Record<string, string> = {
-    subject: `New website inquiry from ${firstName} ${lastName}`,
+    subject: `Inventory sign-up from ${firstName} ${lastName}`,
     name: `${firstName} ${lastName}`,
     firstName,
     lastName,
     email: values.email.trim(),
     phone: digits ? formatPhone(digits) : values.phone.trim(),
+    lookingFor: interestList(values.interest).join(', '),
     message: values.message.trim(),
     pricePoint: values.pricePoint,
+    timeline: values.timeline,
     workingWithRealtor: values.realtor,
     howDidYouHear: values.referral === 'Other' && other ? `Other: ${other}` : values.referral,
-    source: 'lardnercustomhomes.com inventory form',
+    source: 'lardnercustomhomes.com inventory sign-up',
   };
   if (accessKey) payload.access_key = accessKey;
   return payload;
+}
+
+/** The longest message carried in an email link. Some email apps refuse much longer links. */
+export const MAILTO_MESSAGE_LIMIT = 1200;
+
+/**
+ * A mailto: link that opens the visitor's own email app with the sign-up written out, ready to
+ * send to Colin. Used until a form service is connected, so nothing passes through a third party.
+ */
+export function buildMailto(values: InquiryValues, to: string): string {
+  const payload = buildPayload(values);
+  const message = payload.message ?? '';
+  const lines = [
+    `Name: ${payload.name}`,
+    `Email: ${payload.email}`,
+    `Phone: ${payload.phone}`,
+    payload.lookingFor && `Looking for: ${payload.lookingFor}`,
+    `Price point: ${payload.pricePoint}`,
+    payload.timeline && `Timeline: ${payload.timeline}`,
+    `Working with a realtor: ${payload.workingWithRealtor}`,
+    payload.howDidYouHear && `How they heard about us: ${payload.howDidYouHear}`,
+    message && `\n${message.length > MAILTO_MESSAGE_LIMIT ? `${message.slice(0, MAILTO_MESSAGE_LIMIT)}…` : message}`,
+  ].filter(Boolean);
+  const subject = encodeURIComponent(payload.subject ?? 'Inventory sign-up');
+  const body = encodeURIComponent(lines.join('\r\n'));
+  return `mailto:${to}?subject=${subject}&body=${body}`;
 }

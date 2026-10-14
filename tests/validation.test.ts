@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  buildMailto,
   buildPayload,
   formatPhone,
   isValidEmail,
@@ -16,6 +17,8 @@ const valid: InquiryValues = {
   lastName: 'Lovelace',
   email: 'ada@example.com',
   phone: '(214) 555-0100',
+  interest: '',
+  timeline: '',
   message: '',
   pricePoint: '$1M–$2M',
   realtor: 'No',
@@ -28,6 +31,8 @@ const empty: InquiryValues = {
   lastName: '',
   email: '',
   phone: '',
+  interest: '',
+  timeline: '',
   message: '',
   pricePoint: '',
   realtor: '',
@@ -127,7 +132,7 @@ test('over-long entries are rejected with the limit in the message', () => {
 test('buildPayload() trims text, formats the phone and names the sender', () => {
   const payload = buildPayload({ ...valid, firstName: ' Ada ', phone: '214.555.0100', message: ' A lot in Uptown. ' });
   assert.equal(payload.name, 'Ada Lovelace');
-  assert.equal(payload.subject, 'New website inquiry from Ada Lovelace');
+  assert.equal(payload.subject, 'Inventory sign-up from Ada Lovelace');
   assert.equal(payload.phone, '(214) 555-0100');
   assert.equal(payload.message, 'A lot in Uptown.');
   assert.equal(payload.pricePoint, '$1M–$2M');
@@ -141,4 +146,37 @@ test('buildPayload() folds the "Other" answer in and adds an access key only whe
   assert.equal(other.access_key, 'public-key');
   assert.equal(buildPayload({ ...valid, referral: 'Other' }).howDidYouHear, 'Other');
   assert.equal(buildPayload({ ...valid, referral: 'Realtor', referralOther: 'ignored' }).howDidYouHear, 'Realtor');
+});
+
+test('"I\'m looking for" and the timeline are optional but must come from the lists', () => {
+  assert.equal(validateField('interest', { ...valid, interest: 'Lots, Homes for sale' }), undefined);
+  assert.equal(validateField('interest', { ...valid, interest: 'Lots, A castle' }), 'Choose from the options shown.');
+  assert.equal(validateField('timeline', { ...valid, timeline: '3 to 6 months' }), undefined);
+  assert.equal(validateField('timeline', { ...valid, timeline: 'Tomorrow' }), 'Choose an option from the list.');
+});
+
+test('buildPayload() carries what the visitor is looking for and when', () => {
+  const payload = buildPayload({ ...valid, interest: 'Lots, Building on my own lot', timeline: 'Just exploring' });
+  assert.equal(payload.lookingFor, 'Lots, Building on my own lot');
+  assert.equal(payload.timeline, 'Just exploring');
+  assert.equal(payload.source, 'lardnercustomhomes.com inventory sign-up');
+});
+
+test('buildMailto() writes the sign-up into an email to Colin', () => {
+  const link = buildMailto({ ...valid, interest: 'Lots', message: 'Near a park & a school.' }, 'colin@example.com');
+  const url = new URL(link);
+  assert.equal(url.protocol, 'mailto:');
+  assert.equal(url.pathname, 'colin@example.com');
+  assert.equal(url.searchParams.get('subject'), 'Inventory sign-up from Ada Lovelace');
+  const body = url.searchParams.get('body') ?? '';
+  assert.match(body, /^Name: Ada Lovelace\r\nEmail: ada@example\.com\r\nPhone: \(214\) 555-0100\r\nLooking for: Lots\r\n/);
+  assert.match(body, /Near a park & a school\.$/);
+  assert.doesNotMatch(body, /Timeline:/);
+});
+
+test('buildMailto() shortens a very long message so email apps accept the link', () => {
+  const link = buildMailto({ ...valid, message: 'x'.repeat(1900) }, 'colin@example.com');
+  const body = new URL(link).searchParams.get('body') ?? '';
+  assert.ok(body.endsWith('x'.repeat(10) + '…'));
+  assert.ok(body.length < 1500);
 });
