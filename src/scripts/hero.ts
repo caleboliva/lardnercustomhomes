@@ -4,36 +4,61 @@ import { heroProgress, revealAmount } from '../lib/scroll.ts';
 const SLIDE_MS = 6000;
 const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 
-/** Ties the headline and the shade to how far the page has scrolled through the pinned hero. */
+// Browsers that can tie an animation to the scroll position run the headline from CSS alone
+// (see HeroSlideshow.astro), which keeps it exactly in step with the page.
+const SCROLL_DRIVEN = 'CSS' in window && CSS.supports('animation-timeline: scroll()');
+
+/** Ties the headline and the darkening to how far the page has scrolled through the pinned hero. */
 function initScroll(hero: HTMLElement, stage: HTMLElement): void {
   const content = hero.querySelector<HTMLElement>('.hero__content');
+  let top = 0;
+  let travel = 0;
   let queued = false;
+  let shown = '';
   // Reaching the buttons with the keyboard shows the words even before any scrolling.
   let focused = false;
 
+  // Measured on load and when the size changes, never during a scroll frame.
+  const measure = () => {
+    top = hero.offsetTop;
+    travel = hero.offsetHeight - stage.offsetHeight;
+  };
+
   const update = () => {
     queued = false;
-    const progress = heroProgress(window.scrollY - hero.offsetTop, hero.offsetHeight - stage.offsetHeight);
+    const progress = heroProgress(window.scrollY - top, travel);
+    const reveal = focused ? 1 : revealAmount(progress);
+    const next = `${progress.toFixed(3)} ${reveal.toFixed(3)}`;
+    if (next === shown) return;
+    shown = next;
     hero.style.setProperty('--hero-p', progress.toFixed(3));
-    hero.style.setProperty('--hero-reveal', (focused ? 1 : revealAmount(progress)).toFixed(3));
+    hero.style.setProperty('--hero-reveal', reveal.toFixed(3));
+    hero.toggleAttribute('data-words', reveal > 0.5);
   };
   const request = () => {
     if (queued) return;
     queued = true;
     requestAnimationFrame(update);
   };
+  const remeasure = () => {
+    measure();
+    request();
+  };
 
-  window.addEventListener('scroll', request, { passive: true });
-  window.addEventListener('resize', request);
-  window.matchMedia(REDUCED_MOTION).addEventListener('change', request);
+  if (!SCROLL_DRIVEN) window.addEventListener('scroll', request, { passive: true });
+  new ResizeObserver(remeasure).observe(hero);
+  window.matchMedia(REDUCED_MOTION).addEventListener('change', remeasure);
   content?.addEventListener('focusin', () => {
     focused = true;
+    hero.setAttribute('data-focused', '');
     update();
   });
   content?.addEventListener('focusout', () => {
     focused = false;
+    hero.removeAttribute('data-focused');
     update();
   });
+  measure();
   update();
 }
 

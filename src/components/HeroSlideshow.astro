@@ -58,6 +58,7 @@ const first = slides[0];
       }
     </div>
     <div class="hero__shade" aria-hidden="true"></div>
+    <div class="hero__dim" aria-hidden="true"></div>
 
     <div class="hero__content container" data-theme="dark">
       <p class="eyebrow">{hero.eyebrow}</p>
@@ -107,13 +108,19 @@ const first = slides[0];
 </script>
 
 <style>
+  /*
+    Heights use lvh, the screen height with a phone's address bar hidden, so no dark band shows
+    under the photo when the bar slides away on the first scroll. Things that must stay in view
+    while the bar is showing are lifted by the difference between lvh and svh.
+  */
   .hero {
     /* How far the page scrolls while the slideshow stays pinned and the headline comes in. */
     --hero-travel: 70svh;
     --hero-p: 1;
     --hero-reveal: 1;
+    --toolbar: calc(100lvh - 100svh);
     position: relative;
-    height: 100svh;
+    height: 100lvh;
     background: var(--color-midnight-deep);
     color: var(--color-white);
   }
@@ -121,13 +128,14 @@ const first = slides[0];
   .hero__stage {
     position: sticky;
     top: 0;
-    height: 100svh;
+    height: 100lvh;
     overflow: hidden;
   }
 
   .hero__slides,
   .hero__slide,
-  .hero__shade {
+  .hero__shade,
+  .hero__dim {
     position: absolute;
     inset: 0;
   }
@@ -160,13 +168,21 @@ const first = slides[0];
     transition: transform 9s linear;
   }
 
-  /* Darkens the top for the menu, and the whole photo as the headline comes in. */
+  /* Darkens the top for the menu and the bottom for the caption. It never changes. */
   .hero__shade {
     z-index: 2;
     background:
       linear-gradient(to bottom, color-mix(in srgb, var(--color-midnight-deep) 72%, transparent), transparent 14rem),
-      linear-gradient(to top, color-mix(in srgb, var(--color-midnight-deep) 60%, transparent), transparent 9rem),
-      color-mix(in srgb, var(--color-midnight-deep) calc(var(--hero-reveal) * 58%), transparent);
+      linear-gradient(to top, color-mix(in srgb, var(--color-midnight-deep) 60%, transparent), transparent calc(9rem + var(--toolbar)));
+  }
+
+  /* Darkens the whole photo as the headline comes in. Only its opacity changes, which the
+     browser can do without repainting the photo. */
+  .hero__dim {
+    z-index: 2;
+    background: var(--color-midnight-deep);
+    opacity: calc(var(--hero-reveal) * 0.58);
+    will-change: opacity;
   }
 
   .hero__content {
@@ -177,9 +193,10 @@ const first = slides[0];
     align-content: center;
     justify-items: start;
     gap: var(--space-4);
-    padding-block: calc(var(--header-h) + var(--space-5)) var(--space-9);
+    padding-block: calc(var(--header-h) + var(--space-5)) calc(var(--space-9) + var(--toolbar));
     opacity: var(--hero-reveal);
-    transform: translateY(calc((1 - var(--hero-reveal)) * 2.5rem));
+    transform: translate3d(0, calc((1 - var(--hero-reveal)) * 2.5rem), 0);
+    will-change: opacity, transform;
     /* Clicks pass through to the slideshow until the words are there. */
     pointer-events: none;
   }
@@ -208,7 +225,7 @@ const first = slides[0];
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    padding-block: var(--space-4);
+    padding-block: var(--space-4) calc(var(--space-4) + var(--toolbar));
   }
 
   .hero__caption {
@@ -285,23 +302,18 @@ const first = slides[0];
   }
 
   /* With JavaScript and no request for less motion: pin the slideshow, hide the words until the
-     page scrolls, and invite the scroll. */
+     page scrolls, and invite the scroll. Nothing here uses a transition: a transition chasing
+     the scroll position makes the words lag and stutter. */
   @media (prefers-reduced-motion: no-preference) {
     :global(html.js) .hero {
-      height: calc(100svh + var(--hero-travel));
+      height: calc(100lvh + var(--hero-travel));
       --hero-p: 0;
       --hero-reveal: 0;
     }
 
-    :global(html.js) .hero__content {
-      transition:
-        opacity 260ms linear,
-        transform 260ms ease-out;
-    }
-
     :global(html.js) .hero__cue {
       position: absolute;
-      inset: auto 0 var(--space-8);
+      inset: auto 0 calc(var(--space-8) + var(--toolbar));
       z-index: 4;
       display: flex;
       align-items: center;
@@ -313,11 +325,93 @@ const first = slides[0];
       opacity: calc(1 - var(--hero-p) * 6);
       pointer-events: none;
       text-transform: uppercase;
-      transition: opacity 260ms linear;
     }
 
     :global(html.js) .hero__cue :global(svg) {
       animation: hero-cue 2.4s var(--ease) infinite;
+    }
+
+    /* Where the browser can tie an animation to the scroll position itself, it does. The words
+       then move exactly in step with the page, even while the page is busy. The ranges match
+       revealAmount() in src/lib/scroll.ts: in from 6% to 55% of the pinned distance. */
+    @supports (animation-timeline: scroll()) {
+      :global(html.js) .hero__content,
+      :global(html.js) .hero__dim,
+      :global(html.js) .hero__actions {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root block);
+        animation-range: calc(var(--hero-travel) * 0.06) calc(var(--hero-travel) * 0.55);
+      }
+
+      :global(html.js) .hero__content {
+        animation-name: hero-words;
+      }
+
+      :global(html.js) .hero__dim {
+        animation-name: hero-dim;
+      }
+
+      /* The buttons cannot be clicked until they are half visible. */
+      :global(html.js) .hero__actions {
+        animation-name: hero-actions;
+      }
+
+      :global(html.js) .hero__cue {
+        animation: hero-cue-out linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 calc(var(--hero-travel) * 0.16);
+      }
+
+      /* Reaching the buttons with the keyboard shows the words straight away (hero.ts). */
+      :global(html.js) .hero[data-focused] :is(.hero__content, .hero__dim, .hero__actions) {
+        animation: none;
+      }
+    }
+
+    /* Elsewhere hero.ts sets --hero-reveal and data-words as the page scrolls. */
+    @supports not (animation-timeline: scroll()) {
+      :global(html.js) .hero:not([data-words]) .hero__actions {
+        pointer-events: none;
+      }
+    }
+  }
+
+  @keyframes hero-words {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 2.5rem, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes hero-dim {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 0.58;
+    }
+  }
+
+  @keyframes hero-actions {
+    from {
+      pointer-events: none;
+    }
+
+    to {
+      pointer-events: auto;
+    }
+  }
+
+  @keyframes hero-cue-out {
+    to {
+      opacity: 0;
     }
   }
 

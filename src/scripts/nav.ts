@@ -8,6 +8,13 @@ function initHeaderScroll(header: HTMLElement): void {
   // On the home page the header starts see-through and turns solid once the hero has passed.
   const hero = header.hasAttribute('data-overlay') ? document.querySelector<HTMLElement>('[data-hero]') : null;
   const stage = hero?.querySelector<HTMLElement>('[data-hero-stage]') ?? hero;
+  // Measured on load and when the size changes, never during a scroll frame.
+  let box = { top: 0, height: 0, pinned: 0 };
+  let headerHeight = 0;
+  const measure = () => {
+    if (hero && stage) box = { top: hero.offsetTop, height: hero.offsetHeight, pinned: stage.offsetHeight };
+    headerHeight = header.offsetHeight;
+  };
   let state: HeaderState = { hidden: false, lastY: window.scrollY };
   let queued = false;
 
@@ -19,11 +26,11 @@ function initHeaderScroll(header: HTMLElement): void {
     queued = false;
     const y = Math.max(window.scrollY, 0);
     state = nextHeaderState(state, y);
-    header.toggleAttribute('data-compact', y > COMPACT_AFTER);
-    if (hero && stage) {
-      const box = { top: hero.offsetTop, height: hero.offsetHeight, pinned: stage.offsetHeight };
-      header.toggleAttribute('data-over-hero', headerOverHero(y, box, header.offsetHeight));
-    }
+    const overHero = hero !== null && headerOverHero(y, box, headerHeight);
+    if (hero) header.toggleAttribute('data-over-hero', overHero);
+    // Over the slideshow the header keeps its full size, so the logo does not swap the moment
+    // the page starts to move.
+    header.toggleAttribute('data-compact', y > COMPACT_AFTER && !overHero);
     header.toggleAttribute('data-hidden', state.hidden && !isPinned());
   };
 
@@ -37,6 +44,13 @@ function initHeaderScroll(header: HTMLElement): void {
     { passive: true },
   );
   header.addEventListener('focusin', () => header.removeAttribute('data-hidden'));
+  const remeasure = () => {
+    measure();
+    update();
+  };
+  if (hero) new ResizeObserver(remeasure).observe(hero);
+  else window.addEventListener('resize', remeasure);
+  measure();
   update();
 }
 

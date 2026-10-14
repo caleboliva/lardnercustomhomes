@@ -18,12 +18,19 @@ import type { Listing } from './types.ts';
   and coverPosition says which part to keep: '50% 100%' keeps the bottom, where the logo sits,
   and '50% 0%' keeps the top.
 
+  Lot prices: every lot shows "Contact for pricing" (LOT_PRICE below). The spreadsheet's figures
+  appear to be prices with a finished house, so they are not shown. To show a real lot price,
+  replace LOT_PRICE in that lot's entry with the price, for example '$850,000'.
+
   Sources: the "Lardner Available Lots & Homes 2026" spreadsheet for the lots (lot areas are the
   sheet's figure, or frontage × depth where it gives dimensions). 4103 Saranac's details come
-  from Colin's April 2026 flyer and magazine cover. The 6616 Deloache images are concept
+  from Colin's April 2026 flyer and magazine cover; its price ($3,000,000) and size (4,957 sq ft)
+  were updated by Caleb on 14 October 2026. The 6616 Deloache images are concept
   renderings and are labelled as such. The gallery (src/data/projects.ts) keeps its own,
   shorter set of 4103 Saranac photos.
 */
+
+const LOT_PRICE = 'Contact for pricing';
 
 export const listings: Listing[] = [
   {
@@ -33,10 +40,10 @@ export const listings: Listing[] = [
     status: 'For Sale',
     neighborhood: 'Midway Hollow',
     address: '4103 Saranac Drive, Dallas, TX 75220',
-    price: '$2,995,000',
+    price: '$3,000,000',
     beds: 4,
     baths: 5,
-    sqft: 4689,
+    sqft: 4957,
     lotSize: 'Approx. 14,000 sq ft (0.32 acres)',
     features: ['Home office', 'Workout room', 'Game room', 'Mudroom', 'Two laundry rooms', 'Two balconies', 'Covered patio'],
     description:
@@ -92,7 +99,7 @@ export const listings: Listing[] = [
     address: '6616 Deloache Avenue, Dallas, TX',
     lotSize: '10,500 sq ft',
     lotDimensions: '75 × 140 ft',
-    price: '$3,995,000',
+    price: LOT_PRICE,
     beds: 4,
     baths: 5,
     garage: 2,
@@ -117,7 +124,7 @@ export const listings: Listing[] = [
     address: '301 Thompson Drive, Richardson, TX',
     // Irregular creek lot: the sheet gives 95 × 131 ft, so the area is an estimate.
     lotSize: 'Approx. 12,400 sq ft',
-    price: '$2,500,000',
+    price: LOT_PRICE,
     beds: 4,
     baths: 5,
     garage: 2,
@@ -137,7 +144,7 @@ export const listings: Listing[] = [
     address: '3632 Duchess Trail, Dallas, TX',
     lotSize: '10,000 sq ft',
     lotDimensions: '80 × 125 ft',
-    price: '$2,300,000',
+    price: LOT_PRICE,
     beds: 4,
     baths: 5,
     garage: 2,
@@ -157,6 +164,7 @@ export const listings: Listing[] = [
     address: '9911 Hurley Way, Dallas, TX',
     lotSize: '12,320 sq ft',
     lotDimensions: '70 × 176 ft',
+    price: LOT_PRICE,
     beds: 4,
     cover: 'lot-drawing.jpg',
     coverAlt: 'Drawing of the rectangular lot at 9911 Hurley Way, near Williamsburg Road',
@@ -172,7 +180,7 @@ export const listings: Listing[] = [
     neighborhood: 'Midway Hollow',
     address: '9903 Coppedge Lane, Dallas, TX',
     lotSize: '16,707 sq ft',
-    price: '$850,000 (lot)',
+    price: LOT_PRICE,
     beds: 4,
     baths: 5,
     garage: 2,
@@ -191,6 +199,7 @@ export const listings: Listing[] = [
     neighborhood: 'East Village Dallas',
     address: '4405 Scurry Street, Dallas, TX',
     lotSize: '11,360 sq ft',
+    price: LOT_PRICE,
     units: 6,
     beds: 2,
     baths: 2.5,

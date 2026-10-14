@@ -4,6 +4,7 @@ The site is live with real projects, lots and Colin's details. These items are s
 
 ## Photos
 
+- [ ] **Two lot drawings to redo**: Caleb is redrawing two of the lot drawings by hand. Save each new drawing as `lot-drawing.jpg` in that lot's folder under `src/assets/homes/`, replacing the old one.
 - [ ] **6616 Deloache, lot drawing**: the other five lots show their lot drawing. No drawing was supplied for 6616 Deloache, so its page shows the concept renderings of the planned home, labelled as renderings. Add a drawing as `lot-drawing.jpg` in `src/assets/homes/6616-deloache/` if one is made.
 - [ ] **4103 Saranac, remaining small photos**: the hero and 17 of the listing photos now use the full-size files. The other 20 are still small web copies (about 1,000px wide) and look soft on large screens: the kitchen, the living room with the fireplace, the office, the stairs, the bedrooms, the dressing room, two baths, the laundry, the back of the house at dusk, the back lawn and the skyline aerial. Ask the photographers for the full-size versions.
 - [ ] **Not used from the second upload**: the mood boards (they contain other people's inspiration photos and paint brand names), one closet photo that shows a company's shopping bag, and loose photos of other projects. The new headshot of Colin is listed below.
@@ -17,13 +18,11 @@ The site is live with real projects, lots and Colin's details. These items are s
 
 ## Listings
 
-- [ ] **4103 Saranac price**: the listing shows $2,995,000, 4 beds, 5 baths and 4,689 sq ft, taken from Colin's April 2026 magazine cover and flyer. Confirm the price is still current.
 - [ ] **4103 Saranac description**: adapted from the flyer. It names the architect, Far+Dang, as the flyer does. Confirm Colin wants the architect named on the site.
 - [ ] **301 Thompson lot size**: the lot is irregular and the spreadsheet gives only 95 × 131 ft, so the site shows "Approx. 12,400 sq ft" (95 × 131, rounded). Replace it with the surveyed area.
 - [ ] **Lot sizes**: for the rectangular lots the area is frontage × depth from the spreadsheet (6616 Deloache 10,500 sq ft, 3632 Duchess Trail 10,000 sq ft, 9911 Hurley Way 12,320 sq ft). Confirm against the surveys.
 - [ ] **6616 Deloache renderings**: the four images are concept renderings made with AI. They are labelled "Concept rendering" on the site. Confirm Colin is happy to show them.
-- [ ] **Lot prices**: 9911 Hurley Way's price is TBD, so no price is shown. 9903 Coppedge Lane shows its lot price ($850,000).
-- [ ] **What the prices cover**: the spreadsheet does not say whether the other prices are for the lot alone or for the lot with the planned home. They are shown simply as "Price". Confirm and adjust the wording if needed.
+- [ ] **Lot prices**: every lot shows "Contact for pricing", because the spreadsheet's prices appear to include a finished house. Add a lot's own price in `src/data/homes.ts` once Colin confirms it.
 - [ ] **Project stages** (Bidding, Demolition, Leasing, Design) from the spreadsheet are not shown on the site. Add them if Colin wants them public.
 - [ ] **Descriptions**: none of the lots has a description yet.
 
