@@ -1,15 +1,16 @@
 :root {
   /* Palette. Names from figma.com/colors. Change the site's colours here. */
   --color-honeydew: #f0fff0;
-  --color-champagne: #f7e6ca;
   --color-powder: #b8e3e9;
+  /* Powder Blue softened with Honeydew (October 2026: replaced Champagne). */
+  --color-powder-soft: #d1f0ec;
   --color-midnight: #272757;
   --color-midnight-deep: #12122b;
   --color-white: #ffffff;
 
   /* Roles. Components use these, never the palette directly. */
   --bg: var(--color-honeydew);
-  --surface: var(--color-champagne);
+  --surface: var(--color-powder-soft);
   --accent: var(--color-powder);
   --text: var(--color-midnight);
   --text-muted: color-mix(in srgb, var(--color-midnight) 72%, var(--color-honeydew));

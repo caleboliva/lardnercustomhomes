@@ -6,7 +6,6 @@ import sharp from 'sharp';
 const W = 1600;
 const H = 1200;
 const midnight = '#272757';
-const champagne = '#F7E6CA';
 const powder = '#B8E3E9';
 const honeydew = '#F0FFF0';
 
@@ -39,7 +38,7 @@ const house = `
 
 function plan(withHouse) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-  <rect width="${W}" height="${H}" fill="${champagne}" />
+  <rect width="${W}" height="${H}" fill="${honeydew}" />
   <g stroke="${midnight}" stroke-opacity="0.07" stroke-width="2">${grid}</g>
   <rect x="0" y="990" width="${W}" height="210" fill="${honeydew}" />
   <line x1="0" y1="990" x2="${W}" y2="990" stroke="${midnight}" stroke-opacity="0.25" stroke-width="3" />

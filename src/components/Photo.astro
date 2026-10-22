@@ -55,7 +55,7 @@ const widths = image ? [...[480, 800, 1200, 1600].filter((w) => w < maxWidth), m
     position: relative;
     display: block;
     overflow: hidden;
-    background: var(--color-champagne);
+    background: var(--surface);
     aspect-ratio: var(--ratio);
   }
 
@@ -96,7 +96,7 @@ const widths = image ? [...[480, 800, 1200, 1600].filter((w) => w < maxWidth), m
 
   :global(a:hover) .photo__placeholder,
   :global(button:hover) .photo__placeholder {
-    background: color-mix(in srgb, var(--color-powder) 45%, var(--color-champagne));
+    background: var(--color-powder);
   }
 
   .photo__tag {
