@@ -79,14 +79,32 @@ encapsulation). Nothing about prices, availability, awards or reviews was added.
 | Other pages | | +1 kB HTML each (preload tags, image description, footer link) |
 | Unused images in the build | 2 | 0 |
 
+## Palette, after review
+
+The audit found no contrast problems with the original palette (Honeydew, Champagne, Powder Blue,
+Midnight Blue). The owner felt the pastels looked less upscale than the homes, so the palette was
+reviewed on the real pages in two steps:
+
+1. Champagne was replaced with a soft powder blue (`#D1F0EC`).
+2. Four quieter palettes were compared (Ivory & Ink, Ivory & Midnight, Porcelain & Midnight,
+   Stone & Deep Teal). The owner chose **Porcelain & Midnight**: Porcelain `#F8F8F6` for the
+   page, Pearl `#ECEDF0` for tinted bands, Mist `#E1E5EC` for the accent band, with Midnight Blue
+   `#272757` kept for text and buttons. The colourful logo is now the only bright colour on the
+   page.
+
+The palette variables were renamed to match (`--color-porcelain`, `--color-pearl`,
+`--color-mist`). After the change, 12 pages at 390 and 1440px have no overflow, contrast or
+tap-target problems; the lowest text contrast is 5.02:1.
+
 ## Deliberately not changed
 
 - **The opening slideshow and hidden headline.** The brief asks for the Dallas focus to be clear
-  immediately; the slideshow-first opening was requested by the owner. The page title, the
-  headline after the first scroll and the new "Start here" section carry the message instead.
+  immediately; the slideshow-first opening was requested by the owner. The page title and the
+  headline after the first scroll carry the message instead.
 - **Navigation labels.** "Inventory" overlaps with "Homes" in meaning, but it is Colin's chosen
   name for the exclusive-access page. Worth revisiting with him (see below).
-- **Brand, palette and typography.** Already consistent across routes; no new identity.
+- **Logo and typography.** Already consistent across routes. The palette did change after the
+  audit, at the owner's request (see "Palette, after review").
 - **Image file names.** Names like `01-exterior.jpg` are not descriptive, but every photo has
   specific alt text, and renaming over 200 files would churn the repository for little gain.
 - **Conversion tracking.** The site has no analytics, so there is nothing to attach it to.

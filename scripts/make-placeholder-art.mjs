@@ -6,8 +6,8 @@ import sharp from 'sharp';
 const W = 1600;
 const H = 1200;
 const midnight = '#272757';
-const powder = '#B8E3E9';
-const honeydew = '#F0FFF0';
+const mist = '#E1E5EC';
+const porcelain = '#F8F8F6';
 
 // The parcel, slightly out of square like a real lot.
 const lot = '360,170 1240,150 1270,890 330,910';
@@ -22,28 +22,28 @@ const trees = [
   [1190, 800, 60],
   [410, 830, 55],
 ]
-  .map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${honeydew}" stroke="${midnight}" stroke-opacity="0.35" stroke-width="3" /><circle cx="${x}" cy="${y}" r="5" fill="${midnight}" fill-opacity="0.4" />`)
+  .map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${porcelain}" stroke="${midnight}" stroke-opacity="0.35" stroke-width="3" /><circle cx="${x}" cy="${y}" r="5" fill="${midnight}" fill-opacity="0.4" />`)
   .join('');
 
 const house = `
   <g>
-    <polygon points="560,330 1040,320 1050,700 570,710" fill="${honeydew}" stroke="${midnight}" stroke-width="5" />
+    <polygon points="560,330 1040,320 1050,700 570,710" fill="${porcelain}" stroke="${midnight}" stroke-width="5" />
     <line x1="565" y1="520" x2="1045" y2="510" stroke="${midnight}" stroke-width="3" />
     <line x1="560" y1="330" x2="700" y2="517" stroke="${midnight}" stroke-width="3" stroke-opacity="0.6" />
     <line x1="1040" y1="320" x2="900" y2="513" stroke="${midnight}" stroke-width="3" stroke-opacity="0.6" />
     <line x1="570" y1="710" x2="700" y2="517" stroke="${midnight}" stroke-width="3" stroke-opacity="0.6" />
     <line x1="1050" y1="700" x2="900" y2="513" stroke="${midnight}" stroke-width="3" stroke-opacity="0.6" />
-    <rect x="760" y="700" width="140" height="190" fill="${powder}" fill-opacity="0.6" stroke="${midnight}" stroke-opacity="0.4" stroke-width="3" />
+    <rect x="760" y="700" width="140" height="190" fill="${mist}" stroke="${midnight}" stroke-opacity="0.4" stroke-width="3" />
   </g>`;
 
 function plan(withHouse) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-  <rect width="${W}" height="${H}" fill="${honeydew}" />
+  <rect width="${W}" height="${H}" fill="${porcelain}" />
   <g stroke="${midnight}" stroke-opacity="0.07" stroke-width="2">${grid}</g>
-  <rect x="0" y="990" width="${W}" height="210" fill="${honeydew}" />
+  <rect x="0" y="990" width="${W}" height="210" fill="${porcelain}" />
   <line x1="0" y1="990" x2="${W}" y2="990" stroke="${midnight}" stroke-opacity="0.25" stroke-width="3" />
   <line x1="0" y1="1095" x2="${W}" y2="1095" stroke="${midnight}" stroke-opacity="0.35" stroke-width="5" stroke-dasharray="48 36" />
-  <polygon points="${lot}" fill="${powder}" fill-opacity="0.45" />
+  <polygon points="${lot}" fill="${mist}" />
   <polygon points="420,230 1180,212 1205,830 392,848" fill="none" stroke="${midnight}" stroke-opacity="0.3" stroke-width="3" stroke-dasharray="10 12" />
   ${trees}
   ${withHouse ? house : ''}

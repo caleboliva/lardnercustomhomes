@@ -64,7 +64,7 @@
   z-index: 100;
   padding: var(--space-3) var(--space-5);
   background: var(--color-midnight);
-  color: var(--color-honeydew);
+  color: var(--color-porcelain);
   transform: translateY(-200%);
 }
 
@@ -155,8 +155,8 @@
 /* Text that still has to be supplied. Deliberately loud so it is never missed. */
 .placeholder-text {
   padding: 0.1em 0.4em;
-  background: var(--color-powder);
-  color: var(--color-midnight);
+  background: var(--color-midnight);
+  color: var(--color-white);
   font-family: var(--font-body);
   font-style: normal;
   -webkit-box-decoration-break: clone;
@@ -339,7 +339,7 @@ textarea.field__input {
 .choice__input:checked + .choice__label {
   border-color: var(--color-midnight);
   background: var(--color-midnight);
-  color: var(--color-honeydew);
+  color: var(--color-porcelain);
 }
 
 .choice__input:checked + .choice__label::before {

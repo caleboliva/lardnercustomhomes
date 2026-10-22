@@ -1,24 +1,24 @@
 :root {
-  /* Palette. Names from figma.com/colors. Change the site's colours here. */
-  --color-honeydew: #f0fff0;
-  --color-powder: #b8e3e9;
-  /* Powder Blue softened with Honeydew (October 2026: replaced Champagne). */
-  --color-powder-soft: #d1f0ec;
+  /* Palette. Change the site's colours here. October 2026: Porcelain, Pearl and Mist replaced
+     Honeydew, Powder Blue and Champagne, so the logo is the only bright colour on the page. */
+  --color-porcelain: #f8f8f6;
+  --color-pearl: #ecedf0;
+  --color-mist: #e1e5ec;
   --color-midnight: #272757;
   --color-midnight-deep: #12122b;
   --color-white: #ffffff;
 
   /* Roles. Components use these, never the palette directly. */
-  --bg: var(--color-honeydew);
-  --surface: var(--color-powder-soft);
-  --accent: var(--color-powder);
+  --bg: var(--color-porcelain);
+  --surface: var(--color-pearl);
+  --accent: var(--color-mist);
   --text: var(--color-midnight);
-  --text-muted: color-mix(in srgb, var(--color-midnight) 72%, var(--color-honeydew));
+  --text-muted: color-mix(in srgb, var(--color-midnight) 72%, var(--color-porcelain));
   --rule: color-mix(in srgb, var(--color-midnight) 18%, transparent);
   --field-border: color-mix(in srgb, var(--color-midnight) 60%, transparent);
   --focus: var(--color-midnight);
   --btn-bg: var(--color-midnight);
-  --btn-text: var(--color-honeydew);
+  --btn-text: var(--color-porcelain);
 
   /* Type */
   --font-display: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -72,7 +72,7 @@
   --text: var(--color-white);
   --text-muted: color-mix(in srgb, var(--color-white) 74%, var(--color-midnight-deep));
   --rule: color-mix(in srgb, var(--color-white) 22%, transparent);
-  --focus: var(--color-powder);
-  --btn-bg: var(--color-honeydew);
+  --focus: var(--color-mist);
+  --btn-bg: var(--color-porcelain);
   --btn-text: var(--color-midnight);
 }
