@@ -14,7 +14,7 @@ in this repository and the live site at https://lardnercustomhomes.com on 22 Oct
   3:1 for large text), tap targets under 24 × 24px, and the number of `h1` elements.
 - The live domain: HTTP and `www` redirects, trailing-slash redirects, `robots.txt`, `sitemap.xml`,
   and the GitHub Pages settings (read only).
-- Journeys clicked through: listing → enquiry, Build on Your Lot → enquiry, home page → each path.
+- Journeys clicked through: listing → enquiry, Build on Your Lot → enquiry.
 
 Not measured: Core Web Vitals from real visitors (needs field data, for example PageSpeed Insights
 or Search Console after launch). The browser here cannot run Lighthouse reliably, so performance
@@ -40,7 +40,7 @@ was judged from page weight, image loading and the build output instead.
 | 1 | High | HTTPS not enforced: visitors on `http://` are not redirected | Verified. Needs the "Enforce HTTPS" box in GitHub → Settings → Pages (not a code change) |
 | 2 | High | Build on Your Lot was a dead end: a heading, one sentence and a button (about 25 words), for one of the three main ways customers come to Lardner | Verified. Fixed |
 | 3 | Medium | "Ask about this home/lot" opened the Inventory page at the exclusive-access banner, with nothing showing which home it was about | Verified. Fixed |
-| 4 | Medium | The home page did not separate the three journeys (buy a home, buy a lot, build on your own lot) | Verified. Fixed |
+| 4 | Medium | The home page did not separate the three journeys (buy a home, buy a lot, build on your own lot) | Verified. A "Start here" section was tried and removed at the owner's request; the Homes menu and the journey links below still cover it |
 | 5 | Medium | Project pages showed no context, though location, architect and press coverage are published for three of them, and 4103 Saranac's page did not link to its listing | Verified. Fixed |
 | 6 | Low | Share previews had no image description (`og:image:alt`) | Verified. Fixed |
 | 7 | Low | The two main fonts were found only after the stylesheet loaded | Verified. Preloaded (same files as the stylesheet, so nothing downloads twice) |
@@ -53,8 +53,7 @@ was judged from page weight, image loading and the build output instead.
 
 | Area | Files |
 |---|---|
-| Home page: "Start here" section with three paths and live counts ("1 home for sale", "6 lots available") | `src/components/PathCards.astro`, `src/pages/index.astro`, `src/data/copy.ts` (`home.paths`), `src/lib/content.ts` (`openListingCounts`) |
-| Build on Your Lot: why build with Lardner, no lot yet, recent custom homes, a closing call to action | `src/pages/homes/build-on-your-lot.astro`, `src/data/copy.ts` (`homes.buildOnYourLot`) |
+| Build on Your Lot: why build with Lardner, no lot yet (with a live count of lots), recent custom homes, a closing call to action | `src/pages/homes/build-on-your-lot.astro`, `src/data/copy.ts` (`homes.buildOnYourLot`), `src/lib/content.ts` (`openListingCounts`) |
 | Enquiry journeys: links land on the form, tick what the visitor came for and name the listing in the heading | `src/lib/validation.ts` (`signupHref`, `interestForParam`), `src/scripts/inquiry-form.ts`, `src/pages/inventory.astro`, `src/pages/homes/[slug].astro`, `src/pages/index.astro` |
 | Project pages: location, architect, press coverage, link to the listing | `src/pages/gallery/[slug].astro`, `src/data/projects.ts`, `src/data/types.ts`, `src/data/copy.ts` (`gallery`) |
 | Head: `og:image:alt`, font preloads | `src/layouts/BaseLayout.astro`, `src/pages/homes/[slug].astro`, `src/pages/gallery/[slug].astro` |
@@ -77,8 +76,6 @@ encapsulation). Nothing about prices, availability, awards or reviews was added.
 | Overflow, contrast and tap-target problems (42 page-and-width checks) | 0 | 0 |
 | Build on Your Lot, words of content | about 25 | 189 |
 | Clicks from a lot's page to a ready, labelled enquiry | 1 click, then scroll past the banner; no sign of which lot | 1 click; lands on the form, "Ask about 6616 Deloache", "Lots" ticked |
-| Home page HTML / CSS | 30 kB / 31 kB | 34 kB / 33 kB |
-| Images loaded with the home page (before scrolling) | 4 | 4 (the three new photos load lazily) |
 | Other pages | | +1 kB HTML each (preload tags, image description, footer link) |
 | Unused images in the build | 2 | 0 |
 

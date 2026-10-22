@@ -1,7 +1,6 @@
 ---
 import { pageSeo } from '../data/seo.ts';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
-import PathCards from '../components/PathCards.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { copy } from '../data/copy.ts';
 import { pressOutlets } from '../data/press.ts';
@@ -31,7 +30,6 @@ const seo = pageSeo.home;
     </div>
   </section>
 
-  <PathCards />
 
   {
     featuredList.length > 0 && (

@@ -24,7 +24,7 @@ export function previewPhotos(all: Project[], perProject: number, limit: number)
     .slice(0, limit);
 }
 
-/** How many homes are on the market and how many lots are available, for the home page. Sold listings are left out. */
+/** How many homes are on the market and how many lots are available. Sold listings are left out. */
 export function openListingCounts(all: Listing[]): { homes: number; lots: number } {
   const open = all.filter((listing) => listing.status !== 'Sold');
   return {
