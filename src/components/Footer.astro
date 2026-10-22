@@ -19,6 +19,9 @@ const year = new Date().getFullYear();
           <li><a href={site.phone.href}>{site.phone.display}</a></li>
           <li><a href={site.email.href}>{site.email.display}</a></li>
           <li><span class="footer__text">{site.address}</span></li>
+          <li>
+            <a href={site.brokerage.href} target="_blank" rel="noopener noreferrer">{site.brokerage.name}, Colin's brokerage<span class="visually-hidden"> (opens in a new tab)</span></a>
+          </li>
         </ul>
       </div>
       <div class="footer__col footer__col--social">

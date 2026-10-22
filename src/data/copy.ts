@@ -73,6 +73,40 @@ export const copy = {
       ],
       link: 'About us',
     },
+    // Three ways in: a home for sale, a lot, or building on land the visitor already owns.
+    // Counts come from src/data/homes.ts. Photos are files under src/assets/.
+    paths: {
+      eyebrow: 'Start here',
+      heading: 'Buy a home, find a lot, or build on yours.',
+      items: [
+        {
+          key: 'homes',
+          title: 'Buy a new home',
+          body: 'Homes built by Lardner, ready for their first owners.',
+          href: '/homes/available/',
+          image: 'homes/4103-saranac/09-living.jpg',
+          imageAlt: '4103 Saranac: living room open to the kitchen, with sliding glass doors to the yard',
+        },
+        {
+          key: 'lots',
+          title: 'Find a lot',
+          body: 'Land ready for a custom home, each with a drawing and a map.',
+          href: '/homes/lots/',
+          image: 'homes/9903-coppedge-lane/lot-drawing.jpg',
+          imageAlt: 'Drawing of the lot at 9903 Coppedge Lane',
+          // Keeps the logo in the drawing's corner whole when the card crops it.
+          position: '100% 50%',
+        },
+        {
+          key: 'build',
+          title: 'Build on your lot',
+          body: 'Already own the land? We can design and build on it.',
+          href: '/homes/build-on-your-lot/',
+          image: 'projects/3805-eaton-drive/02-exterior.jpg',
+          imageAlt: '3805 Eaton Drive: front of the house with a walkway across the lawn',
+        },
+      ],
+    },
     featured: { eyebrow: 'Gallery', heading: 'Recent work', link: 'See the gallery' },
     // The outlets come from src/data/press.ts.
     press: { heading: 'As featured in', link: 'Read the coverage' },
@@ -112,6 +146,37 @@ export const copy = {
       intro: 'Already have the land? We can design and build on it.',
       // Add a few sentences from Colin on how building on a client's own lot works.
       body: [] as string[],
+      // Sources: the company description above (homes planned around how owners live; energy
+      // efficiency and finishes), Colin's licences (About page), Texas Architect (FAR + DANG
+      // designed Ascend) and Colin's April 2026 flyer for 4103 Saranac (architect FAR + DANG;
+      // 2x6 framing, engineered slab on piers, full foam encapsulation).
+      points: {
+        heading: 'Why build with Lardner',
+        items: [
+          {
+            title: 'Designed around you',
+            body: 'Each home is planned around the way its owners live. Lardner works with architects such as FAR + DANG, who designed 4103 Saranac and the Ascend townhouses on Scurry Street.',
+          },
+          {
+            title: 'A builder who is also a broker',
+            body: 'Colin Lardner is a licensed general contractor and a Texas real estate broker.',
+          },
+          {
+            title: 'Built well, run efficiently',
+            body: 'The team cares as much about energy efficiency as about the finishes. 4103 Saranac, for example, was built with 2x6 framing, an engineered slab on piers and full foam encapsulation.',
+          },
+        ],
+      },
+      noLot: {
+        heading: 'No lot yet?',
+        body: 'Lardner has lots ready for a custom home, each with a drawing, its size and a map.',
+        link: 'See available lots',
+      },
+      work: { heading: 'Recent custom homes', link: 'See the gallery' },
+      cta: {
+        heading: 'Tell Colin about your lot.',
+        body: "Share where it is and what you have in mind, and he'll follow up about designing and building on it.",
+      },
       button: 'Start a conversation',
     },
   },
@@ -125,6 +190,10 @@ export const copy = {
       living: 'Living spaces from across our projects.',
     },
     projectHint: 'Select a photo to view it larger.',
+    architectLabel: 'Architect:',
+    // Shown on a project page when the same home has a listing, followed by its status.
+    listingLink: 'See the listing',
+    pressLabel: 'Press coverage of this project',
     empty: 'Photos are on the way.',
   },
 

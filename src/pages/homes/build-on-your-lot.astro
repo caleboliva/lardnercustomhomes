@@ -2,28 +2,160 @@
 import { pageSeo } from '../../data/seo.ts';
 import Copy from '../../components/Copy.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 import SubNav from '../../components/SubNav.astro';
 import { copy } from '../../data/copy.ts';
+import { listings } from '../../data/homes.ts';
 import { homesSubNav } from '../../data/navigation.ts';
+import { projects } from '../../data/projects.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { featuredProjects, openListingCounts } from '../../lib/content.ts';
+import { signupHref } from '../../lib/validation.ts';
 
 const page = copy.homes.buildOnYourLot;
 const seo = pageSeo.buildOnYourLot;
+const lots = openListingCounts(listings).lots;
+const work = featuredProjects(projects, 3);
+const signup = signupHref({ interest: 'build' });
 ---
 
 <BaseLayout title={page.title} description={seo.description} seo={seo}>
   <PageHeader title={page.title} eyebrow="Homes" intro={page.intro} />
   <SubNav label="Homes sections" items={homesSubNav} />
-  <section class="section section--tight container">
-    <div class="prose">
-      {page.body.map((paragraph) => <p><Copy text={paragraph} /></p>)}
+
+  <section class="section section--tight container" aria-labelledby="why-title">
+    {
+      page.body.length > 0 && (
+        <div class="prose build__body">
+          {page.body.map((paragraph) => <p><Copy text={paragraph} /></p>)}
+        </div>
+      )
+    }
+    <h2 id="why-title" data-reveal>{page.points.heading}</h2>
+    <ul class="points" role="list">
+      {
+        page.points.items.map((point, i) => (
+          <li class="points__item" data-reveal style={`--reveal-i: ${i}`}>
+            <h3>{point.title}</h3>
+            <p>{point.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="build__action"><a class="btn" href={signup}>{page.button}</a></p>
+  </section>
+
+  {
+    lots > 0 && (
+      <section class="section section--surface" aria-labelledby="no-lot-title">
+        <div class="split container" data-reveal>
+          <h2 id="no-lot-title">{page.noLot.heading}</h2>
+          <div class="split__text">
+            <p class="lead">{page.noLot.body}</p>
+            <a class="link-arrow" href="/homes/lots/">{page.noLot.link} ({lots})</a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    work.length > 0 && (
+      <section class="section container work" aria-labelledby="work-title">
+        <div class="work__header" data-reveal>
+          <h2 id="work-title">{page.work.heading}</h2>
+          <a class="link-arrow" href="/gallery/">{page.work.link}</a>
+        </div>
+        <ul class="grid grid--3" role="list">
+          {work.map((project, i) => (
+            <li data-reveal style={`--reveal-i: ${i}`}>
+              <ProjectCard project={project} headingLevel={3} sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 46vw, 92vw" />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="section section--accent" aria-labelledby="build-cta-title">
+    <div class="build__cta container" data-reveal>
+      <h2 id="build-cta-title">{page.cta.heading}</h2>
+      <p class="lead">{page.cta.body}</p>
+      <a class="btn" href={signup}>{page.button}</a>
     </div>
-    <p class="cta"><a class="btn" href="/inventory/">{page.button}</a></p>
   </section>
 </BaseLayout>
 
 <style>
-  .cta {
-    margin-top: var(--space-6);
+  .build__body {
+    margin-bottom: var(--space-8);
+  }
+
+  .points {
+    display: grid;
+    gap: var(--space-6);
+    margin: var(--space-6) 0 0;
+  }
+
+  .points__item {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--rule);
+  }
+
+  .points__item p {
+    max-width: var(--measure);
+  }
+
+  .build__action {
+    margin-top: var(--space-7);
+  }
+
+  .split {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .split__text {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+  }
+
+  .work {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .work__header {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-4) var(--space-6);
+  }
+
+  .build__cta {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+  }
+
+  .build__cta .btn {
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 64rem) {
+    .points {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: var(--space-7);
+    }
+
+    .split {
+      grid-template-columns: 25rem minmax(0, 1fr);
+      column-gap: var(--space-9);
+    }
   }
 </style>

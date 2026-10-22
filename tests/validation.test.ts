@@ -3,6 +3,8 @@ import test from 'node:test';
 import {
   buildMailto,
   buildPayload,
+  interestForParam,
+  signupHref,
   formatPhone,
   isValidEmail,
   LIMITS,
@@ -179,4 +181,18 @@ test('buildMailto() shortens a very long message so email apps accept the link',
   const body = new URL(link).searchParams.get('body') ?? '';
   assert.ok(body.endsWith('x'.repeat(10) + '…'));
   assert.ok(body.length < 1500);
+});
+
+test('links to the sign-up can tick what the visitor is looking for', () => {
+  assert.equal(interestForParam('lots'), 'Lots');
+  assert.equal(interestForParam(' Build '), 'Building on my own lot');
+  assert.equal(interestForParam('homes'), 'Homes for sale');
+  assert.equal(interestForParam('castles'), undefined);
+  assert.equal(interestForParam(null), undefined);
+});
+
+test('signupHref() goes straight to the form, carrying the listing and interest', () => {
+  assert.equal(signupHref(), '/inventory/#signup');
+  assert.equal(signupHref({ interest: 'build' }), '/inventory/?interest=build#signup');
+  assert.equal(signupHref({ home: '6616 Deloache', interest: 'lots' }), '/inventory/?home=6616+Deloache&interest=lots#signup');
 });

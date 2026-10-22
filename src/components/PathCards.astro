@@ -1,0 +1,126 @@
+---
+// The home page's three ways in: buy a home, find a lot, or build on land already owned.
+// Each card is one link. The middle card sits lower on wide screens, for a less even rhythm.
+import { copy } from '../data/copy.ts';
+import { listings } from '../data/homes.ts';
+import { openListingCounts } from '../lib/content.ts';
+import { resolveImage } from '../lib/images.ts';
+import Photo from './Photo.astro';
+
+const { paths } = copy.home;
+const counts = openListingCounts(listings);
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+// A count line only where there is something to count, and never "0 homes".
+const countFor: Record<string, string | undefined> = {
+  homes: counts.homes > 0 ? `${plural(counts.homes, 'home', 'homes')} for sale` : undefined,
+  lots: counts.lots > 0 ? `${plural(counts.lots, 'lot', 'lots')} available` : undefined,
+};
+---
+
+<section class="paths section container" aria-labelledby="paths-title">
+  <div class="paths__header" data-reveal>
+    <p class="eyebrow">{paths.eyebrow}</p>
+    <h2 id="paths-title">{paths.heading}</h2>
+  </div>
+  <ul class="paths__list" role="list">
+    {
+      paths.items.map((item, i) => (
+        <li class="paths__item" data-reveal style={`--reveal-i: ${i}${'position' in item ? `; --photo-position: ${item.position}` : ''}`}>
+          <a class="paths__link" href={item.href}>
+            <span class="paths__media">
+              <Photo
+                image={resolveImage(item.image)}
+                alt={item.imageAlt}
+                ratio="fill"
+                sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 46vw, 92vw"
+                placeholderLabel={item.title}
+              />
+            </span>
+            <span class="paths__text">
+              {countFor[item.key] && <span class="eyebrow">{countFor[item.key]}</span>}
+              <span class="paths__title">{item.title}</span>
+              <span class="paths__body">{item.body}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .paths {
+    display: grid;
+    gap: var(--space-7);
+    padding-top: 0;
+  }
+
+  .paths__header {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 40rem;
+  }
+
+  .paths__list {
+    display: grid;
+    gap: var(--space-7) var(--space-6);
+    margin: 0;
+  }
+
+  .paths__link {
+    display: grid;
+    gap: var(--space-4);
+    text-decoration: none;
+  }
+
+  /* Wide on a phone, so the three cards do not make a very long scroll; tall from tablet up. */
+  .paths__media {
+    display: block;
+    aspect-ratio: 3 / 2;
+  }
+
+  .paths__text {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .paths__title {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: var(--leading-tight);
+    text-decoration: underline transparent 1px;
+    text-underline-offset: 0.15em;
+    transition: text-decoration-color var(--dur) var(--ease);
+  }
+
+  .paths__link:hover .paths__title,
+  .paths__link:focus-visible .paths__title {
+    text-decoration-color: currentColor;
+  }
+
+  .paths__body {
+    max-width: 30ch;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 40rem) {
+    .paths__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .paths__media {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .paths__list {
+      align-items: start;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .paths__item:nth-child(2) {
+      margin-top: var(--space-9);
+    }
+  }
+</style>

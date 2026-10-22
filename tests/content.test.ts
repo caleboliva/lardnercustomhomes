@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Listing, Project } from '../src/data/types.ts';
-import { featuredProjects, filterListings, photosForRoom, previewPhotos } from '../src/lib/content.ts';
+import { featuredProjects, filterListings, openListingCounts, photosForRoom, previewPhotos } from '../src/lib/content.ts';
 import { formatNumber, isPlaceholder, placeholder, specLine } from '../src/lib/format.ts';
 import { isCurrentPage, isCurrentSection } from '../src/lib/nav-utils.ts';
 
@@ -117,4 +117,15 @@ test('isCurrentSection() matches a page and everything beneath it, but "/" only 
   assert.equal(isCurrentSection('/about/', '/homes/'), false);
   assert.equal(isCurrentSection('/homes/', '/'), false);
   assert.equal(isCurrentSection('/', '/'), true);
+});
+
+test('openListingCounts() counts homes and lots that are not sold', () => {
+  const all = [
+    listing({ slug: 'a', category: 'available', status: 'For Sale' }),
+    listing({ slug: 'b', category: 'available', status: 'Sold' }),
+    listing({ slug: 'c', category: 'lot', status: 'Available' }),
+    listing({ slug: 'd', category: 'lot', status: 'Pending' }),
+  ];
+  assert.deepEqual(openListingCounts(all), { homes: 1, lots: 2 });
+  assert.deepEqual(openListingCounts([]), { homes: 0, lots: 0 });
 });

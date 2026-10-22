@@ -14,6 +14,7 @@ import { placeholder } from '../../lib/format.ts';
 import { homeImage, toGalleryItem } from '../../lib/images.ts';
 import { listingFacts } from '../../lib/listing-facts.ts';
 import { mapEmbedUrl, mapLinkUrl } from '../../lib/maps.ts';
+import { signupHref } from '../../lib/validation.ts';
 import { listingSchema, listingSeo } from '../../lib/seo.ts';
 
 export function getStaticPaths() {
@@ -41,7 +42,7 @@ const facts = listingFacts(listing);
 const description =
   listing.description ?? (listing.placeholder ? placeholder(`a short description of this ${isLot ? 'lot' : 'home'}`) : '');
 const back = isLot ? { href: '/homes/lots/', label: 'All lots' } : { href: '/homes/available/', label: 'Available homes' };
-const inquiryHref = `/inventory/?home=${encodeURIComponent(listing.title)}`;
+const inquiryHref = signupHref({ home: listing.title, interest: isLot ? 'lots' : 'homes' });
 const { location, plannedHome, aboutNeighborhood } = copy.homes;
 const areaText = listing.neighborhood ? (neighborhoods[listing.neighborhood] ?? []) : [];
 // In the local preview, outlined boxes mark where text can still be added. They never reach
@@ -56,7 +57,7 @@ const schema = listingSchema(listing, new URL(Astro.url.pathname, Astro.site).hr
 <BaseLayout
   title={listing.title}
   description={seo.description}
-  seo={{ title: seo.title, keywords: seo.keywords, image: cover, schema: [schema] }}
+  seo={{ title: seo.title, keywords: seo.keywords, image: cover, imageAlt: coverAlt, schema: [schema] }}
 >
   <article class="listing">
     <header class="listing__header container">

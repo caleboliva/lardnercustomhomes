@@ -1,6 +1,7 @@
 ---
 import { pageSeo } from '../data/seo.ts';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
+import PathCards from '../components/PathCards.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { copy } from '../data/copy.ts';
 import { pressOutlets } from '../data/press.ts';
@@ -8,6 +9,7 @@ import { projects } from '../data/projects.ts';
 import { site } from '../data/site.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { featuredProjects } from '../lib/content.ts';
+import { signupHref } from '../lib/validation.ts';
 
 const { intro, featured, press, neighborhoods, quote, cta } = copy.home;
 const outlets = pressOutlets();
@@ -28,6 +30,8 @@ const seo = pageSeo.home;
       <p><a class="link-arrow" href="/about/">{intro.link}</a></p>
     </div>
   </section>
+
+  <PathCards />
 
   {
     featuredList.length > 0 && (
@@ -91,7 +95,7 @@ const seo = pageSeo.home;
     <div class="cta container" data-reveal>
       <h2 id="cta-title">{cta.heading}</h2>
       <p class="lead">{cta.body}</p>
-      <a class="btn" href="/inventory/">{cta.button}</a>
+      <a class="btn" href={signupHref()}>{cta.button}</a>
     </div>
   </section>
 </BaseLayout>

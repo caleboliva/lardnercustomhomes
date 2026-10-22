@@ -1,6 +1,6 @@
 // Draws the stand-in images used until real photos exist: a site plan of an open lot, and the same
 // plan with a house footprint. Both use only the site palette. Run with: npm run placeholder-art
-import { copyFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
 
 const W = 1600;
@@ -57,17 +57,19 @@ function plan(withHouse) {
 </svg>`;
 }
 
-const site = 'src/assets/site';
-mkdirSync(site, { recursive: true });
-await sharp(Buffer.from(plan(false))).png({ compressionLevel: 9, palette: true }).toFile(`${site}/lot-plan.png`);
-await sharp(Buffer.from(plan(true))).png({ compressionLevel: 9, palette: true }).toFile(`${site}/home-plan.png`);
-console.log('Wrote lot-plan.png and home-plan.png');
-
-// Each listing gets its own copy, so a real photo can later replace it in that listing's folder.
+// Usage: npm run placeholder-art -- <slug>:lot <slug>:home ...
+// Each listing gets its own copy (lot.png or home.png) in its folder, so a real photo can later
+// replace it there. Nothing is written anywhere else, so no unused image ends up in the build.
+const images = {
+  lot: await sharp(Buffer.from(plan(false))).png({ compressionLevel: 9, palette: true }).toBuffer(),
+  home: await sharp(Buffer.from(plan(true))).png({ compressionLevel: 9, palette: true }).toBuffer(),
+};
 const copies = process.argv.slice(2);
+if (copies.length === 0) console.log('Name at least one listing, for example: npm run placeholder-art -- 9911-hurley-way:lot');
 for (const entry of copies) {
   const [slug, kind] = entry.split(':');
+  const name = kind === 'home' ? 'home' : 'lot';
   mkdirSync(`src/assets/homes/${slug}`, { recursive: true });
-  copyFileSync(`${site}/${kind === 'home' ? 'home-plan' : 'lot-plan'}.png`, `src/assets/homes/${slug}/${kind === 'home' ? 'home' : 'lot'}.png`);
-  console.log(`  copied to homes/${slug}`);
+  writeFileSync(`src/assets/homes/${slug}/${name}.png`, images[name]);
+  console.log(`Wrote homes/${slug}/${name}.png`);
 }

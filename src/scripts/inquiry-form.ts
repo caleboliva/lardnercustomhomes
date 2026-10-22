@@ -1,6 +1,7 @@
 import { deliverInquiry, TRAP_FIELD, type DeliveryOutcome } from '../lib/delivery.ts';
 import {
   buildMailto,
+  interestForParam,
   formatPhone,
   normalizePhone,
   validateField,
@@ -210,8 +211,15 @@ export function initInquiryForm(): void {
   referral.addEventListener('change', syncOther);
   syncOther();
 
-  // Arriving from a listing: start the message for them.
+  // Arriving from a listing, Build on Your Lot or the home page: tick what they came for.
+  const interest = interestForParam(params.get('interest'));
+  const box = interest ? form.querySelector<HTMLInputElement>(`input[name="interest"][value="${interest}"]`) : null;
+  if (box) box.checked = true;
+
+  // Arriving from a listing: name it in the heading and start the message for them.
   const home = params.get('home')?.replace(/[\u0000-\u001f]/g, '').trim().slice(0, 120);
   const message = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
   if (home && message && !message.value) message.value = `I'm interested in ${home}.`;
+  const heading = document.querySelector<HTMLElement>('[data-signup-heading]');
+  if (home && heading) heading.textContent = `Ask about ${home}`;
 }

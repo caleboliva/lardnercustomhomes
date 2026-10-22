@@ -46,6 +46,7 @@ The site is live with real projects, lots and Colin's details. These items are s
 
 ## To do
 
+- [ ] **Enforce HTTPS**: GitHub → the repository's Settings → Pages → tick "Enforce HTTPS". Right now `http://lardnercustomhomes.com` opens without switching to the secure address (found in the October 2026 audit, `docs/audit/2026-10-website-audit.md`).
 - [ ] **Google Search Console**: add and verify lardnercustomhomes.com, then submit `https://lardnercustomhomes.com/sitemap.xml` (see "Search engines" in the README). Colin signs in with his own Google account.
 - [ ] **Google Business Profile**: claim or create the "Lardner Custom Homes" profile (category "Custom home builder"), with the same phone number as the site. This is what local searches use.
 - [ ] **Search keywords**: review the phrases in `src/data/seo.ts`. They lean on Midway Hollow, modern homes, available lots and building on a client's lot. Add a neighborhood only if Lardner works there.

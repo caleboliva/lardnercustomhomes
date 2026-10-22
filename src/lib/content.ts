@@ -23,3 +23,12 @@ export function previewPhotos(all: Project[], perProject: number, limit: number)
     .flatMap((project) => project.photos.slice(0, perProject).map((photo) => ({ photo, project })))
     .slice(0, limit);
 }
+
+/** How many homes are on the market and how many lots are available, for the home page. Sold listings are left out. */
+export function openListingCounts(all: Listing[]): { homes: number; lots: number } {
+  const open = all.filter((listing) => listing.status !== 'Sold');
+  return {
+    homes: open.filter((listing) => listing.category === 'available').length,
+    lots: open.filter((listing) => listing.category === 'lot').length,
+  };
+}

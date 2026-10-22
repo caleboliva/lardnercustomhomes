@@ -4,6 +4,8 @@ import Lightbox from '../../components/Lightbox.astro';
 import LightboxTrigger from '../../components/LightboxTrigger.astro';
 import Photo from '../../components/Photo.astro';
 import { copy } from '../../data/copy.ts';
+import { listings } from '../../data/homes.ts';
+import { press } from '../../data/press.ts';
 import { projects } from '../../data/projects.ts';
 import type { Project } from '../../data/types.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -20,6 +22,9 @@ interface Props {
 
 const { project } = Astro.props;
 const seo = projectSeo(project);
+// Verified context: coverage that names this project, and its listing if it is on the market.
+const coverage = press.filter((item) => item.project?.href === `/gallery/${project.slug}/`);
+const listing = listings.find((entry) => entry.slug === project.slug && entry.status !== 'Sold');
 const items = await Promise.all(
   project.photos.map((photo) => toGalleryItem(projectImage(project.slug, photo.file), photo.alt, project.name)),
 );
@@ -28,7 +33,12 @@ const items = await Promise.all(
 <BaseLayout
   title={project.name}
   description={seo.description}
-  seo={{ title: seo.title, keywords: seo.keywords, image: projectImage(project.slug, project.cover) }}
+  seo={{
+    title: seo.title,
+    keywords: seo.keywords,
+    image: projectImage(project.slug, project.cover),
+    imageAlt: project.photos.find((photo) => photo.file === project.cover)?.alt,
+  }}
   header={false}
 >
   <div class="project" data-theme="dark" data-project-view>
@@ -39,7 +49,32 @@ const items = await Promise.all(
     <header class="project__header">
       <p class="eyebrow"><a href="/gallery/">Gallery</a></p>
       <h1>{project.name}</h1>
-      {project.location && <p class="project__location">{project.location}</p>}
+      {
+        (project.location || project.architect) && (
+          <p class="project__location">
+            {[project.location, project.architect && `${copy.gallery.architectLabel} ${project.architect}`].filter(Boolean).join(' · ')}
+          </p>
+        )
+      }
+      {
+        listing && (
+          <p class="project__listing">
+            <a class="link-arrow" href={`/homes/${listing.slug}/`}>{copy.gallery.listingLink}: {listing.status}</a>
+          </p>
+        )
+      }
+      {
+        coverage.length > 0 && (
+          <ul class="project__press" role="list" aria-label={copy.gallery.pressLabel}>
+            {coverage.map((item) => (
+              <li>
+                <span class="eyebrow">{item.outlet}</span>{' '}
+                <a href={item.href} target="_blank" rel="noopener noreferrer">{item.title}<span class="visually-hidden"> (opens in a new tab)</span></a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
       <p class="project__hint">{copy.gallery.projectHint}</p>
     </header>
     <ul class="project__photos" role="list" data-lightbox-group>
@@ -134,6 +169,16 @@ const items = await Promise.all(
   .project__hint {
     font-size: var(--step--1);
     letter-spacing: 0.04em;
+  }
+
+  .project__press {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .project__press a {
+    text-underline-offset: 0.18em;
   }
 
   .project__photos {

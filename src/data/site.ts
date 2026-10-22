@@ -5,6 +5,8 @@ export const site = {
   phone: { display: '(844) 527-3637', href: 'tel:8445273637' },
   email: { display: 'colin@lardnergroup.com', href: 'mailto:colin@lardnergroup.com' },
   address: 'Dallas, TX 75220',
+  /** Colin's brokerage, linked from the footer and the Inventory page. */
+  brokerage: { name: 'Lardner Group', href: 'https://lardnergroup.com/' },
   social: [
     { name: 'Facebook', href: 'https://www.facebook.com/dallashomesforsale', icon: 'facebook' },
     { name: 'Instagram', href: 'https://www.instagram.com/lardner_group/', icon: 'instagram' },

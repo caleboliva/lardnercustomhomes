@@ -1,5 +1,26 @@
 export const PRICE_POINTS = ['Under $1M', '$1M–$2M', '$2M–$3M', '$3M+'] as const;
 export const INTEREST_OPTIONS = ['Homes for sale', 'Lots', 'Building on my own lot'] as const;
+/** Short names used in links to the sign-up, for example /inventory/?interest=lots. */
+const INTEREST_PARAMS: Record<string, (typeof INTEREST_OPTIONS)[number]> = {
+  homes: 'Homes for sale',
+  lots: 'Lots',
+  build: 'Building on my own lot',
+};
+
+/** The "I'm looking for" box a link asks to tick, or undefined for anything unknown. */
+export function interestForParam(param: string | null | undefined): (typeof INTEREST_OPTIONS)[number] | undefined {
+  return param ? INTEREST_PARAMS[param.trim().toLowerCase()] : undefined;
+}
+
+/** The address of the sign-up form, ticked and labelled for the page that links to it. */
+export function signupHref(options: { home?: string; interest?: 'homes' | 'lots' | 'build' } = {}): string {
+  const params = new URLSearchParams();
+  if (options.home) params.set('home', options.home);
+  if (options.interest) params.set('interest', options.interest);
+  const query = params.toString();
+  return `/inventory/${query ? `?${query}` : ''}#signup`;
+}
+
 export const TIMELINE_OPTIONS = ['Within 3 months', '3 to 6 months', '6 to 12 months', 'More than a year', 'Just exploring'] as const;
 export const REALTOR_OPTIONS = ['Yes', 'No'] as const;
 export const REFERRAL_OPTIONS = [

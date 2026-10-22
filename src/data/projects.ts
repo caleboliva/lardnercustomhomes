@@ -16,6 +16,9 @@ export const projects: Project[] = [
   {
     slug: '4103-saranac',
     name: '4103 Saranac',
+    // Colin's April 2026 flyer: Midway Hollow, architect Far+Dang.
+    location: 'Midway Hollow',
+    architect: 'FAR + DANG',
     cover: '01-exterior.jpg',
     photos: [
       { file: '01-exterior.jpg', room: 'exterior', alt: '4103 Saranac: front of the house at dusk, with wood siding, pale brick and a dark metal roof' },
@@ -43,6 +46,8 @@ export const projects: Project[] = [
   {
     slug: '3880-durango',
     name: '3880 Durango',
+    // Candy's Dirt, March 2025.
+    location: 'Midway Hollow',
     cover: '01-exterior.jpg',
     photos: [
       { file: '01-exterior.jpg', room: 'exterior', alt: '3880 Durango: front of the house with a dark garage door and black-framed windows' },
@@ -129,6 +134,9 @@ export const projects: Project[] = [
   {
     slug: '4401-scurry-street',
     name: '4401 Scurry Street',
+    // Texas Architect, July 2019: Ascend, at Burlew and Scurry streets, designed by FAR + DANG.
+    location: 'Old East Dallas',
+    architect: 'FAR + DANG',
     cover: '01-exterior.jpg',
     photos: [
       { file: '01-exterior.jpg', room: 'exterior', alt: '4401 Scurry Street: three dark gabled townhomes lit at dusk' },
