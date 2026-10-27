@@ -2,6 +2,7 @@
 import { pageSeo } from '../data/seo.ts';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import PressLogo from '../components/PressLogo.astro';
 import { copy } from '../data/copy.ts';
 import { pressOutlets } from '../data/press.ts';
 import { projects } from '../data/projects.ts';
@@ -63,7 +64,7 @@ const seo = pageSeo.home;
         <ul class="press-line__list" role="list">
           {outlets.map((item) => (
             <li>
-              <a href={item.href} target="_blank" rel="noopener noreferrer">{item.outlet}<span class="visually-hidden">{`: ${item.title} (opens in a new tab)`}</span></a>
+              <a href={item.href} target="_blank" rel="noopener noreferrer"><PressLogo item={item} /><span class="visually-hidden">{`: ${item.title} (opens in a new tab)`}</span></a>
             </li>
           ))}
         </ul>
@@ -138,11 +139,9 @@ const seo = pageSeo.home;
   .press-line__list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2) var(--space-7);
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
     margin: 0;
-    font-family: var(--font-display);
-    font-size: var(--step-2);
-    line-height: 1.25;
   }
 
   .press-line__list a {
@@ -150,12 +149,19 @@ const seo = pageSeo.home;
     align-items: center;
     min-height: var(--tap);
     text-decoration: none;
+    opacity: 0.8;
+    transition: opacity var(--dur-fast) var(--ease);
   }
 
-  .press-line__list a:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
+  .press-line__list a:hover,
+  .press-line__list a:focus-visible {
+    opacity: 1;
+  }
+
+  @media (max-width: 40rem) {
+    .press-line__list {
+      gap: var(--space-3) var(--space-6);
+    }
   }
 
   .neighborhoods {

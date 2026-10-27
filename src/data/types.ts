@@ -66,8 +66,6 @@ export type Project = {
   slug: string;
   name: string;
   location?: string;
-  /** The architect, where published, for example 'FAR + DANG'. */
-  architect?: string;
   /** Front elevation. File name in src/assets/projects/<slug>/, or null. */
   cover: string | null;
   photos: Photo[];

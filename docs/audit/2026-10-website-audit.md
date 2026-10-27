@@ -62,10 +62,14 @@ was judged from page weight, image loading and the build output instead.
 | Tests | `tests/validation.test.ts`, `tests/content.test.ts`, `tests/data.test.ts` |
 
 Every new statement comes from a source already in the project: Colin's licences (About page), the
-company description, Texas Architect (FAR + DANG designed Ascend at Burlew and Scurry, Old East
-Dallas), Candy's Dirt (3880 Durango, Midway Hollow) and Colin's April 2026 flyer for 4103 Saranac
-(Midway Hollow; architect Far+Dang; 2x6 framing, engineered slab on piers, full foam
-encapsulation). Nothing about prices, availability, awards or reviews was added.
+company description, Texas Architect (Ascend, Old East Dallas), Candy's Dirt (Durango Drive,
+Midway Hollow) and Colin's April 2026 flyer for 4103 Saranac (Midway Hollow; 2x6 framing,
+engineered slab on piers, full foam encapsulation). Nothing about prices, availability, awards or
+reviews was added.
+
+Later in October 2026, at Colin's request, architects are no longer named anywhere on the site
+(the architect line on project pages was removed), and sold homes in the gallery are named by
+street only, without the house number.
 
 ## Before and after
 

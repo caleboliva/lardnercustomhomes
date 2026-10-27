@@ -20,39 +20,39 @@ export const copy = {
           href: '/gallery/4103-saranac/',
         },
         {
-          image: 'slide-3880-durango.jpg',
-          alt: '3880 Durango at dusk, a white gabled house lit from within',
+          image: 'slide-durango-drive.jpg',
+          alt: 'A Durango Drive home at dusk, white and gabled, lit from within',
           position: '50% 30%',
-          label: '3880 Durango',
-          href: '/gallery/3880-durango/',
+          label: 'Durango Drive',
+          href: '/gallery/durango-drive/',
         },
         {
-          image: 'slide-3805-eaton-drive.jpg',
-          alt: '3805 Eaton Drive at dusk, with twin white brick gables under a pink sky',
+          image: 'slide-eaton-drive.jpg',
+          alt: 'An Eaton Drive home at dusk, with twin white brick gables under a pink sky',
           position: '60% 35%',
-          label: '3805 Eaton Drive',
-          href: '/gallery/3805-eaton-drive/',
+          label: 'Eaton Drive',
+          href: '/gallery/eaton-drive/',
         },
         {
-          image: 'slide-4401-scurry-street.jpg',
-          alt: '4401 Scurry Street at dusk, three dark metal-clad gables in a row',
+          image: 'slide-scurry-street.jpg',
+          alt: 'Scurry Street townhomes at dusk, three dark metal-clad gables in a row',
           position: '50% 40%',
-          label: '4401 Scurry Street',
-          href: '/gallery/4401-scurry-street/',
+          label: 'Scurry Street',
+          href: '/gallery/scurry-street/',
         },
         {
-          image: 'slide-2208-moser-avenue.jpg',
-          alt: '2208 Moser Avenue at dusk, a white metal-clad house with a balcony',
+          image: 'slide-moser-avenue.jpg',
+          alt: 'A Moser Avenue home at dusk, white and metal-clad, with a balcony',
           position: '50% 45%',
-          label: '2208 Moser Avenue',
-          href: '/gallery/2208-moser-avenue/',
+          label: 'Moser Avenue',
+          href: '/gallery/moser-avenue/',
         },
         {
-          image: 'slide-721-eagles-landing.jpg',
-          alt: '721 Eagles Landing, a stone house with blue shutters and an arched wood door',
+          image: 'slide-eagles-landing.jpg',
+          alt: 'An Eagles Landing home in stone, with blue shutters and an arched wood door',
           position: '50% 40%',
-          label: '721 Eagles Landing',
-          href: '/gallery/721-eagles-landing/',
+          label: 'Eagles Landing',
+          href: '/gallery/eagles-landing/',
         },
       ],
       /** Read out by screen readers to name the slideshow. */
@@ -113,15 +113,16 @@ export const copy = {
       // Add a few sentences from Colin on how building on a client's own lot works.
       body: [] as string[],
       // Sources: the company description above (homes planned around how owners live; energy
-      // efficiency and finishes), Colin's licences (About page), Texas Architect (FAR + DANG
-      // designed Ascend) and Colin's April 2026 flyer for 4103 Saranac (architect FAR + DANG;
-      // 2x6 framing, engineered slab on piers, full foam encapsulation).
+      // efficiency and finishes), Colin's licences (About page), the design stage on Lardner
+      // Group's builder services page, and Colin's April 2026 flyer for 4103 Saranac (2x6
+      // framing, engineered slab on piers, full foam encapsulation). Colin asked in October 2026
+      // that architects not be named on the site.
       points: {
         heading: 'Why build with Lardner',
         items: [
           {
             title: 'Designed around you',
-            body: 'Each home is planned around the way its owners live. Lardner works with architects such as FAR + DANG, who designed 4103 Saranac and the Ascend townhouses on Scurry Street.',
+            body: 'Each home is planned around the way its owners live, and designed together with an architect.',
           },
           {
             title: 'A builder who is also a broker',
@@ -156,7 +157,6 @@ export const copy = {
       living: 'Living spaces from across our projects.',
     },
     projectHint: 'Select a photo to view it larger.',
-    architectLabel: 'Architect:',
     // Shown on a project page when the same home has a listing, followed by its status.
     listingLink: 'See the listing',
     pressLabel: 'Press coverage of this project',
@@ -257,8 +257,8 @@ export const copy = {
     title: 'Get exclusive access to our inventory.',
     intro: "Join Colin's list for first access to Lardner homes and lots, including upcoming projects before they come to market.",
     /** File name in src/assets/site/ for the photo behind the title. */
-    image: 'slide-3880-durango.jpg',
-    imageAlt: '3880 Durango at dusk, a white gabled house lit from within',
+    image: 'slide-durango-drive.jpg',
+    imageAlt: 'A Durango Drive home at dusk, white and gabled, lit from within',
     signupCta: 'Sign up',
     browseCta: 'See homes and lots',
     form: {

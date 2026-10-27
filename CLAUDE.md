@@ -32,6 +32,7 @@ If the Browser pane's preview will not start on a Mac, change `runtimeExecutable
 ## Rules
 
 - **Never invent facts** about the company, Colin, homes, prices, specs or projects. Use what Colin provides. Where something is missing, use `placeholder('what is needed')` from `src/lib/format.ts`.
+- **Privacy, at Colin's request (October 2026)**: sold homes in the gallery are named by street only, never the house number, in names, slugs, photo `alt` text and image file names. Homes and lots still for sale keep their address. Never name the architects Colin works with.
 - **Content lives in `src/data/`**: `site.ts` (contact details), `navigation.ts`, `homes.ts`, `projects.ts`, `copy.ts`, `seo.ts` (search titles, descriptions and keywords), `press.ts` (press coverage), `neighborhoods.ts` (neighborhood descriptions). Change content there, not in components. `homes.ts` and `projects.ts` start with instructions and an example entry.
 - **Photos** go in `src/assets/projects/<slug>/`, `src/assets/homes/<slug>/` and `src/assets/site/`. Names in the data must match file names exactly, including capital letters. JPG, PNG, WebP or AVIF only; convert HEIC first. Every photo needs `alt` text describing it and a `room` (`exterior`, `kitchen`, `bath`, `living` or `other`).
 - **Delete the "Sample" entries** as real ones replace them. Sample entries have `placeholder: true`; real entries have `placeholder: false`.

@@ -27,6 +27,10 @@ export function siteImage(file: string | null): ImageMetadata | null {
   return resolveImage(file ? `site/${file}` : null);
 }
 
+export function pressLogo(file: string | undefined): ImageMetadata | null {
+  return resolveImage(file ? `press/${file}` : null);
+}
+
 /** Everything the photo grid and the lightbox need to show one photo. */
 export type GalleryItem = {
   image: ImageMetadata | null;

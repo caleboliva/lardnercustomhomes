@@ -104,7 +104,7 @@ test('a listing with no neighborhood still gets a sensible title', () => {
 test('a project is described by the rooms it shows', () => {
   const project: Project = {
     slug: 'p',
-    name: '3880 Durango',
+    name: 'Durango Drive',
     cover: null,
     photos: [
       { file: 'a.jpg', room: 'exterior', alt: 'a' },
@@ -115,8 +115,8 @@ test('a project is described by the rooms it shows', () => {
     placeholder: false,
   };
   const seo = projectSeo(project);
-  assert.equal(seo.title, '3880 Durango: Custom Home Photos');
-  assert.equal(seo.description, 'Photos of 3880 Durango by Lardner Custom Homes, a Dallas custom home builder: exterior and kitchen.');
+  assert.equal(seo.title, 'Durango Drive: Custom Home Photos');
+  assert.equal(seo.description, 'Photos of Durango Drive by Lardner Custom Homes, a Dallas custom home builder: exterior and kitchen.');
 });
 
 test('the business is published as a general contractor in Dallas', () => {

@@ -49,13 +49,7 @@ const items = await Promise.all(
     <header class="project__header">
       <p class="eyebrow"><a href="/gallery/">Gallery</a></p>
       <h1>{project.name}</h1>
-      {
-        (project.location || project.architect) && (
-          <p class="project__location">
-            {[project.location, project.architect && `${copy.gallery.architectLabel} ${project.architect}`].filter(Boolean).join(' · ')}
-          </p>
-        )
-      }
+      {project.location && <p class="project__location">{project.location}</p>}
       {
         listing && (
           <p class="project__listing">

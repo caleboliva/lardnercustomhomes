@@ -5,6 +5,7 @@ import test from 'node:test';
 import { copy } from '../src/data/copy.ts';
 import { listings } from '../src/data/homes.ts';
 import { gallerySubNav, homesSubNav, primaryNav } from '../src/data/navigation.ts';
+import { press } from '../src/data/press.ts';
 import { projects } from '../src/data/projects.ts';
 import { site } from '../src/data/site.ts';
 import { RESERVED_LISTING_SLUGS, RESERVED_PROJECT_SLUGS, ROOM_PAGES } from '../src/data/types.ts';
@@ -91,6 +92,8 @@ test('every photo named in the data exists on disk with exactly that name', () =
     for (const photo of project.photos) if (photo.file) refs.push({ dir, file: photo.file });
   }
   for (const slide of copy.home.hero.slides) refs.push({ dir: 'site', file: slide.image });
+  refs.push({ dir: 'site', file: copy.inventory.image });
+  for (const item of press) if (item.logo) refs.push({ dir: 'press', file: item.logo });
 
   // readdirSync, not existsSync: Windows treats names as case-insensitive, web servers do not.
   const readDir = (dir: string) => {

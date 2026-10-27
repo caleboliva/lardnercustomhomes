@@ -47,7 +47,7 @@ export const listings: Listing[] = [
     lotSize: 'Approx. 14,000 sq ft (0.32 acres)',
     features: ['Home office', 'Workout room', 'Game room', 'Mudroom', 'Two laundry rooms', 'Two balconies', 'Covered patio'],
     description:
-      'A modern residence by Lardner Custom Homes and architect Far+Dang, set beneath mature oak trees on an oversized lot in Midway Hollow. Expansive glass, soaring ceilings and wide sliding doors connect the living spaces to the outdoors, with warm wood accents and custom tile throughout.',
+      'A modern residence by Lardner Custom Homes, set beneath mature oak trees on an oversized lot in Midway Hollow. Expansive glass, soaring ceilings and wide sliding doors connect the living spaces to the outdoors, with warm wood accents and custom tile throughout.',
     cover: '01-exterior.jpg',
     photos: [
       { file: '01-exterior.jpg', room: 'exterior', alt: 'Front of the house at dusk, with wood siding, pale brick and a dark metal roof' },
