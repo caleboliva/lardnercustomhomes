@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import type { Listing, Project } from '../src/data/types.ts';
 import { featuredProjects, filterListings, openListingCounts, photosForRoom, previewPhotos } from '../src/lib/content.ts';
-import { formatNumber, isPlaceholder, placeholder, specLine } from '../src/lib/format.ts';
+import { boldParts, formatNumber, isPlaceholder, placeholder, specLine } from '../src/lib/format.ts';
 import { isCurrentPage, isCurrentSection } from '../src/lib/nav-utils.ts';
 
 const listing = (over: Partial<Listing>): Listing => ({
@@ -30,6 +30,16 @@ test('placeholder() wraps the need and isPlaceholder() recognises it', () => {
   assert.equal(placeholder('a bio'), '[Placeholder: a bio]');
   assert.equal(isPlaceholder('[Placeholder: a bio]'), true);
   assert.equal(isPlaceholder('A real sentence.'), false);
+});
+
+test('boldParts() splits out words marked **bold**', () => {
+  assert.deepEqual(boldParts('Access **exclusive** listings'), [
+    { text: 'Access ', bold: false },
+    { text: 'exclusive', bold: true },
+    { text: ' listings', bold: false },
+  ]);
+  assert.deepEqual(boldParts('**All bold**'), [{ text: 'All bold', bold: true }]);
+  assert.deepEqual(boldParts('No marks'), [{ text: 'No marks', bold: false }]);
 });
 
 test('formatNumber() adds thousands separators', () => {

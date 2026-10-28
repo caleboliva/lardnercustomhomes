@@ -205,10 +205,16 @@ export const listings: Listing[] = [
     baths: 2.5,
     garage: 2,
     features: ['Flex room'],
-    cover: 'lot-drawing.jpg',
-    coverAlt: 'Drawing of the lot at 4405 Scurry Street, near Burlew Street',
-    coverPosition: '50% 100%',
-    photos: [],
+    // Ascend II renderings supplied by Caleb, October 2026.
+    cover: 'rendering-front.jpg',
+    coverCaption: 'Concept rendering of Ascend II, the planned townhomes',
+    coverPosition: '50% 70%',
+    photosHeading: 'Concept renderings and lot drawing',
+    photos: [
+      { file: 'rendering-front.jpg', room: 'exterior', alt: 'Concept rendering of Ascend II from the street: two dark townhome buildings with vertical cladding either side of a shared driveway, under a flowering tree' },
+      { file: 'rendering-corner.jpg', room: 'exterior', alt: 'Concept rendering of Ascend II: corner view of the townhomes, with a cantilevered upper floor, a wood front door and a long wood fence' },
+      { file: 'lot-drawing.jpg', room: 'other', alt: 'Drawing of the lot at 4405 Scurry Street, near Burlew Street' },
+    ],
     placeholder: false,
   },
 ];

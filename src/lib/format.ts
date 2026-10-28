@@ -11,6 +11,14 @@ export function isPlaceholder(text: string): boolean {
   return text.startsWith(PLACEHOLDER_PREFIX);
 }
 
+/** Splits copy where **words between double asterisks** are to be shown in bold. */
+export function boldParts(text: string): { text: string; bold: boolean }[] {
+  return text
+    .split(/\*\*(.+?)\*\*/)
+    .map((part, i) => ({ text: part, bold: i % 2 === 1 }))
+    .filter((part) => part.text !== '');
+}
+
 export function formatNumber(n: number): string {
   return n.toLocaleString('en-US');
 }

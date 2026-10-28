@@ -259,18 +259,18 @@ export const copy = {
     /** File name in src/assets/site/ for the photo behind the title. */
     image: 'slide-durango-drive.jpg',
     imageAlt: 'A Durango Drive home at dusk, white and gabled, lit from within',
-    signupCta: 'Sign up',
+    // Wording from Colin's email of 27 October 2026.
+    signupCta: 'Get Access Now',
     browseCta: 'See homes and lots',
     form: {
-      heading: 'Sign up for early access',
-      intro: "Tell Colin what you're looking for. He'll be in touch as homes and lots that fit come up.",
-      submit: 'Sign up',
-      /** Shown until a form service is connected, when sending opens the visitor's email app. */
-      emailNote: 'Signing up opens your email app with your details filled in, ready to send to Colin.',
+      heading: 'Want access to exclusive off-market inventory?',
+      intro: 'We can get you there.',
+      submit: 'Get Access Now',
     },
     brokerage: {
       heading: 'Buying or selling another home?',
-      body: "Lardner Group, Colin's brokerage, represents buyers and sellers across Dallas. Search homes for sale or get a home valuation on the Lardner Group website.",
+      // **Words between double asterisks** are shown in bold.
+      body: 'Our companies offer effortlessly creative luxury real estate services: Building, Brokerage & Management. Reach out today to access **exclusive** off-market opportunities, listing services and more!',
       link: { label: 'Visit Lardner Group', href: 'https://lardnergroup.com/' },
       searchLink: { label: 'Search homes for sale', href: 'https://lardnergroup.com/home-search/listings' },
     },
