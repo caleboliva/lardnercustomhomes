@@ -41,7 +41,7 @@ const items = await Promise.all(
   }}
   header={false}
 >
-  <div class="project" data-theme="dark" data-project-view>
+  <div class="project" data-project-view>
     <a class="project__close" href="/gallery/" data-project-close>
       <Icon name="close" />
       <span class="visually-hidden">Close this project and return to the gallery</span>
@@ -99,10 +99,11 @@ const items = await Promise.all(
 </script>
 
 <style>
+  /* Pearl, chosen by Caleb in October 2026 over navy, white and Mist. */
   .project {
     min-height: 100dvh;
     padding: var(--space-8) var(--gutter) var(--space-section);
-    background: var(--bg);
+    background: var(--surface);
     color: var(--text);
     cursor: zoom-out;
   }
@@ -121,18 +122,18 @@ const items = await Promise.all(
     justify-content: center;
     width: 3rem;
     height: 3rem;
-    border: 1px solid color-mix(in srgb, var(--color-white) 55%, transparent);
+    border: 1px solid var(--rule);
     border-radius: 50%;
-    background: color-mix(in srgb, var(--color-midnight-deep) 70%, transparent);
-    color: var(--color-white);
+    background: color-mix(in srgb, var(--color-white) 85%, transparent);
+    color: var(--color-midnight);
     transition:
       background-color var(--dur-fast) var(--ease),
       color var(--dur-fast) var(--ease);
   }
 
   .project__close:hover {
-    background: var(--color-mist);
-    color: var(--color-midnight);
+    background: var(--color-midnight);
+    color: var(--color-white);
   }
 
   .project__header,
