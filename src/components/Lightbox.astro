@@ -34,8 +34,9 @@ import Icon from './Icon.astro';
 </script>
 
 <style>
+  /* Pearl, like the gallery project view (October 2026: Caleb preferred it to navy). */
   .lightbox {
-    --focus: var(--color-mist);
+    --focus: var(--color-midnight);
     --frame-h: calc(100dvh - 9.5rem);
 
     position: fixed;
@@ -48,7 +49,7 @@ import Icon from './Icon.astro';
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--color-white);
+    color: var(--color-midnight);
     overflow: hidden;
     overscroll-behavior: contain;
   }
@@ -60,7 +61,7 @@ import Icon from './Icon.astro';
   }
 
   .lightbox::backdrop {
-    background: var(--color-midnight-deep);
+    background: var(--color-pearl);
   }
 
   @keyframes lightbox-in {
@@ -94,7 +95,7 @@ import Icon from './Icon.astro';
     gap: var(--space-2);
     width: min(92vw, 60rem, calc(var(--frame-h) * 1.5));
     padding: var(--space-5);
-    background: var(--color-pearl);
+    background: var(--color-white);
     color: var(--color-midnight);
     text-align: center;
     aspect-ratio: 3 / 2;
@@ -124,7 +125,7 @@ import Icon from './Icon.astro';
   }
 
   .lightbox__counter {
-    color: color-mix(in srgb, var(--color-white) 74%, var(--color-midnight-deep));
+    color: color-mix(in srgb, var(--color-midnight) 72%, var(--color-pearl));
     font-variant-numeric: tabular-nums;
   }
 
@@ -136,18 +137,18 @@ import Icon from './Icon.astro';
     width: 3rem;
     height: 3rem;
     padding: 0;
-    border: 1px solid color-mix(in srgb, var(--color-white) 55%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-midnight) 25%, transparent);
     border-radius: 50%;
-    background: color-mix(in srgb, var(--color-midnight-deep) 70%, transparent);
-    color: var(--color-white);
+    background: color-mix(in srgb, var(--color-white) 85%, transparent);
+    color: var(--color-midnight);
     transition:
       background-color var(--dur-fast) var(--ease),
       color var(--dur-fast) var(--ease);
   }
 
   .lightbox__btn:hover {
-    background: var(--color-mist);
-    color: var(--color-midnight);
+    background: var(--color-midnight);
+    color: var(--color-white);
   }
 
   .lightbox__close {
