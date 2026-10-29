@@ -68,6 +68,8 @@ export type Project = {
   slug: string;
   name: string;
   location?: string;
+  /** What kind of project, when it is not a new build, for example 'Remodel'. */
+  kind?: string;
   /** Front elevation. File name in src/assets/projects/<slug>/, or null. */
   cover: string | null;
   /** The photographer, credited under the photos, for example 'Robert Tsai'. */

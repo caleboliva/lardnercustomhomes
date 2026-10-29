@@ -90,10 +90,12 @@ function joinList(items: string[]): string {
 export function projectSeo(project: Project): PageSeo {
   const rooms = ROOM_PAGES.filter((room) => project.photos.some((photo) => photo.room === room)).map((room) => ROOM_WORDS[room]);
   const where = project.location ? ` in ${project.location}` : '';
+  const kind = project.kind?.toLowerCase();
+  const what = kind ? `the ${project.name} ${kind}` : project.name;
   return {
-    title: `${project.name}: Custom Home Photos`,
-    description: `Photos of ${project.name}${where} by ${BUILDER}${rooms.length > 0 ? `: ${joinList(rooms)}` : ''}.`,
-    keywords: [project.name, 'custom home photos', `${site.name} projects`],
+    title: `${project.name}: ${kind ? `${project.kind} Photos` : 'Custom Home Photos'}`,
+    description: `Photos of ${what}${where} by ${BUILDER}${rooms.length > 0 ? `: ${joinList(rooms)}` : ''}.`,
+    keywords: [project.name, kind ? `${kind} photos` : 'custom home photos', `${site.name} projects`],
   };
 }
 

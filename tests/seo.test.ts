@@ -119,6 +119,21 @@ test('a project is described by the rooms it shows', () => {
   assert.equal(seo.description, 'Photos of Durango Drive by Lardner Custom Homes, a Dallas custom home builder: exterior and kitchen.');
 });
 
+test('a remodel is named as one in its title and description', () => {
+  const project: Project = {
+    slug: 'p',
+    name: 'Purple Sage Road',
+    kind: 'Remodel',
+    cover: null,
+    photos: [{ file: 'a.jpg', room: 'kitchen', alt: 'a' }],
+    featured: false,
+    placeholder: false,
+  };
+  const seo = projectSeo(project);
+  assert.equal(seo.title, 'Purple Sage Road: Remodel Photos');
+  assert.equal(seo.description, 'Photos of the Purple Sage Road remodel by Lardner Custom Homes, a Dallas custom home builder: kitchen.');
+});
+
 test('the business is published as a general contractor in Dallas', () => {
   const schema = businessSchema({ image: 'https://example.com/a.jpg', logo: 'https://example.com/l.png' });
   assert.equal(schema['@type'], 'GeneralContractor');

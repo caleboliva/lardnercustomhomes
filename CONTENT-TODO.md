@@ -7,8 +7,8 @@ The site is live with real projects, lots and Colin's details. These items are s
 - [ ] **Two lot drawings to redo**: Caleb is redrawing two of the lot drawings by hand. Save each new drawing as `lot-drawing.jpg` in that lot's folder under `src/assets/homes/`, replacing the old one.
 - [ ] **6616 Deloache, lot drawing**: the other five lots show their lot drawing. No drawing was supplied for 6616 Deloache, so its page shows the concept renderings of the planned home, labelled as renderings. Add a drawing as `lot-drawing.jpg` in `src/assets/homes/6616-deloache/` if one is made.
 - [ ] **Not used from the second upload**: the mood boards (they contain other people's inspiration photos and paint brand names), one closet photo that shows a company's shopping bag, and loose photos of other projects. The new headshot of Colin is listed below.
-- [ ] **More projects**: the gallery shows a selection of photos for 4103 Saranac, Durango Drive, Eagles Landing, Eaton Drive, Moser Avenue and Scurry Street. Add more projects and photos as they come in. Sold homes are named by street only, never the house number (Colin, October 2026).
-- [ ] **Project locations**: Eagles Landing, Eaton Drive and Moser Avenue show no neighborhood yet. Add `location` in `src/data/projects.ts` once confirmed.
+- [ ] **More projects**: the gallery shows a selection of photos for 4103 Saranac, Durango Drive, Eagles Landing, Eaton Drive, Moser Avenue, Scurry Street and the Purple Sage Road remodel. Add more projects and photos as they come in. Sold homes are named by street only, never the house number (Colin, October 2026).
+- [ ] **Project locations**: Eagles Landing, Eaton Drive, Moser Avenue and Purple Sage Road show no neighborhood yet. Add `location` in `src/data/projects.ts` once confirmed.
 - [ ] **Colin's portrait**: the current file is 447 × 447px. The second upload includes a large new headshot (orange shirt, in a kitchen), the same one used on the 4103 Saranac flyer. Say the word and it replaces the portrait on the About page.
 
 ## Photo rights

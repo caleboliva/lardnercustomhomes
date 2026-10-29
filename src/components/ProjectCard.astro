@@ -22,7 +22,7 @@ const coverAlt = project.photos.find((photo) => photo.file === project.cover)?.a
     <Photo image={cover} alt={coverAlt} ratio="3/2" sizes={sizes} eager={eager} placeholderLabel="Front elevation" />
     <div class="card__body">
       <Heading class="card__title">{project.name}</Heading>
-      {project.location && <p class="card__meta">{project.location}</p>}
+      {(project.location || project.kind) && <p class="card__meta">{[project.location, project.kind].filter(Boolean).join(' · ')}</p>}
     </div>
   </a>
 </article>

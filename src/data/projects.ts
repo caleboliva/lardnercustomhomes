@@ -135,4 +135,23 @@ export const projects: Project[] = [
     featured: false,
     placeholder: false,
   },
+  {
+    slug: 'purple-sage-road',
+    name: 'Purple Sage Road',
+    // Colin's Purple Sage remodel email, 2 October 2026. Named by street only.
+    kind: 'Remodel',
+    cover: '01-exterior.jpg',
+    photos: [
+      { file: '01-exterior.jpg', room: 'exterior', alt: 'Purple Sage Road: front door with a wreath beside red brick, a black lantern and a planter of hydrangeas' },
+      { file: '02-kitchen.jpg', room: 'kitchen', alt: 'Purple Sage Road: galley kitchen with white cabinets, glazed tile, oak shelves and a window over the sink' },
+      { file: '03-kitchen.jpg', room: 'kitchen', alt: 'Purple Sage Road: kitchen sink under a wide window, looking toward the breakfast nook' },
+      { file: '04-kitchen.jpg', room: 'kitchen', alt: 'Purple Sage Road: gas range under a stainless hood, with white cabinets and glazed tile' },
+      { file: '05-kitchen.jpg', room: 'kitchen', alt: 'Purple Sage Road: kitchen sink below a window, with oak shelves on the tiled wall' },
+      { file: '06-kitchen.jpg', room: 'kitchen', alt: 'Purple Sage Road: breakfast nook in a bay window, with a pendant light and glass-front cabinets' },
+      { file: '07-bath.jpg', room: 'bath', alt: 'Purple Sage Road: tub and shower in pale blue tile, with brass fixtures and a glass panel' },
+      { file: '08-bath.jpg', room: 'bath', alt: 'Purple Sage Road: walk-in shower in white tile, with a brass shower head and a niche' },
+    ],
+    featured: false,
+    placeholder: false,
+  },
 ];
