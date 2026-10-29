@@ -228,6 +228,13 @@ export const copy = {
         },
       ],
     },
+    // A full-width photo between Services and The company, to give the page a pause.
+    // `file` is a path in src/assets/.
+    feature: {
+      file: 'homes/4103-saranac/33-exterior.jpg',
+      alt: 'Back terrace of 4103 Saranac at dusk, with glass walls along the house and chairs around a fire bowl',
+      caption: '4103 Saranac, Midway Hollow · Photography: Robert Tsai',
+    },
     // The articles come from src/data/press.ts.
     press: {
       heading: 'Press',
