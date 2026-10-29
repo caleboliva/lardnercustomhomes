@@ -64,7 +64,7 @@ const seo = pageSeo.home;
         <ul class="press-line__list" role="list">
           {outlets.map((item) => (
             <li>
-              <a href={item.href} target="_blank" rel="noopener noreferrer"><PressLogo item={item} /><span class="visually-hidden">{`: ${item.title} (opens in a new tab)`}</span></a>
+              <a href={item.href} target="_blank" rel="noopener noreferrer"><PressLogo item={item} scale={1.45} /><span class="visually-hidden">{`: ${item.title} (opens in a new tab)`}</span></a>
             </li>
           ))}
         </ul>
@@ -73,7 +73,7 @@ const seo = pageSeo.home;
     )
   }
 
-  <section class="section section--surface" aria-labelledby="neighborhoods-title">
+  <section class="section section--dark" data-theme="dark" aria-labelledby="neighborhoods-title">
     <div class="neighborhoods container" data-reveal>
       <h2 class="eyebrow" id="neighborhoods-title">{neighborhoods.eyebrow}</h2>
       <ul class="neighborhoods__list" role="list">
@@ -131,16 +131,18 @@ const seo = pageSeo.home;
 
   .press-line {
     display: grid;
-    justify-items: start;
-    gap: var(--space-4);
-    padding-block: 0 calc(var(--space-section) * 0.6);
+    justify-items: center;
+    gap: var(--space-6);
+    padding-block: var(--space-8) calc(var(--space-section) * 0.7);
+    text-align: center;
   }
 
   .press-line__list {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-4) var(--space-8);
+    justify-content: center;
+    gap: var(--space-5) var(--space-9);
     margin: 0;
   }
 
@@ -160,7 +162,7 @@ const seo = pageSeo.home;
 
   @media (max-width: 40rem) {
     .press-line__list {
-      gap: var(--space-3) var(--space-6);
+      gap: var(--space-4) var(--space-6);
     }
   }
 

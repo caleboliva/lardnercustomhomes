@@ -6,7 +6,6 @@ The site is live with real projects, lots and Colin's details. These items are s
 
 - [ ] **Two lot drawings to redo**: Caleb is redrawing two of the lot drawings by hand. Save each new drawing as `lot-drawing.jpg` in that lot's folder under `src/assets/homes/`, replacing the old one.
 - [ ] **6616 Deloache, lot drawing**: the other five lots show their lot drawing. No drawing was supplied for 6616 Deloache, so its page shows the concept renderings of the planned home, labelled as renderings. Add a drawing as `lot-drawing.jpg` in `src/assets/homes/6616-deloache/` if one is made.
-- [ ] **4103 Saranac, remaining small photos**: the hero and 17 of the listing photos now use the full-size files. The other 20 are still small web copies (about 1,000px wide) and look soft on large screens: the kitchen, the living room with the fireplace, the office, the stairs, the bedrooms, the dressing room, two baths, the laundry, the back of the house at dusk, the back lawn and the skyline aerial. Ask the photographers for the full-size versions.
 - [ ] **Not used from the second upload**: the mood boards (they contain other people's inspiration photos and paint brand names), one closet photo that shows a company's shopping bag, and loose photos of other projects. The new headshot of Colin is listed below.
 - [ ] **More projects**: the gallery shows a selection of photos for 4103 Saranac, Durango Drive, Eagles Landing, Eaton Drive, Moser Avenue and Scurry Street. Add more projects and photos as they come in. Sold homes are named by street only, never the house number (Colin, October 2026).
 - [ ] **Project locations**: Eagles Landing, Eaton Drive and Moser Avenue show no neighborhood yet. Add `location` in `src/data/projects.ts` once confirmed.
@@ -14,7 +13,7 @@ The site is live with real projects, lots and Colin's details. These items are s
 
 ## Photo rights
 
-- [ ] The project photos were taken by professional photographers (Bradley Evans for Eaton Drive, Robert Tsai for Moser Avenue, Robert Yu for Scurry Street, Shoot2sell.com for the dusk photos of 4103 Saranac, and others). Their names and copyright notices were removed from the files along with all other embedded data. Confirm that Colin's agreements with them allow use on the website, and whether any of them require a photo credit.
+- [ ] The project photos were taken by professional photographers (Bradley Evans for Eaton Drive, Robert Tsai for Moser Avenue, Robert Yu for Scurry Street, Shoot2sell.com for the home page's dusk photo of 4103 Saranac, and others). Since October 2026 every 4103 Saranac listing and gallery photo is Robert Tsai's (April 2026 shoot), credited on those pages as "Photography: Robert Tsai". Their names and copyright notices were removed from the files along with all other embedded data. Confirm that Colin's agreements with them allow use on the website, and whether any of them require a photo credit.
 
 ## Listings
 

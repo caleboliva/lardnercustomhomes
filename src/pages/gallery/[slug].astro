@@ -70,6 +70,7 @@ const items = await Promise.all(
         )
       }
       <p class="project__hint">{copy.gallery.projectHint}</p>
+      {project.photoCredit && <p class="project__credit">{copy.gallery.photoCredit} {project.photoCredit}</p>}
     </header>
     <ul class="project__photos" role="list" data-lightbox-group>
       {
@@ -156,13 +157,20 @@ const items = await Promise.all(
   }
 
   .project__location,
-  .project__hint {
+  .project__hint,
+  .project__credit {
     color: var(--text-muted);
   }
 
   .project__hint {
     font-size: var(--step--1);
     letter-spacing: 0.04em;
+  }
+
+  .project__credit {
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
   }
 
   .project__press {

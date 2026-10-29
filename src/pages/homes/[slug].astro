@@ -119,6 +119,7 @@ const schema = listingSchema(listing, new URL(Astro.url.pathname, Astro.site).hr
         <section class="listing__photos container" aria-labelledby="photos-heading">
           <h2 id="photos-heading">{listing.photosHeading ?? 'Photos'}</h2>
           <PhotoGrid items={items} layout="three" ratio="4/3" />
+          {listing.photoCredit && <p class="listing__credit">{copy.gallery.photoCredit} {listing.photoCredit}</p>}
         </section>
       )
     }
@@ -253,6 +254,13 @@ const schema = listingSchema(listing, new URL(Astro.url.pathname, Astro.site).hr
     display: grid;
     gap: var(--space-6);
     padding-bottom: var(--space-section);
+  }
+
+  .listing__credit {
+    color: var(--text-muted);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
   }
 
   .listing__location {

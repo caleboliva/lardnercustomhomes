@@ -157,6 +157,8 @@ export const copy = {
       living: 'Living spaces from across our projects.',
     },
     projectHint: 'Select a photo to view it larger.',
+    // Followed by the photographer's name, under a project's or a listing's photos.
+    photoCredit: 'Photography:',
     // Shown on a project page when the same home has a listing, followed by its status.
     listingLink: 'See the listing',
     pressLabel: 'Press coverage of this project',
@@ -203,21 +205,26 @@ export const copy = {
     services: {
       heading: 'Services',
       intro: 'Through Lardner Custom Homes and Lardner Group, his brokerage, Colin offers three services.',
+      // In the order Colin lists them ("Building, Brokerage & Management"). `image` is a path
+      // in src/assets/ and its description.
       items: [
         {
-          title: 'Luxury management',
-          body: 'Management for homes and rental properties in Dallas: leasing and marketing vacancies, rent collection and bookkeeping, getting homes ready between tenants, and steady communication with owners and tenants.',
-          link: { label: 'Property management', href: 'https://lardnergroup.com/residential-property-management' },
+          title: 'Development',
+          body: 'From the land to the finished homes: market and feasibility studies, land acquisition and platting, design with architects, construction by Lardner Custom Homes, then marketing, sales and leasing.',
+          link: { label: 'Builder services', href: 'https://lardnergroup.com/builder-services' },
+          image: { file: 'projects/scurry-street/01-exterior.jpg', alt: 'Scurry Street townhomes at dusk, developed by Colin Lardner' },
         },
         {
           title: 'Brokerage',
           body: "Colin is a licensed Texas real estate broker. Lardner Group represents buyers and sellers across Dallas, with home searches, home valuations, and buyer's and seller's guides.",
           link: { label: 'Visit Lardner Group', href: 'https://lardnergroup.com/' },
+          image: { file: 'homes/4103-saranac/03-exterior.jpg', alt: 'Front of 4103 Saranac, a Lardner home for sale' },
         },
         {
-          title: 'Development',
-          body: 'From the land to the finished homes: market and feasibility studies, land acquisition and platting, design with architects, construction by Lardner Custom Homes, then marketing, sales and leasing.',
-          link: { label: 'Builder services', href: 'https://lardnergroup.com/builder-services' },
+          title: 'Luxury management',
+          body: 'Management for homes and rental properties in Dallas: leasing and marketing vacancies, rent collection and bookkeeping, getting homes ready between tenants, and steady communication with owners and tenants.',
+          link: { label: 'Property management', href: 'https://lardnergroup.com/residential-property-management' },
+          image: { file: 'homes/4103-saranac/10-living.jpg', alt: 'Living room with cream sofas and a concrete fireplace wall' },
         },
       ],
     },

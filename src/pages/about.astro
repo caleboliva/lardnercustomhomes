@@ -3,10 +3,12 @@ import { pageSeo } from '../data/seo.ts';
 import { Image } from 'astro:assets';
 import colinPhoto from '../assets/people/colin-lardner.jpg';
 import PageHeader from '../components/PageHeader.astro';
+import Photo from '../components/Photo.astro';
 import PressLogo from '../components/PressLogo.astro';
 import { copy } from '../data/copy.ts';
 import { press } from '../data/press.ts';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { resolveImage } from '../lib/images.ts';
 
 const { title, colin, services, company, values } = copy.about;
 const isExternal = (href: string) => href.startsWith('http');
@@ -39,15 +41,18 @@ const seo = pageSeo.about;
     <ul class="services" role="list">
       {
         services.items.map((service, i) => (
-          <li class="services__item" data-reveal style={`--reveal-i: ${i}`}>
-            <h3>{service.title}</h3>
-            <p>{service.body}</p>
-            <a
-              class="link-arrow"
-              href={service.link.href}
-              target={isExternal(service.link.href) ? '_blank' : undefined}
-              rel={isExternal(service.link.href) ? 'noopener noreferrer' : undefined}
-            >{service.link.label}{isExternal(service.link.href) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
+          <li class="service" data-reveal style={`--reveal-i: ${i}`}>
+            <Photo image={resolveImage(service.image.file)} alt={service.image.alt} ratio="4/3" sizes="(min-width: 64rem) 30vw, 92vw" />
+            <div class="service__text">
+              <h3>{service.title}</h3>
+              <p>{service.body}</p>
+              <a
+                class="link-arrow service__link"
+                href={service.link.href}
+                target={isExternal(service.link.href) ? '_blank' : undefined}
+                rel={isExternal(service.link.href) ? 'noopener noreferrer' : undefined}
+              >{service.link.label}{isExternal(service.link.href) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
+            </div>
           </li>
         ))
       }
@@ -153,13 +158,75 @@ const seo = pageSeo.about;
     margin: var(--space-7) 0 0;
   }
 
-  .services__item {
+  /* Each service is a card: its photo, then its text. The whole card follows its link, and on
+     hover it lifts a little while the photo eases in. */
+  .service {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--color-white);
+    box-shadow: 0 0 0 1px var(--rule);
+    transition:
+      transform var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease);
+  }
+
+  .service__text {
     display: grid;
     align-content: start;
     justify-items: start;
     gap: var(--space-3);
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--rule);
+    padding: var(--space-5) var(--space-5) var(--space-6);
+  }
+
+  .service h3 {
+    font-size: var(--step-0);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+
+  /* Stretches the link over the whole card. */
+  .service__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .service:hover,
+  .service:focus-within {
+    transform: translateY(-0.375rem);
+    box-shadow:
+      0 0 0 1px var(--rule),
+      0 1.5rem 2.5rem -1.5rem color-mix(in srgb, var(--color-midnight-deep) 45%, transparent);
+  }
+
+  .service:hover :global(.photo img),
+  .service:focus-within :global(.photo img) {
+    transform: scale(1.04);
+  }
+
+  /* Keyboard focus rings the whole card rather than the link inside it. */
+  .service:has(.service__link:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .service__link:focus-visible {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service,
+    .service:hover,
+    .service:focus-within {
+      transform: none;
+    }
+
+    .service:hover :global(.photo img),
+    .service:focus-within :global(.photo img) {
+      transform: none;
+    }
   }
 
   .press {
@@ -191,7 +258,7 @@ const seo = pageSeo.about;
   }
 
   .press__title {
-    font-size: var(--step-2);
+    font-size: var(--step-1);
   }
 
   .press__title a {
@@ -226,7 +293,7 @@ const seo = pageSeo.about;
 
     .services {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: var(--space-7);
+      column-gap: var(--space-6);
     }
   }
 </style>

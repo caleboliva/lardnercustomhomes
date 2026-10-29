@@ -56,6 +56,8 @@ export type Listing = {
   coverCaption?: string;
   /** The heading over `photos` when they are not photographs. Default 'Photos'. */
   photosHeading?: string;
+  /** The photographer, credited under the photos, for example 'Robert Tsai'. */
+  photoCredit?: string;
   photos: Photo[];
   /** True for sample entries that must be replaced before launch. */
   placeholder: boolean;
@@ -68,6 +70,8 @@ export type Project = {
   location?: string;
   /** Front elevation. File name in src/assets/projects/<slug>/, or null. */
   cover: string | null;
+  /** The photographer, credited under the photos, for example 'Robert Tsai'. */
+  photoCredit?: string;
   photos: Photo[];
   /** Featured projects appear on the home page (first three). */
   featured: boolean;
